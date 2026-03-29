@@ -1,2 +1,2 @@
-# hub
-Hub for all of the projects that are on a site, made by me and or my friends.
+# zOcM
+<h2>Sick hub for all my stuff ig</h2>
