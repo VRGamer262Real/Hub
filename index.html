@@ -46,6 +46,40 @@
                 animation: fadeIn 2s forwards;
             }
 
+            .listItem {
+                opacity: 0;
+                animation: fadeIn 2s forwards;
+                padding: 50px 50px;
+                color: white;
+                transition: background-color 0.25s, color 0.25s;
+                border-radius: 5%;
+                list-style-type: none;
+            }
+
+            .listItem li {
+                float: left;
+                padding: 5px;
+            }
+
+            .listItem a {
+                display: block;
+                color: whitesmoke;
+                text-decoration: none;
+                text-align: center;
+                border-radius: 5%;
+                padding: 50px 50px;
+                background: rgba(42, 51, 46, 0.75);
+            }
+
+            .listItem li a {
+                transition: background-color 0.25s, color 0.25s;
+            }
+
+            .listItem li a:hover {
+                color: black;
+                background-color: white;
+            }
+
             @keyframes fadeIn {
                 to {
                     opacity: 1;
@@ -54,13 +88,21 @@
         </style>
     </head>
     <body>
+        <!--Navigation-->
         <ul class="nav">
             <li><a href="index.html">Home</a></li>
             <li><a href="games.html">Games</a></li>
             <li><a href="tools.html">Tools</a></li>
+            <li><a href="models.html">Models</a></li>
         </ul>
 
         <h1><strong>Main</strong> hub for all my <strong>silly</strong> projects.</h1>
 
+        <ul class="listItem">
+            <li><a href="https://www.youtube.com/@zOcM">YouTube</a></li>
+            <li><a href="https://makerworld.com/en/@wpl435">MakerWorld</a></li>
+            <li><a href="https://github.com/zOcMYT">GitHub</a></li>
+        </ul>
+
     </body>
-</html>
+</html> 
