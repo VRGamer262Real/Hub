@@ -90,6 +90,12 @@
     <body>
         
         <audio src="bg.mp3" autoplay loop></audio>
+        Notification.requestPermission().then(function(permission) {
+  if (permission === "granted") {
+    console.log("Notification permission granted.");
+  }
+});
+
         
         <!--Navigation-->
         <ul class="nav">
