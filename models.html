@@ -8,19 +8,24 @@
             body {
                 background-image: url("https://raw.githubusercontent.com/VRGamer262Real/Hub-Cloudflare/refs/heads/main/bg.jpg");
                 background-size: cover;
+                background-attachment: fixed; /* Added for better background behavior */
                 color: white;
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                margin: 0; /* Reset default margin */
             }
 
+            /* Navigation */
             .nav {
-                
                 list-style-type: none;
                 margin: 0;
                 padding: 0;
                 overflow: hidden;
-                color: white;
-                background: rgba(42, 51, 46, 0.75);
+                background: rgba(42, 51, 46, 0.75); /* Slightly adjusted for consistency */
+                backdrop-filter: blur(5px); /* Added for a modern look */
+            }
 
+            .nav li {
+                float: left;
             }
 
             .nav li a {
@@ -29,12 +34,8 @@
                 text-decoration: none;
                 padding: 14px 16px;
                 text-align: center;
-                transition: background-color 0.25s, color 0.25s;
-                border-radius: 5%;
-            }
-
-            .nav li {
-                float: left;
+                transition: background-color 0.25s, color 0.25s; /* Kept original transition */
+                border-radius: 5%; /* Kept original border-radius */
             }
 
             .nav li a:hover {
@@ -43,48 +44,63 @@
             }
 
             h1 {
+                text-align: center; /* Centered the heading */
+                margin-top: 40px; /* Added some top margin */
+                font-size: 3rem; /* Larger font size */
                 opacity: 0;
-                animation: fadeIn 2s forwards;
+                animation: fadeIn 1s forwards; /* Applied fadeIn animation */
             }
 
             .listItem {
-                opacity: 0;
-                animation: fadeIn 2s forwards;
-                padding: 50px 50px;
-                color: white;
-                transition: background-color 0.25s, color 0.25s;
-                border-radius: 5%;
+                display: flex; /* Using flexbox for layout */
+                flex-wrap: wrap; /* Allow items to wrap */
+                justify-content: center; /* Center items horizontally */
+                gap: 25px; /* Spacing between items */
+                padding: 40px; /* Padding around the list */
                 list-style-type: none;
+                opacity: 0;
+                animation: fadeIn 1.5s 0.5s forwards; /* Applied fadeIn animation with delay */
             }
 
             .listItem li {
-                float: left;
-                padding: 5px;
+                width: 220px; /* Fixed width for list items */
+                margin: 5px; /* Added some margin for spacing */
             }
 
             .listItem a {
-                display: block;
-                color: whitesmoke;
+                display: flex;
+                flex-direction: column; /* Stack content vertically */
+                align-items: center; /* Center content horizontally */
                 text-decoration: none;
+                color: white;
+                background: rgba(42, 51, 46, 0.75); /* Kept original background */
+                padding: 15px; /* Adjusted padding */
+                border-radius: 15px; /* Rounded corners */
+                border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle border */
+                transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Enhanced transition */
                 text-align: center;
-                border-radius: 5%;
-                padding: 50px 50px;
-                background: rgba(42, 51, 46, 0.75);
+                height: 100%; /* Ensure full height */
             }
 
-            .listItem li a {
-                transition: background-color 0.25s, color 0.25s;
+            /* Cool Animation Effects */
+            .listItem a:hover {
+                transform: translateY(-15px) scale(1.05); /* Hover effect */
+                background: rgba(255, 255, 255, 0.15); /* Lighter background on hover */
+                border-color: #00d2ff; /* Cyan border on hover */
+                box-shadow: 0 15px 30px rgba(0, 210, 255, 0.4); /* Glow effect */
             }
 
-            .listItem li a:hover {
-                color: black;
-                background-color: white;
+            /* Removed the specific 'hacked' class styles as they are not present in this context */
+
+            .game-title { /* Renamed from game-title to be more general */
+                font-weight: bold;
+                font-size: 1rem;
+                margin-top: 5px;
             }
 
             @keyframes fadeIn {
-                to {
-                    opacity: 1;
-                }
+                to { opacity: 1; transform: translateY(0); }
+                from { opacity: 0; transform: translateY(20px); }
             }
         </style>
     </head>
@@ -101,12 +117,22 @@
 
         <h1>Models</h1>
 
-        <br>
-
         <ul class="listItem">
-            <li><a href="https://makerworld.com/en/models/1804813-locking-bottlenose-bcar">Locking Bottlenose BCAR SillyShell</a></li>
-            <li><a href="https://makerworld.com/en/models/2444418-nail-form-roll-holder#profileId-2682744">Nail Form Holder</a></li>
-            <li><a href="https://makerworld.com/en/models/2444354-starlink-gen-3-mounts#profileId-2682685">Starlink Gen 3 Mounts</a></li>
+            <li>
+                <a href="https://makerworld.com/en/models/1804813-locking-bottlenose-bcar">
+                    <span class="game-title">Locking Bottlenose BCAR SillyShell</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://makerworld.com/en/models/2444418-nail-form-roll-holder#profileId-2682744">
+                    <span class="game-title">Nail Form Holder</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://makerworld.com/en/models/2444354-starlink-gen-3-mounts#profileId-2682685">
+                    <span class="game-title">Starlink Gen 3 Mounts</span>
+                </a>
+            </li>
         </ul>
     </body>
 </html>
