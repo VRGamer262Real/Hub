@@ -61,7 +61,7 @@
             }
 
             .listItem li {
-                width: 200px;
+                width: 220px;
             }
 
             .listItem a {
@@ -76,12 +76,13 @@
                 border: 1px solid rgba(255, 255, 255, 0.1);
                 transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
                 text-align: center;
+                height: 100%;
             }
 
             /* The Image inside the button */
             .listItem img {
                 width: 100%;
-                height: 120px;
+                height: 130px;
                 object-fit: cover;
                 border-radius: 10px;
                 margin-bottom: 12px;
@@ -96,13 +97,19 @@
                 box-shadow: 0 15px 30px rgba(0, 210, 255, 0.4);
             }
 
+            /* Special glow for Hacked versions */
+            .listItem a.hacked:hover {
+                border-color: #ff4b2b;
+                box-shadow: 0 15px 30px rgba(255, 75, 43, 0.4);
+            }
+
             .listItem a:hover img {
                 transform: scale(1.1) rotate(2deg);
             }
 
             .game-title {
                 font-weight: bold;
-                font-size: 1.1rem;
+                font-size: 1rem;
                 margin-top: 5px;
             }
 
@@ -126,7 +133,7 @@
         <h1>Games</h1>
 
         <ul class="listItem">
-            <!-- Polytrack (With your Link) -->
+            <!-- Polytrack -->
             <li>
                 <a href="https://vrgamer262real.github.io/polytrack/">
                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSq4z0oIn1dnrq__vTuC1IthPoyEBUIpJx2tw&s" alt="Polytrack">
@@ -134,28 +141,58 @@
                 </a>
             </li>
 
-            <!-- Placeholder Slots -->
+            <!-- Supa Clicker -->
             <li>
                 <a href="https://supaclicker.vrgamer262.workers.dev/">
-                    <img src="https://via.placeholder.com/200x120/2a332e/ffffff?text=Supa+Clicker" alt="Supa Clicker">
+                    <img src="https://via.placeholder.com/200x130/2a332e/ffffff?text=Supa+Clicker" alt="Supa Clicker">
                     <span class="game-title">Supa Clicker</span>
                 </a>
             </li>
+
+            <!-- Supa Clicker Hacked -->
+            <li>
+                <a href="https://supaclickerhacked.vrgamer262.workers.dev/" class="hacked">
+                    <img src="https://via.placeholder.com/200x130/ff4b2b/ffffff?text=Supa+Clicker+HACKED" alt="Supa Clicker Hacked">
+                    <span class="game-title">Supa Clicker (Hacked)</span>
+                </a>
+            </li>
+
+            <!-- Tower Defense -->
             <li>
                 <a href="https://tower-defense.vrgamer262.workers.dev/">
-                    <img src="https://via.placeholder.com/200x120/2a332e/ffffff?text=Tower+Defense" alt="Tower Defense">
+                    <img src="https://via.placeholder.com/200x130/2a332e/ffffff?text=Tower+Defense" alt="Tower Defense">
                     <span class="game-title">Tower Defense</span>
                 </a>
             </li>
+
+            <!-- Tower Defense Hacked -->
             <li>
-                <a href="https://bbcr.vrgamer262.workers.dev/">
-                    <img src="https://via.placeholder.com/200x120/2a332e/ffffff?text=Baldi's+Basics" alt="Baldi">
-                    <span class="game-title">Baldi's Basics</span>
+                <a href="https://towerdefensehacked.vrgamer262.workers.dev/" class="hacked">
+                    <img src="https://via.placeholder.com/200x130/ff4b2b/ffffff?text=Tower+Defense+HACKED" alt="Tower Defense Hacked">
+                    <span class="game-title">Tower Defense (Hacked)</span>
                 </a>
             </li>
+
+            <!-- Baldi's Basics -->
+            <li>
+                <a href="https://bbcr.vrgamer262.workers.dev/">
+                    <img src="https://via.placeholder.com/200x130/2a332e/ffffff?text=Baldi+Classic" alt="Baldi Classic">
+                    <span class="game-title">Baldi's Basics Classic</span>
+                </a>
+            </li>
+
+            <!-- Baldi's Basics Alternate Link -->
+            <li>
+                <a href="https://vrgamer262real.github.io/Baldi-sBasicsClassicRemastered/">
+                    <img src="https://via.placeholder.com/200x130/2a332e/ffffff?text=Baldi+Alternate" alt="Baldi Alternate">
+                    <span class="game-title">Baldi (Alt Link)</span>
+                </a>
+            </li>
+
+            <!-- Tetris -->
             <li>
                 <a href="https://simon.lc/tetr.js/">
-                    <img src="https://via.placeholder.com/200x120/2a332e/ffffff?text=Tetris" alt="Tetris">
+                    <img src="https://via.placeholder.com/200x130/2a332e/ffffff?text=Tetris" alt="Tetris">
                     <span class="game-title">Tetris</span>
                 </a>
             </li>
