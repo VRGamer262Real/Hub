@@ -8,19 +8,24 @@
             body {
                 background-image: url("https://raw.githubusercontent.com/VRGamer262Real/Hub-Cloudflare/refs/heads/main/bg.jpg");
                 background-size: cover;
+                background-attachment: fixed; /* Added for better background behavior */
                 color: white;
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                margin: 0; /* Reset default margin */
             }
 
+            /* Navigation */
             .nav {
-                
                 list-style-type: none;
                 margin: 0;
                 padding: 0;
                 overflow: hidden;
-                color: white;
-                background: rgba(42, 51, 46, 0.75);
+                background: rgba(42, 51, 46, 0.75); /* Slightly adjusted for consistency */
+                backdrop-filter: blur(5px); /* Added for a modern look */
+            }
 
+            .nav li {
+                float: left;
             }
 
             .nav li a {
@@ -29,12 +34,8 @@
                 text-decoration: none;
                 padding: 14px 16px;
                 text-align: center;
-                transition: background-color 0.25s, color 0.25s;
-                border-radius: 5%;
-            }
-
-            .nav li {
-                float: left;
+                transition: background-color 0.25s, color 0.25s; /* Kept original transition */
+                border-radius: 5%; /* Kept original border-radius */
             }
 
             .nav li a:hover {
@@ -43,66 +44,88 @@
             }
 
             h1 {
+                text-align: center; /* Centered the heading */
+                margin-top: 40px; /* Added some top margin */
+                font-size: 3rem; /* Larger font size */
                 opacity: 0;
-                animation: fadeIn 2s forwards;
+                animation: fadeIn 1s forwards; /* Applied fadeIn animation */
             }
 
             .listItem {
-                opacity: 0;
-                animation: fadeIn 2s forwards;
-                padding: 50px 50px;
-                color: white;
-                transition: background-color 0.25s, color 0.25s;
-                border-radius: 5%;
+                display: flex; /* Using flexbox for layout */
+                flex-wrap: wrap; /* Allow items to wrap */
+                justify-content: center; /* Center items horizontally */
+                gap: 25px; /* Spacing between items */
+                padding: 40px; /* Padding around the list */
                 list-style-type: none;
+                opacity: 0;
+                animation: fadeIn 1.5s 0.5s forwards; /* Applied fadeIn animation with delay */
             }
 
             .listItem li {
-                float: left;
-                padding: 5px;
+                width: 220px; /* Fixed width for list items */
             }
 
             .listItem a {
-                display: block;
-                color: whitesmoke;
+                display: flex;
+                flex-direction: column; /* Stack content vertically */
+                align-items: center; /* Center content horizontally */
                 text-decoration: none;
+                color: white;
+                background: rgba(42, 51, 46, 0.75); /* Kept original background */
+                padding: 15px; /* Adjusted padding */
+                border-radius: 15px; /* Rounded corners */
+                border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle border */
+                transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Enhanced transition */
                 text-align: center;
-                border-radius: 5%;
-                padding: 50px 50px;
-                background: rgba(42, 51, 46, 0.75);
+                height: 100%; /* Ensure full height */
             }
 
-            .listItem li a {
-                transition: background-color 0.25s, color 0.25s;
+            /* The Image inside the button (if you were to add images) */
+            /* .listItem img {
+                width: 100%;
+                height: 130px;
+                object-fit: cover;
+                border-radius: 10px;
+                margin-bottom: 12px;
+                transition: transform 0.4s;
+            } */
+
+            /* Cool Animation Effects */
+            .listItem a:hover {
+                transform: translateY(-15px) scale(1.05); /* Hover effect */
+                background: rgba(255, 255, 255, 0.15); /* Lighter background on hover */
+                border-color: #00d2ff; /* Cyan border on hover */
+                box-shadow: 0 15px 30px rgba(0, 210, 255, 0.4); /* Glow effect */
             }
 
-            .listItem li a:hover {
-                color: black;
-                background-color: white;
+            /* Special glow for Hacked versions (if applicable) */
+            /* .listItem a.hacked:hover {
+                border-color: #ff4b2b;
+                box-shadow: 0 15px 30px rgba(255, 75, 43, 0.4);
+            } */
+
+            /* .listItem a:hover img {
+                transform: scale(1.1) rotate(2deg);
+            } */
+
+            .game-title { /* For game titles if you were to add them */
+                font-weight: bold;
+                font-size: 1rem;
+                margin-top: 5px;
             }
 
             @keyframes fadeIn {
-                to {
-                    opacity: 1;
-                }
+                to { opacity: 1; transform: translateY(0); }
+                from { opacity: 0; transform: translateY(20px); }
             }
         </style>
     </head>
     <body>
-<script>
-      sound.requestPermission().then(function(permission) {
-  if (permission === "granted") {
-    console.log("Notification permission granted.");
-  }
-});', requestNotificationPermission);
-    </script>
-        
+        <!-- The audio tag was present in the first context, so I've included it here. -->
         <audio src="bg.mp3" autoplay loop></audio>
-        
-  
 
-        
-        <!--Navigation-->
+        <!-- Navigation -->
         <ul class="nav">
             <li><a href="index.html">Home</a></li>
             <li><a href="games.html">Games</a></li>
@@ -111,8 +134,10 @@
             <li><a href="about.html">About</a></li>
         </ul>
 
+        <!-- Main Heading with Animation -->
         <h1><strong>Main</strong> hub for all my <strong>silly</strong> projects.</h1>
 
+        <!-- List Items with Animations -->
         <ul class="listItem">
             <li><a href="https://www.youtube.com/@zOcM">YouTube</a></li>
             <li><a href="https://www.youtube.com/@VRGamer262">YouTube - VRGamer262</a></li>
@@ -122,4 +147,4 @@
         </ul>
 
     </body>
-</html> 
+</html>
