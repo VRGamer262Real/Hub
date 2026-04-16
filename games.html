@@ -8,20 +8,23 @@
             body {
                 background-image: url("https://raw.githubusercontent.com/VRGamer262Real/Hub-Cloudflare/refs/heads/main/bg.jpg");
                 background-size: cover;
+                background-attachment: fixed;
                 color: white;
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                margin: 0;
             }
 
+            /* Navigation */
             .nav {
-                
                 list-style-type: none;
                 margin: 0;
                 padding: 0;
                 overflow: hidden;
-                color: white;
-                background: rgba(42, 51, 46, 0.75);
-
+                background: rgba(42, 51, 46, 0.85);
+                backdrop-filter: blur(5px);
             }
+
+            .nav li { float: left; }
 
             .nav li a {
                 display: block;
@@ -29,12 +32,7 @@
                 text-decoration: none;
                 padding: 14px 16px;
                 text-align: center;
-                transition: background-color 0.25s, color 0.25s;
-                border-radius: 5%;
-            }
-
-            .nav li {
-                float: left;
+                transition: 0.3s;
             }
 
             .nav li a:hover {
@@ -43,48 +41,74 @@
             }
 
             h1 {
+                text-align: center;
+                margin-top: 40px;
+                font-size: 3rem;
                 opacity: 0;
-                animation: fadeIn 2s forwards;
+                animation: fadeIn 1s forwards;
             }
 
+            /* Games Grid */
             .listItem {
-                opacity: 0;
-                animation: fadeIn 2s forwards;
-                padding: 50px 50px;
-                color: white;
-                transition: background-color 0.25s, color 0.25s;
-                border-radius: 5%;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 25px;
+                padding: 40px;
                 list-style-type: none;
+                opacity: 0;
+                animation: fadeIn 1.5s 0.5s forwards;
             }
 
             .listItem li {
-                float: left;
-                padding: 5px;
+                width: 200px;
             }
 
             .listItem a {
-                display: block;
-                color: whitesmoke;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
                 text-decoration: none;
+                color: white;
+                background: rgba(20, 25, 23, 0.8);
+                padding: 15px;
+                border-radius: 15px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
                 text-align: center;
-                border-radius: 5%;
-                padding: 50px 50px;
-                background: rgba(42, 51, 46, 0.75);
             }
 
-            .listItem li a {
-                transition: background-color 0.25s, color 0.25s;
+            /* The Image inside the button */
+            .listItem img {
+                width: 100%;
+                height: 120px;
+                object-fit: cover;
+                border-radius: 10px;
+                margin-bottom: 12px;
+                transition: transform 0.4s;
             }
 
-            .listItem li a:hover {
-                color: black;
-                background-color: white;
+            /* Cool Animation Effects */
+            .listItem a:hover {
+                transform: translateY(-15px) scale(1.05);
+                background: rgba(255, 255, 255, 0.15);
+                border-color: #00d2ff;
+                box-shadow: 0 15px 30px rgba(0, 210, 255, 0.4);
+            }
+
+            .listItem a:hover img {
+                transform: scale(1.1) rotate(2deg);
+            }
+
+            .game-title {
+                font-weight: bold;
+                font-size: 1.1rem;
+                margin-top: 5px;
             }
 
             @keyframes fadeIn {
-                to {
-                    opacity: 1;
-                }
+                to { opacity: 1; transform: translateY(0); }
+                from { opacity: 0; transform: translateY(20px); }
             }
         </style>
     </head>
@@ -102,16 +126,39 @@
         <h1>Games</h1>
 
         <ul class="listItem">
-            <li><a href="https://supaclicker.vrgamer262.workers.dev/">Supa Clicker</a></li>
-            <li><a href="https://supaclickerhacked.vrgamer262.workers.dev/">Supa Clicker Hacked</a></li>
-            <li><a href="https://tower-defense.vrgamer262.workers.dev/">Tower Defense</a></li>
-            <li><a href="https://towerdefensehacked.vrgamer262.workers.dev/">Tower Defense Hacked</a></li>
-            <li><a href="https://bbcr.vrgamer262.workers.dev/">Baldi's Basics Classic Remastered</a></li>
-            <li><a href="https://vrgamer262real.github.io/Baldi-sBasicsClassicRemastered/">Baldi's Basics Classic Remastered Alternate Link</a></li>
-            <li><a href="https://vrgamer262real.github.io/polytrack/">Polytrack</a></li>
-            
+            <!-- Polytrack (With your Link) -->
+            <li>
+                <a href="https://vrgamer262real.github.io/polytrack/">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSq4z0oIn1dnrq__vTuC1IthPoyEBUIpJx2tw&s" alt="Polytrack">
+                    <span class="game-title">Polytrack</span>
+                </a>
+            </li>
 
-            <li><a href="https://simon.lc/tetr.js/">Tetris</a></li>
+            <!-- Placeholder Slots -->
+            <li>
+                <a href="https://supaclicker.vrgamer262.workers.dev/">
+                    <img src="https://via.placeholder.com/200x120/2a332e/ffffff?text=Supa+Clicker" alt="Supa Clicker">
+                    <span class="game-title">Supa Clicker</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://tower-defense.vrgamer262.workers.dev/">
+                    <img src="https://via.placeholder.com/200x120/2a332e/ffffff?text=Tower+Defense" alt="Tower Defense">
+                    <span class="game-title">Tower Defense</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://bbcr.vrgamer262.workers.dev/">
+                    <img src="https://via.placeholder.com/200x120/2a332e/ffffff?text=Baldi's+Basics" alt="Baldi">
+                    <span class="game-title">Baldi's Basics</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://simon.lc/tetr.js/">
+                    <img src="https://via.placeholder.com/200x120/2a332e/ffffff?text=Tetris" alt="Tetris">
+                    <span class="game-title">Tetris</span>
+                </a>
+            </li>
         </ul>
     </body>
 </html>
