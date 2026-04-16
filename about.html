@@ -8,19 +8,28 @@
             body {
                 background-image: url("https://raw.githubusercontent.com/VRGamer262Real/Hub-Cloudflare/refs/heads/main/bg.jpg");
                 background-size: cover;
+                background-attachment: fixed; /* Added for better background behavior */
                 color: white;
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                margin: 0; /* Reset default margin */
+                padding-bottom: 50px; /* Add some padding at the bottom */
             }
 
+            /* Navigation */
             .nav {
-                
                 list-style-type: none;
                 margin: 0;
                 padding: 0;
                 overflow: hidden;
-                color: white;
-                background: rgba(42, 51, 46, 0.75);
+                background: rgba(42, 51, 46, 0.75); /* Slightly adjusted for consistency */
+                backdrop-filter: blur(5px); /* Added for a modern look */
+                position: sticky; /* Make navigation sticky */
+                top: 0; /* Stick to the top */
+                z-index: 1000; /* Ensure it's above other content */
+            }
 
+            .nav li {
+                float: left;
             }
 
             .nav li a {
@@ -29,12 +38,8 @@
                 text-decoration: none;
                 padding: 14px 16px;
                 text-align: center;
-                transition: background-color 0.25s, color 0.25s;
-                border-radius: 5%;
-            }
-
-            .nav li {
-                float: left;
+                transition: background-color 0.25s, color 0.25s; /* Kept original transition */
+                border-radius: 5%; /* Kept original border-radius */
             }
 
             .nav li a:hover {
@@ -43,64 +48,66 @@
             }
 
             h1 {
+                text-align: center; /* Centered the heading */
+                margin-top: 40px; /* Added some top margin */
+                font-size: 3rem; /* Larger font size */
                 opacity: 0;
-                animation: fadeIn 2s forwards;
+                animation: fadeIn 1s forwards; /* Applied fadeIn animation */
             }
 
-            .listItem {
-                opacity: 0;
-                animation: fadeIn 2s forwards;
-                padding: 50px 50px;
-                color: white;
-                transition: background-color 0.25s, color 0.25s;
-                border-radius: 5%;
-                list-style-type: none;
+            .content-section {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 30px;
+                padding: 40px;
+                margin-top: 20px;
             }
 
-            .listItem li {
-                float: left;
-                padding: 5px;
-            }
-
-            .listItem a {
-                display: block;
-                color: whitesmoke;
-                text-decoration: none;
+            .about-text {
+                max-width: 800px; /* Limit text width for readability */
                 text-align: center;
-                border-radius: 5%;
-                padding: 50px 50px;
-                background: rgba(42, 51, 46, 0.75);
+                line-height: 1.6; /* Improved line spacing */
+                opacity: 0;
+                animation: fadeIn 1.5s 0.5s forwards; /* Applied fadeIn animation with delay */
             }
 
-            .listItem li a {
-                transition: background-color 0.25s, color 0.25s;
+            .image-gallery {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 20px;
+                margin-top: 20px;
+                opacity: 0;
+                animation: fadeIn 1.5s 1s forwards; /* Applied fadeIn animation with delay */
             }
 
-            .listItem li a:hover {
-                color: black;
-                background-color: white;
+            .image-gallery img {
+                width: 300px; /* Adjusted image width */
+                height: 300px; /* Adjusted image height */
+                object-fit: cover; /* Ensure images cover the area */
+                border-radius: 15px; /* Rounded corners for images */
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+                transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
             }
+
+            .image-gallery img:hover {
+                transform: translateY(-10px) scale(1.05); /* Hover effect for images */
+                box-shadow: 0 20px 35px rgba(0, 210, 255, 0.4); /* Glow effect on hover */
+            }
+
+            /* Removed the listItem and listItem li/a styles as they are not relevant for this page's content */
 
             @keyframes fadeIn {
-                to {
-                    opacity: 1;
-                }
+                to { opacity: 1; transform: translateY(0); }
+                from { opacity: 0; transform: translateY(20px); }
             }
         </style>
     </head>
     <body>
-<script>
-      sound.requestPermission().then(function(permission) {
-  if (permission === "granted") {
-    console.log("Notification permission granted.");
-  }
-});', requestNotificationPermission);
-    </script>
+        <!-- Removed the script tag for sound permission as it seems out of place here -->
         
         <audio src="bg.mp3" autoplay loop></audio>
-        
-  
-
         
         <!--Navigation-->
         <ul class="nav">
@@ -110,12 +117,18 @@
             <li><a href="models.html">Models</a></li>
             <li><a href="about.html">About</a></li>
         </ul>
-      <h1>About us!</h1>
 
-      <p>We are the coders of Supa Clicker, and Tower Defense. We Started the clicker as a little fun project, and it evolved. We are now coding even more HTML!</p>
-      <img src="VRGamer262.jpg" alt="Description of image" width="500" height="500">
-        <img src="900-900.jpeg" alt="Description of image" width="500" height="500">
-        </ul>
+        <h1>About Us!</h1>
 
+        <div class="content-section">
+            <p class="about-text">
+                We are the coders of Supa Clicker, and Tower Defense. We started the clicker as a little fun project, and it evolved. We are now coding even more HTML!
+            </p>
+
+            <div class="image-gallery">
+                <img src="VRGamer262.jpg" alt="VRGamer262 Profile Image">
+                <img src="900-900.jpeg" alt="Another Project Image">
+            </div>
+        </div>
     </body>
-</html> 
+</html>
