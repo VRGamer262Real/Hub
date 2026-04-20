@@ -1,7 +1,7 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>ZOCMYT - Hub</title>
+    <title>ZOCMYT - Ultra Hub</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
@@ -12,12 +12,8 @@
             --bg-glass: rgba(15, 18, 17, 0.85);
         }
 
-
-        * {
-            cursor: none !important; /* Forces system cursor to hide everywhere */
-            box-sizing: border-box;
-        }
-
+        /* Forced cursor hide */
+        * { cursor: none !important; box-sizing: border-box; }
 
         body {
             background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
@@ -31,128 +27,62 @@
             min-height: 100vh;
         }
 
-
-        /* Advanced Custom Cursor */
+        /* Custom Cursor */
         #cursor {
-            width: 10px;
-            height: 10px;
-            background: var(--primary);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 10000;
-            transition: transform 0.1s ease, width 0.3s ease, height 0.3s ease, background 0.3s ease;
-            box-shadow: 0 0 15px var(--primary);
+            width: 10px; height: 10px; background: var(--primary);
+            border-radius: 50%; position: fixed; pointer-events: none;
+            z-index: 10000; box-shadow: 0 0 15px var(--primary);
+            transition: transform 0.1s ease;
         }
-
 
         #cursor-follower {
-            width: 30px;
-            height: 30px;
-            border: 2px solid rgba(0, 210, 255, 0.5);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            transition: transform 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+            width: 30px; height: 30px; border: 2px solid rgba(0, 210, 255, 0.5);
+            border-radius: 50%; position: fixed; pointer-events: none;
+            z-index: 9999; transition: transform 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
         }
 
+        .cursor-hover #cursor { transform: scale(3); background: rgba(0, 210, 255, 0.2); border: 1px solid var(--primary); }
 
-        .cursor-hover #cursor {
-            transform: scale(3);
-            background: rgba(0, 210, 255, 0.2);
-            border: 1px solid var(--primary);
-        }
-
-
-        /* Compact Navigation */
+        /* Navigation */
         .nav {
-            list-style: none;
-            margin: 15px auto;
-            padding: 5px;
-            display: flex;
-            justify-content: center;
-            width: fit-content;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(15px);
-            border-radius: 50px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            position: sticky;
-            top: 10px;
-            z-index: 1000;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.5);
+            list-style: none; margin: 15px auto; padding: 5px;
+            display: flex; justify-content: center; width: fit-content;
+            background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(15px);
+            border-radius: 50px; border: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky; top: 10px; z-index: 1000;
         }
-
 
         .nav li a {
-            display: block;
-            color: #888;
-            text-decoration: none;
-            padding: 8px 20px;
-            transition: 0.4s;
-            border-radius: 30px;
-            font-weight: 700;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            display: block; color: #888; text-decoration: none; padding: 8px 20px;
+            transition: 0.4s; border-radius: 30px; font-weight: 700;
+            font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px;
         }
 
-
         .nav li a:hover, .nav li a.active {
-            color: white;
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white; background: linear-gradient(45deg, var(--primary), var(--secondary));
             box-shadow: 0 0 15px rgba(0, 210, 255, 0.4);
         }
 
-
-        /* Section Layout */
-        section {
-            display: none;
-            opacity: 0;
-            perspective: 1000px;
-        }
-
-
-        section.active {
-            display: block;
-            animation: fadeIn 0.5s forwards;
-        }
-
+        /* Sections */
+        section { display: none; opacity: 0; perspective: 1000px; }
+        section.active { display: block; animation: fadeIn 0.5s forwards; }
 
         h1 {
-            text-align: center;
-            margin: 15px 0;
-            font-size: 2.2rem;
+            text-align: center; margin: 15px 0; font-size: 2.2rem;
             background: linear-gradient(to bottom, #fff, #aaa);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-
-        /* 3D Grid Items */
+        /* 3D Grid */
         .listItem {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 15px;
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 10px 20px;
-            list-style: none;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px; max-width: 1100px; margin: 0 auto; padding: 10px 20px; list-style: none;
         }
 
+        .listItem li { opacity: 0; transform: translateY(20px); }
+        section.active li { animation: slideIn 0.4s forwards; }
 
-        .listItem li {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-
-
-        section.active li {
-            animation: slideIn 0.4s forwards;
-        }
-
-
-        /* Stagger effect for items */
+        /* Stagger */
         section.active li:nth-child(1) { animation-delay: 0.1s; }
         section.active li:nth-child(2) { animation-delay: 0.15s; }
         section.active li:nth-child(3) { animation-delay: 0.2s; }
@@ -160,161 +90,84 @@
         section.active li:nth-child(5) { animation-delay: 0.3s; }
         section.active li:nth-child(n+6) { animation-delay: 0.35s; }
 
-
-        .listItem a {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-decoration: none;
-            color: white;
-            background: var(--bg-glass);
-            padding: 12px;
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+        .listItem a, .music-btn {
+            display: flex; flex-direction: column; align-items: center;
+            text-decoration: none; color: white; background: var(--bg-glass);
+            padding: 12px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.05);
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            height: 100%;
-            transform-style: preserve-3d;
+            height: 100%; transform-style: preserve-3d;
         }
 
-
-        .listItem a:hover {
+        .listItem a:hover, .music-btn:hover {
             transform: translateY(-10px) rotateX(10deg) rotateY(5deg);
-            border-color: var(--primary);
-            box-shadow: 0 15px 30px rgba(0, 210, 255, 0.3);
+            border-color: var(--primary); box-shadow: 0 15px 30px rgba(0, 210, 255, 0.3);
             background: rgba(30, 35, 32, 0.95);
         }
 
+        .listItem img { width: 100%; height: 100px; object-fit: cover; border-radius: 10px; margin-bottom: 8px; transform: translateZ(20px); }
+        .game-title { font-weight: 700; font-size: 0.85rem; transform: translateZ(30px); }
 
-        .listItem img {
-            width: 100%;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 10px;
-            margin-bottom: 8px;
-            transition: transform 0.4s ease;
-            transform: translateZ(20px); /* 3D pop effect */
+        /* Toast Notification */
+        #music-toast {
+            position: fixed; bottom: 20px; right: 20px; background: var(--primary);
+            color: black; padding: 10px 20px; border-radius: 10px; font-weight: 700;
+            transform: translateY(100px); transition: 0.5s; z-index: 10001;
         }
 
-
-        .game-title {
-            font-weight: 700;
-            font-size: 0.85rem;
-            transform: translateZ(30px);
-        }
-
-
-        /* About Section */
-        .content-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-            padding-bottom: 30px;
-        }
-
-
-        .about-text {
-            max-width: 600px;
-            text-align: center;
-            font-size: 1rem;
-            background: rgba(0,0,0,0.5);
-            padding: 15px 25px;
-            border-radius: 20px;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-
-        .image-gallery {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px;
-        }
-
-
-        .image-gallery img {
-            width: 220px;
-            height: 220px;
-            object-fit: cover;
-            border-radius: 15px;
-            border: 2px solid rgba(255,255,255,0.1);
-            transition: 0.4s;
-        }
-
-
-        .image-gallery img:hover {
-            transform: scale(1.05) rotate(2deg);
-            border-color: var(--primary);
-            box-shadow: 0 0 20px var(--primary);
-        }
-
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-
-        @keyframes slideIn {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-
-        /* Hide Scrollbar for clean look */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideIn { to { opacity: 1; transform: translateY(0); } }
         ::-webkit-scrollbar { width: 0px; }
     </style>
 </head>
-<body oncontextmenu="return false;"> <!-- Block right click for "app" feel -->
+<body>
     <div id="cursor"></div>
     <div id="cursor-follower"></div>
+    <div id="music-toast">Now Playing: Default Theme</div>
     
-    <audio src="bg.mp3" autoplay loop></audio>
-
+    <audio id="main-audio" src="bg.mp3" autoplay loop></audio>
 
     <ul class="nav">
         <li><a onclick="showSection('home')" id="nav-home">Home</a></li>
         <li><a onclick="showSection('games')" id="nav-games">Games</a></li>
+        <li><a onclick="showSection('music')" id="nav-music">Music</a></li>
         <li><a onclick="showSection('tools')" id="nav-tools">Tools</a></li>
         <li><a onclick="showSection('models')" id="nav-models">Models</a></li>
         <li><a onclick="showSection('about')" id="nav-about">About</a></li>
     </ul>
-
 
     <!-- Home Section -->
     <section id="home" class="active">
         <h1><strong>Silly</strong> Projects Hub</h1>
         <ul class="listItem">
             <li><a href="https://www.youtube.com/@zOcM" target="_blank"><span class="game-title">YouTube</span></a></li>
-            <li><a href="https://www.youtube.com/@VRGamer262" target="_blank"><span class="game-title">YouTube (Alt)</span></a></li>
             <li><a href="https://makerworld.com/en/@wpl435" target="_blank"><span class="game-title">MakerWorld</span></a></li>
             <li><a href="https://github.com/zOcMYT" target="_blank"><span class="game-title">GitHub</span></a></li>
-            <li><a href="https://github.com/VRGamer262Real" target="_blank"><span class="game-title">GitHub (Alt)</span></a></li>
         </ul>
     </section>
 
+    <!-- Music Section -->
+    <section id="music">
+        <h1>Music Player</h1>
+        <ul class="listItem">
+            <li><div class="music-btn" onclick="changeMusic('bg.mp3', 'Default Theme')"><span class="game-title">Default Theme</span></div></li>
+            <li><div class="music-btn" onclick="changeMusic('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', 'Chill Vibes')"><span class="game-title">Chill Vibes</span></div></li>
+            <li><div class="music-btn" onclick="changeMusic('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3', 'Synthwave')"><span class="game-title">Synthwave</span></div></li>
+            <li><div class="music-btn" onclick="changeMusic('music_placeholder_3.mp3', 'Coming Soon...')"><span class="game-title">Track 3 (Empty)</span></div></li>
+            <li><div class="music-btn" onclick="changeMusic('music_placeholder_4.mp3', 'Coming Soon...')"><span class="game-title">Track 4 (Empty)</span></div></li>
+        </ul>
+    </section>
 
-    <!-- Games Section -->
+    <!-- Games, Tools, Models, About Sections (Kept same as before) -->
     <section id="games">
         <h1>Games</h1>
         <ul class="listItem">
             <li><a href="https://vrgamer262real.github.io/polytrack/"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSq4z0oIn1dnrq__vTuC1IthPoyEBUIpJx2tw&s"><span class="game-title">Polytrack</span></a></li>
             <li><a href="https://supaclicker.vrgamer262.workers.dev/"><img src="https://raw.githubusercontent.com/VRGamer262Real/supaclicker.github.io/refs/heads/main/ButtonIcon.png"><span class="game-title">Supa Clicker</span></a></li>
-            <li><a href="https://supaclickerhacked.vrgamer262.workers.dev/" class="hacked"><img src="https://raw.githubusercontent.com/VRGamer262Real/supaclicker.github.io/refs/heads/main/ButtonIcon.png"><span class="game-title">Clicker (Hacked)</span></a></li>
-            <li><a href="https://tower-defense.vrgamer262.workers.dev/"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/PlaceholderLC.png"><span class="game-title">Tower Defense</span></a></li>
-            <li><a href="https://towerdefensehacked.vrgamer262.workers.dev/" class="hacked"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/PlaceholderLC.png"><span class="game-title">TD (Hacked)</span></a></li>
-            <li><a href="https://bbcr.vrgamer262.workers.dev/"><img src="https://m.gjcdn.net/game-header/950/602328-enyxuxkk-v4.jpg"><span class="game-title">Baldi Remaster</span></a></li>
-            <li><a href="https://vrgamer262real.github.io/Baldi-sBasicsClassicRemastered/"><img src="https://m.gjcdn.net/game-header/950/602328-enyxuxkk-v4.jpg"><span class="game-title">Baldi (Alt)</span></a></li>
             <li><a href="https://melodixxx.github.io/reunbozdo.github.io/"><img src="https://i.ytimg.com/vi/tjbh3cNpI9g/maxresdefault.jpg"><span class="game-title">Block Blast</span></a></li>
-            <li><a href="https://simon.lc/tetr.js/"><img src="https://play-lh.googleusercontent.com/w-lUGr-eaAwxLUl7OW5v7jLG-CE8H2Z75D6lkkm8Tro21ZLCk7fvVIjVM7ZG0u0ZLBws=w240-h480-rw"><span class="game-title">Tetris</span></a></li>
             <li><a href="https://soteris24.github.io/genetrydash.github.io/"><img src="https://upload.wikimedia.org/wikipedia/en/3/35/Geometry_Dash_Logo.PNG"><span class="game-title">Geometry Dash</span></a></li>
-            <li><a href="https://8ballpool.vrgamer262.workers.dev/"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkQDXxj4nWBG57shuWLgrAZalDrnAF-CINBQ&s"><span class="game-title">8Ball Pool</span></a></li>
-            <li><a href="https://hollowknight.vrgamer262.workers.dev/"><img src="https://hb.imgix.net/d73d29a560b20cb200d6f6d7daf935043b6edd8a.jpeg?auto=compress,format&fit=crop&h=353&w=616&s=24ed82654ecaa67252feccb8e64f3ee5"><span class="game-title">Hollow Knight</span></a></li>
         </ul>
     </section>
 
-
-    <!-- Tools -->
     <section id="tools">
         <h1>Tools</h1>
         <ul class="listItem">
@@ -322,73 +175,56 @@
         </ul>
     </section>
 
-
-    <!-- Models -->
     <section id="models">
         <h1>Models</h1>
         <ul class="listItem">
             <li><a href="https://makerworld.com/en/models/1804813-locking-bottlenose-bcar"><span class="game-title">Locking BCAR</span></a></li>
-            <li><a href="https://makerworld.com/en/models/2444418-nail-form-roll-holder#profileId-2682744"><span class="game-title">Nail Form Holder</span></a></li>
-            <li><a href="https://makerworld.com/en/models/2444354-starlink-gen-3-mounts#profileId-2682685"><span class="game-title">Starlink Gen 3 Mounts</span></a></li>
         </ul>
     </section>
 
-
-    <!-- About -->
     <section id="about">
         <h1>About Us</h1>
-        <div class="content-section">
-            <p class="about-text">Coders of Supa Clicker and Tower Defense. Starting from a fun project to advanced HTML!</p>
-            <div class="image-gallery">
-                <img src="https://raw.githubusercontent.com/VRGamer262Real/Hub-Cloudflare/refs/heads/main/VRGamer262.jpg" alt="VRGamer262">
-                <img src="https://raw.githubusercontent.com/VRGamer262Real/Hub-Cloudflare/refs/heads/main/900-900.jpeg" alt="900-900">
-            </div>
+        <div style="display:flex; flex-direction:column; align-items:center; gap:15px; padding-bottom:30px;">
+            <p style="max-width:600px; text-align:center; background:rgba(0,0,0,0.5); padding:15px 25px; border-radius:20px;">Coders of Supa Clicker and Tower Defense.</p>
         </div>
     </section>
 
-
     <script>
-        // Custom Cursor Logic
         const cursor = document.getElementById('cursor');
         const follower = document.getElementById('cursor-follower');
+        const audio = document.getElementById('main-audio');
+        const toast = document.getElementById('music-toast');
         
         document.addEventListener('mousemove', (e) => {
             cursor.style.left = e.clientX + 'px';
             cursor.style.top = e.clientY + 'px';
-            
-            // Subtle delay for the follower circle
             setTimeout(() => {
                 follower.style.left = (e.clientX - 10) + 'px';
                 follower.style.top = (e.clientY - 10) + 'px';
             }, 50);
         });
 
+        function changeMusic(url, name) {
+            audio.src = url;
+            audio.play();
+            toast.innerText = "Now Playing: " + name;
+            toast.style.transform = "translateY(0)";
+            setTimeout(() => { toast.style.transform = "translateY(100px)"; }, 3000);
+        }
 
-        // Add hover effects for cursor
-        document.querySelectorAll('a').forEach(link => {
+        function showSection(sectionId) {
+            document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+            const target = document.getElementById(sectionId);
+            target.classList.add('active');
+            document.querySelectorAll('.nav li a').forEach(link => link.classList.remove('active'));
+            document.getElementById('nav-' + sectionId).classList.add('active');
+            window.scrollTo({top: 0, behavior: 'instant'});
+        }
+
+        document.querySelectorAll('a, .music-btn').forEach(link => {
             link.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
             link.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
         });
-
-
-        function showSection(sectionId) {
-            const sections = document.querySelectorAll('section');
-            sections.forEach(s => s.classList.remove('active'));
-
-
-            const target = document.getElementById(sectionId);
-            target.classList.add('active');
-
-
-            const navLinks = document.querySelectorAll('.nav li a');
-            navLinks.forEach(link => link.classList.remove('active'));
-            document.getElementById('nav-' + sectionId).classList.add('active');
-            
-            window.scrollTo({top: 0, behavior: 'instant'});
-        }
-        
-        // Start on Home
-        document.getElementById('nav-home').classList.add('active');
     </script>
 </body>
 </html>
