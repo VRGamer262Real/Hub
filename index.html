@@ -1,70 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZOCMYT - Hub</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        /* CSS Variables */
         :root {
             --primary: #00d2ff;
             --secondary: #9d50bb;
             --accent: #ff4b2b;
             --bg-glass: rgba(15, 18, 17, 0.85);
-            --text-color: white;
-            --nav-link-color: #888;
-            --nav-hover-bg: linear-gradient(45deg, var(--primary), var(--secondary));
-            --box-shadow-primary: 0 0 15px rgba(0, 210, 255, 0.4);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --hover-shadow-accent: 0 15px 30px rgba(0, 210, 255, 0.3);
         }
 
-        /* General Styles */
+
         * {
+            cursor: none !important; /* Forces system cursor to hide everywhere */
             box-sizing: border-box;
-            /* Removed cursor: none !important; for better accessibility and user experience.
-               Custom cursor is implemented via JS. */
         }
+
 
         body {
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
                         url("https://raw.githubusercontent.com/VRGamer262Real/Hub-Cloudflare/refs/heads/main/bg.jpg");
             background-size: cover;
             background-attachment: fixed;
-            color: var(--text-color);
+            color: white;
             font-family: 'Segoe UI', Roboto, sans-serif;
             margin: 0;
             overflow-x: hidden;
             min-height: 100vh;
-            line-height: 1.6; /* Improved readability */
         }
 
-        h1 {
-            text-align: center;
-            margin: 15px 0;
-            font-size: 2.2rem;
-            background: linear-gradient(to bottom, #fff, #aaa);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
 
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes slideIn {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Hide Scrollbar for clean look */
-        ::-webkit-scrollbar {
-            width: 0px;
-            background: transparent; /* Make scrollbar invisible */
-        }
-
-        /* Custom Cursor */
+        /* Advanced Custom Cursor */
         #cursor {
             width: 10px;
             height: 10px;
@@ -77,6 +45,7 @@
             box-shadow: 0 0 15px var(--primary);
         }
 
+
         #cursor-follower {
             width: 30px;
             height: 30px;
@@ -88,13 +57,15 @@
             transition: transform 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
         }
 
+
         .cursor-hover #cursor {
             transform: scale(3);
             background: rgba(0, 210, 255, 0.2);
             border: 1px solid var(--primary);
         }
 
-        /* Navigation */
+
+        /* Compact Navigation */
         .nav {
             list-style: none;
             margin: 15px auto;
@@ -102,26 +73,23 @@
             display: flex;
             justify-content: center;
             width: fit-content;
-            background: var(--bg-glass);
+            background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(15px);
             border-radius: 50px;
-            border: 1px solid var(--glass-border);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             position: sticky;
             top: 10px;
             z-index: 1000;
             box-shadow: 0 5px 25px rgba(0,0,0,0.5);
         }
 
-        .nav li {
-            margin: 0 5px; /* Added spacing between list items */
-        }
 
         .nav li a {
             display: block;
-            color: var(--nav-link-color);
+            color: #888;
             text-decoration: none;
             padding: 8px 20px;
-            transition: 0.4s ease; /* Smoother transition */
+            transition: 0.4s;
             border-radius: 30px;
             font-weight: 700;
             font-size: 0.75rem;
@@ -129,45 +97,60 @@
             letter-spacing: 1px;
         }
 
-        .nav li a:hover,
-        .nav li a.active {
-            color: var(--text-color);
-            background: var(--nav-hover-bg);
-            box-shadow: 0 0 15px rgba(0, 210, 255, 0.4); /* Using variable */
+
+        .nav li a:hover, .nav li a.active {
+            color: white;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.4);
         }
+
 
         /* Section Layout */
         section {
             display: none;
             opacity: 0;
             perspective: 1000px;
-            padding: 20px 0; /* Added padding for sections */
         }
+
 
         section.active {
             display: block;
             animation: fadeIn 0.5s forwards;
         }
 
-        /* List Items (Grid) */
+
+        h1 {
+            text-align: center;
+            margin: 15px 0;
+            font-size: 2.2rem;
+            background: linear-gradient(to bottom, #fff, #aaa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+
+        /* 3D Grid Items */
         .listItem {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 15px;
             max-width: 1100px;
-            margin: 20px auto; /* Added margin */
+            margin: 0 auto;
             padding: 10px 20px;
             list-style: none;
         }
+
 
         .listItem li {
             opacity: 0;
             transform: translateY(20px);
         }
 
+
         section.active li {
             animation: slideIn 0.4s forwards;
         }
+
 
         /* Stagger effect for items */
         section.active li:nth-child(1) { animation-delay: 0.1s; }
@@ -175,30 +158,32 @@
         section.active li:nth-child(3) { animation-delay: 0.2s; }
         section.active li:nth-child(4) { animation-delay: 0.25s; }
         section.active li:nth-child(5) { animation-delay: 0.3s; }
-        section.active li:nth-child(n+6) { animation-delay: 0.35s; } /* General delay for subsequent items */
+        section.active li:nth-child(n+6) { animation-delay: 0.35s; }
+
 
         .listItem a {
             display: flex;
             flex-direction: column;
             align-items: center;
             text-decoration: none;
-            color: var(--text-color);
+            color: white;
             background: var(--bg-glass);
             padding: 12px;
             border-radius: 16px;
-            border: 1px solid var(--glass-border);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             height: 100%;
             transform-style: preserve-3d;
-            justify-content: center; /* Center content vertically */
         }
+
 
         .listItem a:hover {
             transform: translateY(-10px) rotateX(10deg) rotateY(5deg);
             border-color: var(--primary);
-            box-shadow: var(--hover-shadow-accent);
+            box-shadow: 0 15px 30px rgba(0, 210, 255, 0.3);
             background: rgba(30, 35, 32, 0.95);
         }
+
 
         .listItem img {
             width: 100%;
@@ -210,12 +195,13 @@
             transform: translateZ(20px); /* 3D pop effect */
         }
 
+
         .game-title {
             font-weight: 700;
             font-size: 0.85rem;
             transform: translateZ(30px);
-            margin-top: auto; /* Push title to bottom if content varies */
         }
+
 
         /* About Section */
         .content-section {
@@ -223,8 +209,9 @@
             flex-direction: column;
             align-items: center;
             gap: 15px;
-            padding: 20px 0 30px 0; /* Added padding */
+            padding-bottom: 30px;
         }
+
 
         .about-text {
             max-width: 600px;
@@ -234,99 +221,118 @@
             padding: 15px 25px;
             border-radius: 20px;
             backdrop-filter: blur(5px);
-            border: 1px solid var(--glass-border);
+            border: 1px solid rgba(255,255,255,0.1);
         }
+
 
         .image-gallery {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 15px;
-            margin-top: 10px; /* Added margin */
         }
+
 
         .image-gallery img {
             width: 220px;
             height: 220px;
             object-fit: cover;
             border-radius: 15px;
-            border: 2px solid var(--glass-border);
-            transition: 0.4s ease; /* Smoother transition */
+            border: 2px solid rgba(255,255,255,0.1);
+            transition: 0.4s;
         }
+
 
         .image-gallery img:hover {
             transform: scale(1.05) rotate(2deg);
             border-color: var(--primary);
             box-shadow: 0 0 20px var(--primary);
         }
+
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+
+        @keyframes slideIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+
+        /* Hide Scrollbar for clean look */
+        ::-webkit-scrollbar { width: 0px; }
     </style>
 </head>
-<body oncontextmenu="return false;"> <!-- Note: Blocking right-click can impact accessibility. Consider user experience. -->
+<body oncontextmenu="return false;"> <!-- Block right click for "app" feel -->
     <div id="cursor"></div>
     <div id="cursor-follower"></div>
+    
+    <audio src="bg.mp3" autoplay loop></audio>
 
-    <!-- Removed autoplay audio tag. Autoplay audio is often blocked by browsers and can be intrusive.
-         Consider user consent or a play button for audio. -->
-    <!-- <audio src="bg.mp3" autoplay loop></audio> -->
 
-    <nav> <!-- Changed ul to nav for semantic correctness -->
-        <ul class="nav">
-            <li><a href="#home" onclick="showSection('home'); return false;" id="nav-home">Home</a></li>
-            <li><a href="#games" onclick="showSection('games'); return false;" id="nav-games">Games</a></li>
-            <li><a href="#tools" onclick="showSection('tools'); return false;" id="nav-tools">Tools</a></li>
-            <li><a href="#models" onclick="showSection('models'); return false;" id="nav-models">Models</a></li>
-            <li><a href="#about" onclick="showSection('about'); return false;" id="nav-about">About</a></li>
-        </ul>
-    </nav>
+    <ul class="nav">
+        <li><a onclick="showSection('home')" id="nav-home">Home</a></li>
+        <li><a onclick="showSection('games')" id="nav-games">Games</a></li>
+        <li><a onclick="showSection('tools')" id="nav-tools">Tools</a></li>
+        <li><a onclick="showSection('models')" id="nav-models">Models</a></li>
+        <li><a onclick="showSection('about')" id="nav-about">About</a></li>
+    </ul>
+
 
     <!-- Home Section -->
     <section id="home" class="active">
         <h1><strong>Silly</strong> Projects Hub</h1>
         <ul class="listItem">
-            <li><a href="https://www.youtube.com/@zOcM" target="_blank" rel="noopener noreferrer"><span class="game-title">YouTube</span></a></li>
-            <li><a href="https://www.youtube.com/@VRGamer262" target="_blank" rel="noopener noreferrer"><span class="game-title">YouTube (Alt)</span></a></li>
-            <li><a href="https://makerworld.com/en/@wpl435" target="_blank" rel="noopener noreferrer"><span class="game-title">MakerWorld</span></a></li>
-            <li><a href="https://github.com/zOcMYT" target="_blank" rel="noopener noreferrer"><span class="game-title">GitHub</span></a></li>
-            <li><a href="https://github.com/VRGamer262Real" target="_blank" rel="noopener noreferrer"><span class="game-title">GitHub (Alt)</span></a></li>
+            <li><a href="https://www.youtube.com/@zOcM" target="_blank"><span class="game-title">YouTube</span></a></li>
+            <li><a href="https://www.youtube.com/@VRGamer262" target="_blank"><span class="game-title">YouTube (Alt)</span></a></li>
+            <li><a href="https://makerworld.com/en/@wpl435" target="_blank"><span class="game-title">MakerWorld</span></a></li>
+            <li><a href="https://github.com/zOcMYT" target="_blank"><span class="game-title">GitHub</span></a></li>
+            <li><a href="https://github.com/VRGamer262Real" target="_blank"><span class="game-title">GitHub (Alt)</span></a></li>
         </ul>
     </section>
+
 
     <!-- Games Section -->
     <section id="games">
         <h1>Games</h1>
         <ul class="listItem">
-            <li><a href="https://vrgamer262real.github.io/polytrack/" target="_blank" rel="noopener noreferrer"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSq4z0oIn1dnrq__vTuC1IthPoyEBUIpJx2tw&s" alt="Polytrack Thumbnail"><span class="game-title">Polytrack</span></a></li>
-            <li><a href="https://supaclicker.vrgamer262.workers.dev/" target="_blank" rel="noopener noreferrer"><img src="https://raw.githubusercontent.com/VRGamer262Real/supaclicker.github.io/refs/heads/main/ButtonIcon.png" alt="Supa Clicker Thumbnail"><span class="game-title">Supa Clicker</span></a></li>
-            <li><a href="https://supaclickerhacked.vrgamer262.workers.dev/" target="_blank" rel="noopener noreferrer"><img src="https://raw.githubusercontent.com/VRGamer262Real/supaclicker.github.io/refs/heads/main/ButtonIcon.png" alt="Supa Clicker Hacked Thumbnail"><span class="game-title">Clicker (Hacked)</span></a></li>
-            <li><a href="https://tower-defense.vrgamer262.workers.dev/" target="_blank" rel="noopener noreferrer"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/PlaceholderLC.png" alt="Tower Defense Thumbnail"><span class="game-title">Tower Defense</span></a></li>
-            <li><a href="https://towerdefensehacked.vrgamer262.workers.dev/" target="_blank" rel="noopener noreferrer"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/PlaceholderLC.png" alt="Tower Defense Hacked Thumbnail"><span class="game-title">TD (Hacked)</span></a></li>
-            <li><a href="https://bbcr.vrgamer262.workers.dev/" target="_blank" rel="noopener noreferrer"><img src="https://m.gjcdn.net/game-header/950/602328-enyxuxkk-v4.jpg" alt="Baldi Remaster Thumbnail"><span class="game-title">Baldi Remaster</span></a></li>
-            <li><a href="https://vrgamer262real.github.io/Baldi-sBasicsClassicRemastered/" target="_blank" rel="noopener noreferrer"><img src="https://m.gjcdn.net/game-header/950/602328-enyxuxkk-v4.jpg" alt="Baldi Alt Thumbnail"><span class="game-title">Baldi (Alt)</span></a></li>
-            <li><a href="https://melodixxx.github.io/reunbozdo.github.io/" target="_blank" rel="noopener noreferrer"><img src="https://i.ytimg.com/vi/tjbh3cNpI9g/maxresdefault.jpg" alt="Block Blast Thumbnail"><span class="game-title">Block Blast</span></a></li>
-            <li><a href="https://simon.lc/tetr.js/" target="_blank" rel="noopener noreferrer"><img src="https://play-lh.googleusercontent.com/w-lUGr-eaAwxLUl7OW5v7jLG-CE8H2Z75D6lkkm8Tro21ZLCk7fvVIjVM7ZG0u0ZLBws=w240-h480-rw" alt="Tetris Thumbnail"><span class="game-title">Tetris</span></a></li>
-            <li><a href="https://soteris24.github.io/genetrydash.github.io/" target="_blank" rel="noopener noreferrer"><img src="https://upload.wikimedia.org/wikipedia/en/3/35/Geometry_Dash_Logo.PNG" alt="Geometry Dash Thumbnail"><span class="game-title">Geometry Dash</span></a></li>
-            <li><a href="https://8ballpool.vrgamer262.workers.dev/" target="_blank" rel="noopener noreferrer"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkQDXxj4nWBG57shuWLgrAZalDrnAF-CINBQ&s" alt="8Ball Pool Thumbnail"><span class="game-title">8Ball Pool</span></a></li>
-            <li><a href="https://hollowknight.vrgamer262.workers.dev/" target="_blank" rel="noopener noreferrer"><img src="https://hb.imgix.net/d73d29a560b20cb200d6f6d7daf935043b6edd8a.jpeg?auto=compress,format&fit=crop&h=353&w=616&s=24ed82654ecaa67252feccb8e64f3ee5" alt="Hollow Knight Thumbnail"><span class="game-title">Hollow Knight</span></a></li>
+            <li><a href="https://vrgamer262real.github.io/polytrack/"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSq4z0oIn1dnrq__vTuC1IthPoyEBUIpJx2tw&s"><span class="game-title">Polytrack</span></a></li>
+            <li><a href="https://supaclicker.vrgamer262.workers.dev/"><img src="https://raw.githubusercontent.com/VRGamer262Real/supaclicker.github.io/refs/heads/main/ButtonIcon.png"><span class="game-title">Supa Clicker</span></a></li>
+            <li><a href="https://supaclickerhacked.vrgamer262.workers.dev/" class="hacked"><img src="https://raw.githubusercontent.com/VRGamer262Real/supaclicker.github.io/refs/heads/main/ButtonIcon.png"><span class="game-title">Clicker (Hacked)</span></a></li>
+            <li><a href="https://tower-defense.vrgamer262.workers.dev/"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/PlaceholderLC.png"><span class="game-title">Tower Defense</span></a></li>
+            <li><a href="https://towerdefensehacked.vrgamer262.workers.dev/" class="hacked"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/PlaceholderLC.png"><span class="game-title">TD (Hacked)</span></a></li>
+            <li><a href="https://bbcr.vrgamer262.workers.dev/"><img src="https://m.gjcdn.net/game-header/950/602328-enyxuxkk-v4.jpg"><span class="game-title">Baldi Remaster</span></a></li>
+            <li><a href="https://vrgamer262real.github.io/Baldi-sBasicsClassicRemastered/"><img src="https://m.gjcdn.net/game-header/950/602328-enyxuxkk-v4.jpg"><span class="game-title">Baldi (Alt)</span></a></li>
+            <li><a href="https://melodixxx.github.io/reunbozdo.github.io/"><img src="https://i.ytimg.com/vi/tjbh3cNpI9g/maxresdefault.jpg"><span class="game-title">Block Blast</span></a></li>
+            <li><a href="https://simon.lc/tetr.js/"><img src="https://play-lh.googleusercontent.com/w-lUGr-eaAwxLUl7OW5v7jLG-CE8H2Z75D6lkkm8Tro21ZLCk7fvVIjVM7ZG0u0ZLBws=w240-h480-rw"><span class="game-title">Tetris</span></a></li>
+            <li><a href="https://soteris24.github.io/genetrydash.github.io/"><img src="https://assets-prd.ignimgs.com/2021/12/14/geometrydash-1639510868467.jpg"><span class="game-title">Geometry Dash</span></a></li>
+            <li><a href="https://8ballpool.vrgamer262.workers.dev/"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkQDXxj4nWBG57shuWLgrAZalDrnAF-CINBQ&s"><span class="game-title">8Ball Pool</span></a></li>
+            <li><a href="https://hollowknight.vrgamer262.workers.dev/"><img src="https://hb.imgix.net/d73d29a560b20cb200d6f6d7daf935043b6edd8a.jpeg?auto=compress,format&fit=crop&h=353&w=616&s=24ed82654ecaa67252feccb8e64f3ee5"><span class="game-title">Hollow Knight</span></a></li>
         </ul>
     </section>
+
 
     <!-- Tools -->
     <section id="tools">
         <h1>Tools</h1>
         <ul class="listItem">
-            <li><a href="https://dc.vrgamer262.workers.dev/" target="_blank" rel="noopener noreferrer"><span class="game-title">Decode Counter</span></a></li>
+            <li><a href="https://dc.vrgamer262.workers.dev/"><span class="game-title">Decode Counter</span></a></li>
         </ul>
     </section>
+
 
     <!-- Models -->
     <section id="models">
         <h1>Models</h1>
         <ul class="listItem">
-            <li><a href="https://makerworld.com/en/models/1804813-locking-bottlenose-bcar" target="_blank" rel="noopener noreferrer"><span class="game-title">Locking BCAR</span></a></li>
-            <li><a href="https://makerworld.com/en/models/2444418-nail-form-roll-holder#profileId-2682744" target="_blank" rel="noopener noreferrer"><span class="game-title">Nail Form Holder</span></a></li>
-            <li><a href="https://makerworld.com/en/models/2444354-starlink-gen-3-mounts#profileId-2682685" target="_blank" rel="noopener noreferrer"><span class="game-title">Starlink Gen 3 Mounts</span></a></li>
+            <li><a href="https://makerworld.com/en/models/1804813-locking-bottlenose-bcar"><span class="game-title">Locking BCAR</span></a></li>
+            <li><a href="https://makerworld.com/en/models/2444418-nail-form-roll-holder#profileId-2682744"><span class="game-title">Nail Form Holder</span></a></li>
+            <li><a href="https://makerworld.com/en/models/2444354-starlink-gen-3-mounts#profileId-2682685"><span class="game-title">Starlink Gen 3 Mounts</span></a></li>
         </ul>
     </section>
+
 
     <!-- About -->
     <section id="about">
@@ -334,90 +340,55 @@
         <div class="content-section">
             <p class="about-text">Coders of Supa Clicker and Tower Defense. Starting from a fun project to advanced HTML!</p>
             <div class="image-gallery">
-                <img src="https://raw.githubusercontent.com/VRGamer262Real/Hub-Cloudflare/refs/heads/main/VRGamer262.jpg" alt="VRGamer262 Profile Picture">
-                <img src="https://raw.githubusercontent.com/VRGamer262Real/Hub-Cloudflare/refs/heads/main/900-900.jpeg" alt="Team Photo">
+                <img src="https://raw.githubusercontent.com/VRGamer262Real/Hub-Cloudflare/refs/heads/main/VRGamer262.jpg" alt="VRGamer262">
+                <img src="https://raw.githubusercontent.com/VRGamer262Real/Hub-Cloudflare/refs/heads/main/900-900.jpeg" alt="900-900">
             </div>
         </div>
     </section>
+
 
     <script>
         // Custom Cursor Logic
         const cursor = document.getElementById('cursor');
         const follower = document.getElementById('cursor-follower');
-
-        // Update cursor position on mouse move
+        
         document.addEventListener('mousemove', (e) => {
             cursor.style.left = e.clientX + 'px';
             cursor.style.top = e.clientY + 'px';
-
+            
             // Subtle delay for the follower circle
-            // Using requestAnimationFrame for smoother animation and performance
-            requestAnimationFrame(() => {
-                follower.style.left = (e.clientX - follower.offsetWidth / 2) + 'px';
-                follower.style.top = (e.clientY - follower.offsetHeight / 2) + 'px';
-            });
+            setTimeout(() => {
+                follower.style.left = (e.clientX - 10) + 'px';
+                follower.style.top = (e.clientY - 10) + 'px';
+            }, 50);
         });
 
-        // Add hover effects for cursor on interactive elements
-        const interactiveElements = document.querySelectorAll('a, button, input, textarea, select'); // Expanded to include more interactive types
-        interactiveElements.forEach(element => {
-            element.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
-            element.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+
+        // Add hover effects for cursor
+        document.querySelectorAll('a').forEach(link => {
+            link.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+            link.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
         });
 
-        // Function to show/hide sections and update navigation
+
         function showSection(sectionId) {
             const sections = document.querySelectorAll('section');
-            sections.forEach(s => {
-                s.classList.remove('active');
-                s.style.opacity = '0'; // Ensure sections are hidden before animation
-            });
+            sections.forEach(s => s.classList.remove('active'));
 
-            const targetSection = document.getElementById(sectionId);
-            if (targetSection) {
-                targetSection.classList.add('active');
-                // Use a small delay to allow CSS transition to take effect
-                setTimeout(() => {
-                    targetSection.style.opacity = '1';
-                }, 50); // Small delay
-            }
+
+            const target = document.getElementById(sectionId);
+            target.classList.add('active');
+
 
             const navLinks = document.querySelectorAll('.nav li a');
             navLinks.forEach(link => link.classList.remove('active'));
-            const currentNavLink = document.getElementById('nav-' + sectionId);
-            if (currentNavLink) {
-                currentNavLink.classList.add('active');
-            }
-
-            // Scroll to top smoothly
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth' // Changed to smooth for better UX
-            });
+            document.getElementById('nav-' + sectionId).classList.add('active');
+            
+            window.scrollTo({top: 0, behavior: 'instant'});
         }
-
-        // Initialize: Set the 'active' class for the home navigation link and show the home section
-        document.addEventListener('DOMContentLoaded', () => {
-            const homeNavLink = document.getElementById('nav-home');
-            if (homeNavLink) {
-                homeNavLink.classList.add('active');
-            }
-            // Ensure home section is visible on load if it's the default
-            const homeSection = document.getElementById('home');
-            if (homeSection) {
-                homeSection.classList.add('active');
-                homeSection.style.opacity = '1';
-            }
-        });
-
-        // Prevent default anchor link behavior if using JS to control sections
-        document.querySelectorAll('.nav a').forEach(link => {
-            link.addEventListener('click', function(event) {
-                event.preventDefault(); // Prevent default anchor jump
-                const sectionId = this.getAttribute('href').substring(1); // Get section ID from href
-                showSection(sectionId);
-            });
-        });
+        
+        // Start on Home
+        document.getElementById('nav-home').classList.add('active');
     </script>
 </body>
 </html>
