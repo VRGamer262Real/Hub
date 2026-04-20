@@ -14,31 +14,39 @@
                 margin: 0;
             }
 
-            /* Navigation */
-            .nav {
-                list-style-type: none;
-                margin: 0;
-                padding: 0;
-                overflow: hidden;
-                background: rgba(42, 51, 46, 0.85);
-                backdrop-filter: blur(5px);
-            }
+    .nav {
+        list-style-type: none;
+        margin: 20px auto;
+        padding: 5px 15px;
+        display: flex;
+        justify-content: center;
+        width: fit-content;
+        background: rgba(42, 51, 46, 0.75);
+        backdrop-filter: blur(10px);
+        border-radius: 50px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        position: sticky;
+        top: 20px;
+        z-index: 1000;
+        animation: fadeIn 1s ease-out;
+    }
 
-            .nav li { float: left; }
+    .nav li a {
+        display: block;
+        color: whitesmoke;
+        text-decoration: none;
+        padding: 10px 20px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border-radius: 30px;
+    }
 
-            .nav li a {
-                display: block;
-                color: whitesmoke;
-                text-decoration: none;
-                padding: 14px 16px;
-                text-align: center;
-                transition: 0.3s;
-            }
+    .nav li a:hover {
+        background-color: rgba(255, 255, 255, 0.15);
+        color: #00d2ff;
+        transform: scale(1.1);
+    }
 
-            .nav li a:hover {
-                background-color: white;
-                color: black;
-            }
 
             h1 {
                 text-align: center;
