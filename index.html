@@ -10,24 +10,19 @@
             --secondary: #9d50bb;
             --accent: #ff4b2b;
             --bg-glass: rgba(15, 18, 17, 0.85);
+            --glow: rgba(0, 210, 255, 0.4);
         }
 
-        /* 1. HIDE SYSTEM CURSOR */
+        /* 1. CURSOR & RESET */
         * { cursor: none !important; box-sizing: border-box; }
-
         body {
             background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
                         url("https://raw.githubusercontent.com/VRGamer262Real/Hub-Cloudflare/refs/heads/main/bg.jpg");
-            background-size: cover;
-            background-attachment: fixed;
-            color: white;
-            font-family: 'Segoe UI', Roboto, sans-serif;
-            margin: 0;
-            overflow-x: hidden;
-            min-height: 100vh;
+            background-size: cover; background-attachment: fixed; background-position: center;
+            color: white; font-family: 'Segoe UI', Roboto, sans-serif;
+            margin: 0; overflow-x: hidden; min-height: 100vh; transition: background 0.5s ease;
         }
 
-        /* 2. CUSTOM CURSOR */
         #cursor {
             width: 10px; height: 10px; background: var(--primary);
             border-radius: 50%; position: fixed; pointer-events: none;
@@ -36,106 +31,106 @@
         }
 
         #cursor-follower {
-            width: 30px; height: 30px; border: 2px solid rgba(0, 210, 255, 0.5);
+            width: 30px; height: 30px; border: 2px solid var(--primary);
             border-radius: 50%; position: fixed; pointer-events: none;
             z-index: 9999; transition: transform 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+            opacity: 0.5;
         }
 
-        .cursor-hover #cursor { transform: scale(3); background: rgba(0, 210, 255, 0.1); border: 1px solid var(--primary); }
+        .cursor-hover #cursor { transform: scale(3); background: transparent; border: 1px solid var(--primary); }
 
-        /* 3. NAVIGATION */
+        /* 2. NAVIGATION */
+        .nav-wrapper {
+            position: sticky; top: 10px; z-index: 1000;
+            display: flex; justify-content: center; width: 100%; padding: 0 10px;
+        }
+
         .nav {
-            list-style: none; margin: 15px auto; padding: 5px;
-            display: flex; justify-content: center; width: fit-content;
+            list-style: none; margin: 0; padding: 5px;
+            display: flex; flex-wrap: wrap; justify-content: center;
             background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(15px);
             border-radius: 50px; border: 1px solid rgba(255, 255, 255, 0.1);
-            position: sticky; top: 10px; z-index: 1000;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.5);
         }
 
         .nav li a {
-            display: block; color: #888; text-decoration: none; padding: 8px 18px;
+            display: block; color: #888; text-decoration: none; padding: 8px 15px;
             transition: 0.4s; border-radius: 30px; font-weight: 700;
-            font-size: 0.75rem; text-transform: uppercase;
+            font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px;
         }
 
         .nav li a:hover, .nav li a.active {
-            color: white; background: linear-gradient(45deg, var(--primary), var(--secondary));
-            box-shadow: 0 0 15px rgba(0, 210, 255, 0.4);
+            color: white; background: var(--primary);
+            box-shadow: 0 0 15px var(--glow);
         }
 
-        /* 4. SECTIONS & GRID */
-        section { display: none; opacity: 0; perspective: 1000px; padding-bottom: 50px; }
+        /* 3. SECTIONS & GRID */
+        section { display: none; opacity: 0; perspective: 1200px; padding: 20px 10px 80px; }
         section.active { display: block; animation: fadeIn 0.5s forwards; }
 
         h1 {
-            text-align: center; margin: 15px 0; font-size: 2.2rem;
+            text-align: center; margin-bottom: 25px; font-size: 2.5rem;
             background: linear-gradient(to bottom, #fff, #aaa);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
         .listItem {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 15px; max-width: 1100px; margin: 0 auto; padding: 10px 20px; list-style: none;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 15px; max-width: 1200px; margin: 0 auto; list-style: none; padding: 0;
         }
 
         .listItem li { opacity: 0; transform: translateY(20px); }
         section.active li { animation: slideIn 0.4s forwards; }
 
-        /* Staggered Entrance */
-        section.active li:nth-child(1) { animation-delay: 0.05s; }
-        section.active li:nth-child(2) { animation-delay: 0.1s; }
-        section.active li:nth-child(3) { animation-delay: 0.15s; }
-        section.active li:nth-child(n+4) { animation-delay: 0.2s; }
+        /* Stagger */
+        .listItem li:nth-child(1) { animation-delay: 0.05s; }
+        .listItem li:nth-child(2) { animation-delay: 0.1s; }
+        .listItem li:nth-child(3) { animation-delay: 0.15s; }
+        .listItem li:nth-child(4) { animation-delay: 0.2s; }
+        .listItem li:nth-child(n+5) { animation-delay: 0.25s; }
 
         .listItem a, .music-btn, .box-ui {
             display: flex; flex-direction: column; align-items: center;
             text-decoration: none; color: white; background: var(--bg-glass);
-            padding: 12px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 15px; border-radius: 18px; border: 1px solid rgba(255, 255, 255, 0.05);
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             height: 100%; transform-style: preserve-3d; text-align: center;
         }
 
         .listItem a:hover, .music-btn:hover {
-            transform: translateY(-8px) rotateX(5deg);
-            border-color: var(--primary); box-shadow: 0 15px 30px rgba(0, 210, 255, 0.2);
-            background: rgba(30, 35, 32, 0.95);
+            transform: translateY(-10px) rotateX(10deg);
+            border-color: var(--primary); box-shadow: 0 15px 30px var(--glow);
         }
 
         .listItem img {
-            width: 100%; height: 100px; object-fit: cover; border-radius: 10px;
-            margin-bottom: 8px; transform: translateZ(20px);
+            width: 100%; height: 110px; object-fit: cover; border-radius: 12px;
+            margin-bottom: 10px; transform: translateZ(20px);
         }
 
-        .game-title { font-weight: 700; font-size: 0.85rem; transform: translateZ(30px); }
+        .game-title { font-weight: 700; font-size: 0.9rem; transform: translateZ(30px); }
 
-        /* 5. QUESTIONS FORM */
-        .form-container {
-            max-width: 500px; margin: 20px auto; background: var(--bg-glass);
+        /* 4. UTILITY PANELS */
+        .panel {
+            max-width: 600px; margin: 20px auto; background: var(--bg-glass);
             padding: 25px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);
-            display: flex; flex-direction: column; gap: 15px;
+            display: flex; flex-direction: column; gap: 15px; text-align: center;
         }
 
-        input, textarea {
+        input, textarea, select {
             width: 100%; padding: 12px; border-radius: 10px; background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1); color: white; outline: none;
+            border: 1px solid rgba(255,255,255,0.1); color: white; outline: none; font-family: inherit;
         }
 
-        .submit-btn {
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            border: none; color: white; padding: 12px; border-radius: 30px;
-            font-weight: 700; text-transform: uppercase; transition: 0.3s;
+        .btn-main {
+            background: var(--primary); border: none; color: black; padding: 12px;
+            border-radius: 30px; font-weight: 700; text-transform: uppercase; transition: 0.3s;
         }
 
-        /* 6. TOAST & GALLERY */
         #music-toast {
             position: fixed; bottom: 20px; right: 20px; background: var(--primary);
-            color: black; padding: 10px 20px; border-radius: 10px; font-weight: 700;
-            transform: translateY(150%); transition: 0.5s; z-index: 10001;
-        }
-
-        .image-gallery img {
-            width: 200px; height: 200px; object-fit: cover; border-radius: 15px;
-            border: 2px solid rgba(255,255,255,0.1); transition: 0.4s;
+            color: black; padding: 12px 25px; border-radius: 50px; font-weight: 800;
+            transform: translateY(150%); transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 10001; box-shadow: 0 5px 20px rgba(0,0,0,0.4);
         }
 
         @keyframes fadeIn { to { opacity: 1; } }
@@ -143,46 +138,56 @@
         ::-webkit-scrollbar { width: 0px; }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
     <div id="cursor"></div>
     <div id="cursor-follower"></div>
     <div id="music-toast">Now Playing: Default Theme</div>
-    
     <audio id="main-audio" src="bg.mp3" autoplay loop></audio>
 
-    <ul class="nav">
-        <li><a onclick="showSection('home')" id="nav-home">Home</a></li>
-        <li><a onclick="showSection('games')" id="nav-games">Games</a></li>
-        <li><a onclick="showSection('music')" id="nav-music">Music</a></li>
-        <li><a onclick="showSection('tools')" id="nav-tools">Tools</a></li>
-        <li><a onclick="showSection('models')" id="nav-models">Models</a></li>
-        <li><a onclick="showSection('news')" id="nav-news">News</a></li>
-        <li><a onclick="showSection('questions')" id="nav-questions">Questions</a></li>
-        <li><a onclick="showSection('about')" id="nav-about">About</a></li>
-    </ul>
+    <div class="nav-wrapper">
+        <ul class="nav">
+            <li><a onclick="showSection('home')" id="nav-home">Home</a></li>
+            <li><a onclick="showSection('games')" id="nav-games">Games</a></li>
+            <li><a onclick="showSection('music')" id="nav-music">Music</a></li>
+            <li><a onclick="showSection('tools')" id="nav-tools">Tools</a></li>
+            <li><a onclick="showSection('models')" id="nav-models">Models</a></li>
+            <li><a onclick="showSection('customize')" id="nav-customize">Customization</a></li>
+            <li><a onclick="showSection('news')" id="nav-news">News</a></li>
+            <li><a onclick="showSection('questions')" id="nav-questions">Questions</a></li>
+            <li><a onclick="showSection('about')" id="nav-about">About</a></li>
+        </ul>
+    </div>
 
     <!-- HOME -->
     <section id="home" class="active">
-        <h1><strong>Silly</strong> Projects Hub</h1>
+        <h1>Welcome to the <strong>Hub</strong></h1>
         <ul class="listItem">
             <li><a href="https://www.youtube.com/@zOcM" target="_blank"><span class="game-title">YouTube (Z0CM)</span></a></li>
-            <li><a href="https://www.youtube.com/@VRGamer262" target="_blank"><span class="game-title">YouTube (VR)</span></a></li>
-            <li><a href="https://github.com/VRGamer262Real" target="_blank"><span class="game-title">GitHub</span></a></li>
+            <li><a href="https://www.youtube.com/@VRGamer262" target="_blank"><span class="game-title">YouTube (VRGamer262)</span></a></li>
+            <li><a href="https://makerworld.com/en/@wpl435" target="_blank"><span class="game-title">MakerWorld</span></a></li>
+            <li><a href="https://github.com/zOcMYT" target="_blank"><span class="game-title">GitHub (Z0CM)</span></a></li>
+            <li><a href="https://github.com/VRGamer262Real" target="_blank"><span class="game-title">GitHub (VRGamer262)</span></a></li>
         </ul>
     </section>
 
-    <!-- GAMES -->
+    <!-- GAMES (FULL RESTORE) -->
     <section id="games">
         <h1>Games</h1>
         <ul class="listItem">
             <li><a href="https://vrgamer262real.github.io/polytrack/"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSq4z0oIn1dnrq__vTuC1IthPoyEBUIpJx2tw&s"><span class="game-title">Polytrack</span></a></li>
             <li><a href="https://supaclicker.vrgamer262.workers.dev/"><img src="https://raw.githubusercontent.com/VRGamer262Real/supaclicker.github.io/refs/heads/main/ButtonIcon.png"><span class="game-title">Supa Clicker</span></a></li>
-            <li><a href="https://supaclickerhacked.vrgamer262.workers.dev/"><img src="https://raw.githubusercontent.com/VRGamer262Real/supaclicker.github.io/refs/heads/main/ButtonIcon.png"><span class="game-title">Clicker (Hacked)</span></a></li>
-            <li><a href="https://bbcr.vrgamer262.workers.dev/"><img src="https://m.gjcdn.net/game-header/950/602328-enyxuxkk-v4.jpg"><span class="game-title">Baldi Remaster</span></a></li>
+            <li><a href="https://supaclickerhacked.vrgamer262.workers.dev/"><img src="https://raw.githubusercontent.com/VRGamer262Real/supaclicker.github.io/refs/heads/main/ButtonIcon.png"><span class="game-title">Supa Clicker (Hacked)</span></a></li>
+            <li><a href="https://tower-defense.vrgamer262.workers.dev/"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/PlaceholderLC.png"><span class="game-title">Tower Defense</span></a></li>
+            <li><a href="https://towerdefensehacked.vrgamer262.workers.dev/"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/PlaceholderLC.png"><span class="game-title">Tower Defense (Hacked)</span></a></li>
+            <li><a href="https://bbcr.vrgamer262.workers.dev/"><img src="https://m.gjcdn.net/game-header/950/602328-enyxuxkk-v4.jpg"><span class="game-title">Baldi Remastered</span></a></li>
+            <li><a href="https://vrgamer262real.github.io/Baldi-sBasicsClassicRemastered/"><img src="https://m.gjcdn.net/game-header/950/602328-enyxuxkk-v4.jpg"><span class="game-title">Baldi (Alt Link)</span></a></li>
             <li><a href="https://melodixxx.github.io/reunbozdo.github.io/"><img src="https://i.ytimg.com/vi/tjbh3cNpI9g/maxresdefault.jpg"><span class="game-title">Block Blast</span></a></li>
+            <li><a href="https://simon.lc/tetr.js/"><img src="https://play-lh.googleusercontent.com/w-lUGr-eaAwxLUl7OW5v7jLG-CE8H2Z75D6lkkm8Tro21ZLCk7fvVIjVM7ZG0u0ZLBws=w240-h480-rw"><span class="game-title">Tetris</span></a></li>
             <li><a href="https://soteris24.github.io/genetrydash.github.io/"><img src="https://upload.wikimedia.org/wikipedia/en/3/35/Geometry_Dash_Logo.PNG"><span class="game-title">Geometry Dash</span></a></li>
-            <li><a href="https://snowrider3d.vrgamer262.workers.dev/"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7HUapu5amnY5nfYojuBTCRQBThbOGsPKl_Q&s"><span class="game-title">Snow Rider 3D</span></a></li>
+            <li><a href="https://8ballpool.vrgamer262.workers.dev/"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkQDXxj4nWBG57shuWLgrAZalDrnAF-CINBQ&s"><span class="game-title">8Ball Pool</span></a></li>
             <li><a href="https://hollowknight.vrgamer262.workers.dev/"><img src="https://hb.imgix.net/d73d29a560b20cb200d6f6d7daf935043b6edd8a.jpeg?auto=compress,format&fit=crop&h=353&w=616&s=24ed82654ecaa67252feccb8e64f3ee5"><span class="game-title">Hollow Knight</span></a></li>
+            <li><a href="https://snowrider3d.vrgamer262.workers.dev/"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7HUapu5amnY5nfYojuBTCRQBThbOGsPKl_Q&s"><span class="game-title">Snow Rider 3D</span></a></li>
+            <li><a href="https://vrgamer262real.github.io/Hollow-Knight-Silksong//"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNEgkizS0UKu2jt6TTEuk5926iNi01sI924g&s"><span class="game-title">HK: Silksong</span></a></li>
         </ul>
     </section>
 
@@ -192,6 +197,7 @@
         <ul class="listItem">
             <li><div class="music-btn" onclick="changeMusic('bg.mp3', 'Default Theme')"><span class="game-title">Default Theme</span></div></li>
             <li><div class="music-btn" onclick="changeMusic('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', 'Chill Vibes')"><span class="game-title">Chill Vibes</span></div></li>
+            <li><div class="music-btn" onclick="changeMusic('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3', 'Epic Beats')"><span class="game-title">Epic Beats</span></div></li>
         </ul>
     </section>
 
@@ -207,25 +213,40 @@
     <section id="models">
         <h1>3D Models</h1>
         <ul class="listItem">
-            <li><a href="https://makerworld.com/en/models/1804813-locking-bottlenose-bcar"><span class="game-title">Locking BCAR</span></a></li>
+            <li><a href="https://makerworld.com/en/models/1804813-locking-bottlenose-bcar"><span class="game-title">Locking Bottlenose BCAR</span></a></li>
+            <li><a href="https://makerworld.com/en/models/2444418-nail-form-roll-holder"><span class="game-title">Nail Form Holder</span></a></li>
+            <li><a href="https://makerworld.com/en/models/2444354-starlink-gen-3-mounts"><span class="game-title">Starlink Gen 3 Mounts</span></a></li>
         </ul>
+    </section>
+
+    <!-- CUSTOMIZATION (NEW!) -->
+    <section id="customize">
+        <h1>Customization</h1>
+        <div class="panel">
+            <p>Personalize your Hub experience!</p>
+            <label>Theme Color:</label>
+            <input type="color" id="theme-color" value="#00d2ff" onchange="updateTheme(this.value)">
+            <label>Background Image URL:</label>
+            <input type="text" id="bg-url" placeholder="Paste image link here..." onchange="updateBg(this.value)">
+            <button class="btn-main" onclick="resetStyles()">Reset to Default</button>
+        </div>
     </section>
 
     <!-- NEWS -->
     <section id="news">
         <h1>Latest News</h1>
-        <div class="form-container">
-            <p><strong>V1.5 Update:</strong> Added Questions tab, fixed 3D layout bugs, and restored missing game icons!</p>
+        <div class="panel">
+            <p><strong>Version 2.0 Released:</strong> Added Customization Tab, restored all missing games/models, and optimized the 3D engine. Enjoy the Silksong and Snow Rider 3D updates!</p>
         </div>
     </section>
 
     <!-- QUESTIONS -->
     <section id="questions">
         <h1>Submit a Question</h1>
-        <div class="form-container">
-            <input type="text" id="q-title" placeholder="Question Title">
-            <textarea id="q-body" rows="4" placeholder="Your message..."></textarea>
-            <button class="submit-btn" onclick="submitToGithub()">Send to GitHub</button>
+        <div class="panel">
+            <input type="text" id="q-title" placeholder="Short Title">
+            <textarea id="q-body" rows="4" placeholder="Type your question or feedback..."></textarea>
+            <button class="btn-main" onclick="submitToGithub()">Submit to GitHub Issues</button>
         </div>
     </section>
 
@@ -233,20 +254,23 @@
     <section id="about">
         <h1>About Us</h1>
         <div style="display:flex; flex-direction:column; align-items:center; gap:20px;">
-            <p class="form-container">We are the coders of Supa Clicker and Tower Defense.</p>
-            <div class="image-gallery">
-                <img src="https://raw.githubusercontent.com/VRGamer262Real/Hub-Cloudflare/refs/heads/main/VRGamer262.jpg">
-                <img src="https://raw.githubusercontent.com/VRGamer262Real/Hub-Cloudflare/refs/heads/main/900-900.jpeg">
+            <div class="panel">We are the coders of Supa Clicker and Tower Defense. Our hub is designed for speed and fun!</div>
+            <div style="display:flex; gap:15px; flex-wrap:wrap; justify-content:center;">
+                <img src="https://raw.githubusercontent.com/VRGamer262Real/Hub-Cloudflare/refs/heads/main/VRGamer262.jpg" style="width:200px; border-radius:15px; border:2px solid var(--primary);">
+                <img src="https://raw.githubusercontent.com/VRGamer262Real/Hub-Cloudflare/refs/heads/main/900-900.jpeg" style="width:200px; border-radius:15px; border:2px solid var(--primary);">
             </div>
         </div>
     </section>
+
+    <div id="music-toast">Now Playing: Default Theme</div>
 
     <script>
         const cursor = document.getElementById('cursor');
         const follower = document.getElementById('cursor-follower');
         const audio = document.getElementById('main-audio');
         const toast = document.getElementById('music-toast');
-        
+
+        // Cursor Logic
         document.addEventListener('mousemove', (e) => {
             cursor.style.left = e.clientX + 'px';
             cursor.style.top = e.clientY + 'px';
@@ -256,17 +280,32 @@
             }, 50);
         });
 
+        // Tab Switching
         function showSection(id) {
             document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
-            const target = document.getElementById(id);
-            if(target) {
-                target.classList.add('active');
-                document.querySelectorAll('.nav li a').forEach(link => link.classList.remove('active'));
-                document.getElementById('nav-' + id).classList.add('active');
-                window.scrollTo(0,0);
-            }
+            document.getElementById(id).classList.add('active');
+            document.querySelectorAll('.nav li a').forEach(link => link.classList.remove('active'));
+            const activeNav = Array.from(document.querySelectorAll('.nav li a')).find(a => a.id === 'nav-' + id);
+            if(activeNav) activeNav.classList.add('active');
+            window.scrollTo({top: 0, behavior: 'smooth'});
         }
 
+        // Customization
+        function updateTheme(color) {
+            document.documentElement.style.setProperty('--primary', color);
+            document.documentElement.style.setProperty('--glow', color + '66');
+        }
+        function updateBg(url) {
+            document.body.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('${url}')`;
+        }
+        function resetStyles() {
+            updateTheme('#00d2ff');
+            updateBg('https://raw.githubusercontent.com/VRGamer262Real/Hub-Cloudflare/refs/heads/main/bg.jpg');
+            document.getElementById('theme-color').value = '#00d2ff';
+            document.getElementById('bg-url').value = '';
+        }
+
+        // Music
         function changeMusic(url, name) {
             audio.src = url; audio.play();
             toast.innerText = "Now Playing: " + name;
@@ -274,18 +313,22 @@
             setTimeout(() => { toast.style.transform = "translateY(150%)"; }, 3000);
         }
 
+        // GitHub Issues
         function submitToGithub() {
             const t = document.getElementById('q-title').value;
             const b = document.getElementById('q-body').value;
-            if(!t || !b) return alert("Fill all fields!");
+            if(!t || !b) return alert("Please fill in both fields.");
             window.open(`https://github.com/VRGamer262Real/Hub-Cloudflare/issues/new?title=${encodeURIComponent(t)}&body=${encodeURIComponent(b)}`, '_blank');
         }
 
-        document.querySelectorAll('a, .music-btn, .submit-btn, input, textarea').forEach(el => {
-            el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
-            el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
-        });
-
+        // Apply Hover to all current and future interactive items
+        function refreshCursor() {
+            document.querySelectorAll('a, .music-btn, .btn-main, input, textarea, select').forEach(el => {
+                el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+                el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+            });
+        }
+        refreshCursor();
         document.getElementById('nav-home').classList.add('active');
     </script>
 </body>
