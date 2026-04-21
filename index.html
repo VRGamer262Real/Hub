@@ -40,7 +40,13 @@
 
         .cursor-hover #cursor { transform: scale(3); background: transparent; border: 1px solid var(--primary); }
 
-        /* 2. NAVIGATION */
+        /* 2. STATUS BAR & NAVIGATION */
+        .status-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 20px; background: rgba(0,0,0,0.4); backdrop-filter: blur(5px);
+            font-size: 0.8rem; font-weight: 600; color: rgba(255,255,255,0.7);
+        }
+
         .nav-wrapper {
             position: sticky; top: 10px; z-index: 1000;
             display: flex; justify-content: center; width: 100%; padding: 0 10px;
@@ -65,15 +71,28 @@
             box-shadow: 0 0 15px var(--glow);
         }
 
+        /* SEARCH BAR */
+        .search-container {
+            max-width: 400px; margin: 20px auto; position: relative;
+        }
+        .search-container input {
+            padding-left: 40px; border-radius: 50px; background: rgba(255,255,255,0.1);
+        }
+        .search-icon {
+            position: absolute; left: 15px; top: 50%; transform: translateY(-50%);
+            opacity: 0.5; font-size: 1.2rem;
+        }
+
         /* 3. SECTIONS & GRID */
         section { display: none; opacity: 0; perspective: 1200px; padding: 20px 10px 80px; }
         section.active { display: block; animation: fadeIn 0.5s forwards; }
 
         h1 {
-            text-align: center; margin-bottom: 25px; font-size: 2.5rem;
+            text-align: center; margin-bottom: 5px; font-size: 2.5rem;
             background: linear-gradient(to bottom, #fff, #aaa);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
+        .greeting { text-align: center; margin-bottom: 25px; opacity: 0.7; font-weight: 300; }
 
         .listItem {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
@@ -142,6 +161,12 @@
 <body oncontextmenu="return false;">
     <div id="cursor"></div>
     <div id="cursor-follower"></div>
+    
+    <div class="status-bar">
+        <div id="clock">00:00:00 AM</div>
+        <div id="battery">Battery: Loading...</div>
+    </div>
+
     <div id="music-toast">Now Playing: Default Theme</div>
     <audio id="main-audio" src="bg.mp3" autoplay loop></audio>
 
@@ -150,7 +175,7 @@
             <li><a onclick="showSection('home')" id="nav-home">Home</a></li>
             <li><a onclick="showSection('games')" id="nav-games">Games</a></li>
             <li><a onclick="showSection('security')" id="nav-security">Security</a></li>
-            <li><a onclick="showSection('proxies')" id="nav-proxies">Proxies (W.I.P)</a></li>
+            <li><a onclick="showSection('proxies')" id="nav-proxies">Proxies</a></li>
             <li><a onclick="showSection('music')" id="nav-music">Music</a></li>
             <li><a onclick="showSection('tools')" id="nav-tools">Tools</a></li>
             <li><a onclick="showSection('models')" id="nav-models">Models</a></li>
@@ -165,7 +190,14 @@
     <!-- HOME -->
     <section id="home" class="active">
         <h1>Silly Projects <strong>Hub</strong></h1>
-        <ul class="listItem">
+        <p class="greeting" id="greeting-text">Welcome back!</p>
+        
+        <div class="search-container">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="gameSearch" placeholder="Search for games or tools..." onkeyup="filterItems()">
+        </div>
+
+        <ul class="listItem" id="main-list">
             <li><a href="https://www.youtube.com/@zOcM" target="_blank"><span class="game-title">YouTube (Z0CM)</span></a></li>
             <li><a href="https://www.youtube.com/@VRGamer262" target="_blank"><span class="game-title">YouTube (VRGamer262)</span></a></li>
             <li><a href="https://makerworld.com/en/@wpl435" target="_blank"><span class="game-title">MakerWorld</span></a></li>
@@ -177,7 +209,7 @@
     <!-- GAMES -->
     <section id="games">
         <h1>Games</h1>
-        <ul class="listItem">
+        <ul class="listItem" id="games-list">
             <li><a href="https://vrgamer262real.github.io/polytrack/"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSq4z0oIn1dnrq__vTuC1IthPoyEBUIpJx2tw&s"><span class="game-title">Polytrack</span></a></li>
             <li><a href="https://supaclicker.vrgamer262.workers.dev/"><img src="https://raw.githubusercontent.com/VRGamer262Real/supaclicker.github.io/refs/heads/main/ButtonIcon.png"><span class="game-title">Supa Clicker</span></a></li>
             <li><a href="https://supaclickerhacked.vrgamer262.workers.dev/"><img src="https://raw.githubusercontent.com/VRGamer262Real/supaclicker.github.io/refs/heads/main/ButtonIcon.png"><span class="game-title">Supa Clicker (Hacked)</span></a></li>
@@ -200,11 +232,9 @@
         <h1>Security & Privacy</h1>
         <div class="panel">
             <p>Advanced features to keep your browsing private.</p>
-            
             <div style="display:flex; flex-direction:column; gap:10px;">
                 <button class="btn-main" onclick="toggleAntiClose()" id="antiCloseBtn">Enable Anti-Close</button>
                 <button class="btn-main" onclick="openAboutBlank()">Open in About:Blank</button>
-                
                 <label style="margin-top:10px;">Tab Cloaking:</label>
                 <select onchange="setCloak(this.value)">
                     <option value="default">Default (Hub)</option>
@@ -218,7 +248,7 @@
 
     <!-- PROXIES -->
     <section id="proxies">
-        <h1>Web Proxies (NOT WORKING DUE TO BEING IN DEVELOPMENT!)</h1>
+        <h1>Web Proxies (Development)</h1>
         <ul class="listItem">
             <li><a href="https://uv.student-portal.workers.dev/" target="_blank"><span class="game-title">Ultraviolet</span></a></li>
             <li><a href="https://interstellar.student-portal.workers.dev/" target="_blank"><span class="game-title">Interstellar</span></a></li>
@@ -272,7 +302,7 @@
     <section id="news">
         <h1>Latest News</h1>
         <div class="panel">
-            <p><strong>Version 2.1.1 Update:</strong> Added Security section (Anti-close, Cloaking, About:Blank), Proxy links, and System Settings. Fixed some code. Stay safe!</p>
+            <p><strong>Version 2.2 Update:</strong> Added real-time Status Bar (Clock & Battery), Search Bar, and Dynamic Greetings. Better organization for a smoother experience! Stay safe!</p>
         </div>
     </section>
 
@@ -292,7 +322,7 @@
         <div class="panel">
             <p>Quick controls for our hub.</p>
             <button class="btn-main" onclick="localStorage.clear(); location.reload();">Clear Hub Cache</button>
-            <button class="btn-main" onclick="alert('Panic Key set to: [ ` ] (Tilde)')">View Panic Key</button>
+            <button class="btn-main" onclick="alert('Panic Key: [ ` ] | Search: [ / ]')">View Shortcuts</button>
         </div>
     </section>
 
@@ -314,6 +344,42 @@
         const audio = document.getElementById('main-audio');
         const toast = document.getElementById('music-toast');
 
+        // Clock & Battery Logic
+        function updateStatus() {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.toLocaleTimeString();
+            
+            if ('getBattery' in navigator) {
+                navigator.getBattery().then(battery => {
+                    const level = Math.floor(battery.level * 100);
+                    const charging = battery.charging ? " (Charging)" : "";
+                    document.getElementById('battery').innerText = `Battery: ${level}%${charging}`;
+                });
+            }
+        }
+        setInterval(updateStatus, 1000);
+        updateStatus();
+
+        // Greeting Logic
+        function setGreeting() {
+            const hour = new Date().getHours();
+            const greet = document.getElementById('greeting-text');
+            if (hour < 12) greet.innerText = "Good Morning! Ready to play?";
+            else if (hour < 18) greet.innerText = "Good Afternoon! Take a break and explore.";
+            else greet.innerText = "Good Evening! Gaming time?";
+        }
+        setGreeting();
+
+        // Search Filter
+        function filterItems() {
+            const input = document.getElementById('gameSearch').value.toLowerCase();
+            const items = document.querySelectorAll('.listItem li');
+            items.forEach(li => {
+                const text = li.innerText.toLowerCase();
+                li.style.display = text.includes(input) ? "block" : "none";
+            });
+        }
+
         // Cursor Logic
         document.addEventListener('mousemove', (e) => {
             cursor.style.left = e.clientX + 'px';
@@ -334,7 +400,7 @@
             window.scrollTo({top: 0, behavior: 'smooth'});
         }
 
-        // --- SECURITY FEATURES ---
+        // Security Features
         let antiCloseActive = false;
         function toggleAntiClose() {
             antiCloseActive = !antiCloseActive;
@@ -353,41 +419,30 @@
         function setCloak(type) {
             const title = document.getElementById('tab-title');
             const icon = document.getElementById('tab-icon');
-            if (type === 'google') {
-                title.innerText = "Google";
-                icon.href = "https://www.google.com/favicon.ico";
-            } else if (type === 'drive') {
-                title.innerText = "My Drive - Google Drive";
-                icon.href = "https://ssl.gstatic.com/docs/doclist/images/drive_2022q3_32dp.png";
-            } else if (type === 'classroom') {
-                title.innerText = "Classes";
-                icon.href = "https://www.gstatic.com/classroom/favicon.png";
-            } else {
-                title.innerText = "ZOCMYT - Hub";
-                icon.href = "https://raw.githubusercontent.com/VRGamer262Real/Hub-Cloudflare/refs/heads/main/bg.jpg";
-            }
+            if (type === 'google') { title.innerText = "Google"; icon.href = "https://www.google.com/favicon.ico"; }
+            else if (type === 'drive') { title.innerText = "My Drive - Google Drive"; icon.href = "https://ssl.gstatic.com/docs/doclist/images/drive_2022q3_32dp.png"; }
+            else if (type === 'classroom') { title.innerText = "Classes"; icon.href = "https://www.gstatic.com/classroom/favicon.png"; }
+            else { title.innerText = "ZOCMYT - Hub"; icon.href = "https://raw.githubusercontent.com/VRGamer262Real/Hub-Cloudflare/refs/heads/main/bg.jpg"; }
         }
 
         function openAboutBlank() {
             const win = window.open();
-            const url = window.location.href;
             const iframe = win.document.createElement('iframe');
-            iframe.style.width = "100%";
-            iframe.style.height = "100%";
-            iframe.style.border = "none";
-            iframe.style.position = "fixed";
-            iframe.style.top = "0";
-            iframe.style.left = "0";
-            iframe.src = url;
+            iframe.style = "width:100%; height:100%; border:none; position:fixed; top:0; left:0;";
+            iframe.src = window.location.href;
             win.document.body.appendChild(iframe);
             window.location.replace("https://google.com");
         }
 
-        // Panic Key (Backtick `)
+        // Shortcuts
         document.addEventListener('keydown', (e) => {
             if (e.key === '`') window.location.href = "https://classroom.google.com";
+            if (e.key === '/') { 
+                e.preventDefault(); 
+                showSection('home');
+                document.getElementById('gameSearch').focus(); 
+            }
         });
-        // -------------------------
 
         // Customization
         function updateTheme(color) {
@@ -400,11 +455,8 @@
         function resetStyles() {
             updateTheme('#00d2ff');
             updateBg('https://raw.githubusercontent.com/VRGamer262Real/Hub-Cloudflare/refs/heads/main/bg.jpg');
-            document.getElementById('theme-color').value = '#00d2ff';
-            document.getElementById('bg-url').value = '';
         }
 
-        // Music
         function changeMusic(url, name) {
             audio.src = url; audio.play();
             toast.innerText = "Now Playing: " + name;
@@ -412,7 +464,6 @@
             setTimeout(() => { toast.style.transform = "translateY(150%)"; }, 3000);
         }
 
-        // GitHub Issues
         function submitToGithub() {
             const t = document.getElementById('q-title').value;
             const b = document.getElementById('q-body').value;
