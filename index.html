@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>ZOCMYT - Hub</title>
+    <title id="tab-title">ZOCMYT - Hub</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link id="tab-icon" rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/VRGamer262Real/Hub-Cloudflare/refs/heads/main/bg.jpg">
     <style>
         :root {
             --primary: #00d2ff;
@@ -148,12 +149,15 @@
         <ul class="nav">
             <li><a onclick="showSection('home')" id="nav-home">Home</a></li>
             <li><a onclick="showSection('games')" id="nav-games">Games</a></li>
+            <li><a onclick="showSection('security')" id="nav-security">Security</a></li>
+            <li><a onclick="showSection('proxies')" id="nav-proxies">Proxies</a></li>
             <li><a onclick="showSection('music')" id="nav-music">Music</a></li>
             <li><a onclick="showSection('tools')" id="nav-tools">Tools</a></li>
             <li><a onclick="showSection('models')" id="nav-models">Models</a></li>
             <li><a onclick="showSection('customize')" id="nav-customize">Customization</a></li>
             <li><a onclick="showSection('news')" id="nav-news">News</a></li>
             <li><a onclick="showSection('questions')" id="nav-questions">Questions</a></li>
+            <li><a onclick="showSection('settings')" id="nav-settings">Settings</a></li>
             <li><a onclick="showSection('about')" id="nav-about">About</a></li>
         </ul>
     </div>
@@ -170,7 +174,7 @@
         </ul>
     </section>
 
-    <!-- GAMES (FULL RESTORE) -->
+    <!-- GAMES -->
     <section id="games">
         <h1>Games</h1>
         <ul class="listItem">
@@ -188,6 +192,38 @@
             <li><a href="https://hollowknight.vrgamer262.workers.dev/"><img src="https://hb.imgix.net/d73d29a560b20cb200d6f6d7daf935043b6edd8a.jpeg?auto=compress,format&fit=crop&h=353&w=616&s=24ed82654ecaa67252feccb8e64f3ee5"><span class="game-title">Hollow Knight</span></a></li>
             <li><a href="https://snowrider3d.vrgamer262.workers.dev/"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7HUapu5amnY5nfYojuBTCRQBThbOGsPKl_Q&s"><span class="game-title">Snow Rider 3D</span></a></li>
             <li><a href="https://vrgamer262real.github.io/Hollow-Knight-Silksong//"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNEgkizS0UKu2jt6TTEuk5926iNi01sI924g&s"><span class="game-title">HK: Silksong</span></a></li>
+        </ul>
+    </section>
+
+    <!-- SECURITY -->
+    <section id="security">
+        <h1>Security & Privacy</h1>
+        <div class="panel">
+            <p>Advanced features to keep your browsing private.</p>
+            
+            <div style="display:flex; flex-direction:column; gap:10px;">
+                <button class="btn-main" onclick="toggleAntiClose()" id="antiCloseBtn">Enable Anti-Close</button>
+                <button class="btn-main" onclick="openAboutBlank()">Open in About:Blank</button>
+                
+                <label style="margin-top:10px;">Tab Cloaking:</label>
+                <select onchange="setCloak(this.value)">
+                    <option value="default">Default (Hub)</option>
+                    <option value="google">Google</option>
+                    <option value="drive">Google Drive</option>
+                    <option value="classroom">Google Classroom</option>
+                </select>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROXIES -->
+    <section id="proxies">
+        <h1>Web Proxies</h1>
+        <ul class="listItem">
+            <li><a href="https://uv.student-portal.workers.dev/" target="_blank"><span class="game-title">Ultraviolet</span></a></li>
+            <li><a href="https://interstellar.student-portal.workers.dev/" target="_blank"><span class="game-title">Interstellar</span></a></li>
+            <li><a href="https://rammerhead.student-portal.workers.dev/" target="_blank"><span class="game-title">Rammerhead</span></a></li>
+            <li><a href="https://shuttle.student-portal.workers.dev/" target="_blank"><span class="game-title">Shuttle</span></a></li>
         </ul>
     </section>
 
@@ -219,7 +255,7 @@
         </ul>
     </section>
 
-    <!-- CUSTOMIZATION (NEW!) -->
+    <!-- CUSTOMIZATION -->
     <section id="customize">
         <h1>Customization</h1>
         <div class="panel">
@@ -236,7 +272,7 @@
     <section id="news">
         <h1>Latest News</h1>
         <div class="panel">
-            <p><strong>Version 2.0 Released:</strong> Added Customization Tab, restored all missing games/models, and optimized the 3D engine. Enjoy the Silksong and Snow Rider 3D updates!</p>
+            <p><strong>Version 2.1 Update:</strong> Added Security Hub (Anti-close, Cloaking, About:Blank), Proxy links, and System Settings. Stay safe!</p>
         </div>
     </section>
 
@@ -247,6 +283,16 @@
             <input type="text" id="q-title" placeholder="Short Title">
             <textarea id="q-body" rows="4" placeholder="Type your question or feedback..."></textarea>
             <button class="btn-main" onclick="submitToGithub()">Submit to GitHub Issues</button>
+        </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section id="settings">
+        <h1>System Settings</h1>
+        <div class="panel">
+            <p>Quick controls for the hub.</p>
+            <button class="btn-main" onclick="localStorage.clear(); location.reload();">Clear Hub Cache</button>
+            <button class="btn-main" onclick="alert('Panic Key set to: [ ` ] (Tilde)')">View Panic Key</button>
         </div>
     </section>
 
@@ -261,8 +307,6 @@
             </div>
         </div>
     </section>
-
-    <div id="music-toast">Now Playing: Default Theme</div>
 
     <script>
         const cursor = document.getElementById('cursor');
@@ -285,10 +329,65 @@
             document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             document.querySelectorAll('.nav li a').forEach(link => link.classList.remove('active'));
-            const activeNav = Array.from(document.querySelectorAll('.nav li a')).find(a => a.id === 'nav-' + id);
+            const activeNav = document.getElementById('nav-' + id);
             if(activeNav) activeNav.classList.add('active');
             window.scrollTo({top: 0, behavior: 'smooth'});
         }
+
+        // --- SECURITY FEATURES ---
+        let antiCloseActive = false;
+        function toggleAntiClose() {
+            antiCloseActive = !antiCloseActive;
+            const btn = document.getElementById('antiCloseBtn');
+            if (antiCloseActive) {
+                window.onbeforeunload = () => "Are you sure you want to leave?";
+                btn.innerText = "Disable Anti-Close";
+                btn.style.background = "var(--accent)";
+            } else {
+                window.onbeforeunload = null;
+                btn.innerText = "Enable Anti-Close";
+                btn.style.background = "var(--primary)";
+            }
+        }
+
+        function setCloak(type) {
+            const title = document.getElementById('tab-title');
+            const icon = document.getElementById('tab-icon');
+            if (type === 'google') {
+                title.innerText = "Google";
+                icon.href = "https://www.google.com/favicon.ico";
+            } else if (type === 'drive') {
+                title.innerText = "My Drive - Google Drive";
+                icon.href = "https://ssl.gstatic.com/docs/doclist/images/drive_2022q3_32dp.png";
+            } else if (type === 'classroom') {
+                title.innerText = "Classes";
+                icon.href = "https://www.gstatic.com/classroom/favicon.png";
+            } else {
+                title.innerText = "ZOCMYT - Hub";
+                icon.href = "https://raw.githubusercontent.com/VRGamer262Real/Hub-Cloudflare/refs/heads/main/bg.jpg";
+            }
+        }
+
+        function openAboutBlank() {
+            const win = window.open();
+            const url = window.location.href;
+            const iframe = win.document.createElement('iframe');
+            iframe.style.width = "100%";
+            iframe.style.height = "100%";
+            iframe.style.border = "none";
+            iframe.style.position = "fixed";
+            iframe.style.top = "0";
+            iframe.style.left = "0";
+            iframe.src = url;
+            win.document.body.appendChild(iframe);
+            window.location.replace("https://google.com");
+        }
+
+        // Panic Key (Backtick `)
+        document.addEventListener('keydown', (e) => {
+            if (e.key === '`') window.location.href = "https://classroom.google.com";
+        });
+        // -------------------------
 
         // Customization
         function updateTheme(color) {
@@ -321,7 +420,6 @@
             window.open(`https://github.com/VRGamer262Real/Hub-Cloudflare/issues/new?title=${encodeURIComponent(t)}&body=${encodeURIComponent(b)}`, '_blank');
         }
 
-        // Apply Hover to all current and future interactive items
         function refreshCursor() {
             document.querySelectorAll('a, .music-btn, .btn-main, input, textarea, select').forEach(el => {
                 el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
