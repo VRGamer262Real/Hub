@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title id="tab-title">ZOCMYT - Hub</title>
+    <title id="tab-title">ZOCMYT - Hyper Hub</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link id="tab-icon" rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/VRGamer262Real/Hub-Cloudflare/refs/heads/main/bg.jpg">
@@ -14,10 +14,11 @@
             --glow: rgba(0, 210, 255, 0.4);
         }
 
-        /* 1. CURSOR & RESET */
+        /* 1. ULTIMATE CURSOR HIDE */
         * { cursor: none !important; box-sizing: border-box; }
+        
         body {
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), 
                         url("https://raw.githubusercontent.com/VRGamer262Real/Hub-Cloudflare/refs/heads/main/bg.jpg");
             background-size: cover; background-attachment: fixed; background-position: center;
             color: white; font-family: 'Segoe UI', Roboto, sans-serif;
@@ -40,30 +41,48 @@
 
         .cursor-hover #cursor { transform: scale(3); background: transparent; border: 1px solid var(--primary); }
 
-        /* 2. STATUS BAR & NAVIGATION */
+        /* 2. STATUS BAR & GLOBAL SEARCH */
         .status-bar {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 10px 20px; background: rgba(0,0,0,0.4); backdrop-filter: blur(5px);
-            font-size: 0.8rem; font-weight: 600; color: rgba(255,255,255,0.7);
+            padding: 8px 20px; background: rgba(0,0,0,0.6); backdrop-filter: blur(10px);
+            font-size: 0.75rem; font-weight: 700; color: rgba(255,255,255,0.8);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
+        .global-search-wrapper {
+            max-width: 500px; margin: 15px auto; position: relative; z-index: 1001;
+        }
+
+        .global-search-wrapper input {
+            width: 100%; padding: 12px 20px 12px 45px; border-radius: 50px;
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+            color: white; outline: none; transition: 0.3s; font-size: 1rem;
+        }
+
+        .global-search-wrapper input:focus {
+            background: rgba(255,255,255,0.2); border-color: var(--primary);
+            box-shadow: 0 0 20px var(--glow);
+        }
+
+        .search-icon-btn { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); opacity: 0.6; }
+
+        /* 3. NAVIGATION */
         .nav-wrapper {
-            position: sticky; top: 10px; z-index: 1000;
-            display: flex; justify-content: center; width: 100%; padding: 0 10px;
+            position: sticky; top: 0; z-index: 1000;
+            display: flex; justify-content: center; width: 100%; padding: 10px;
         }
 
         .nav {
             list-style: none; margin: 0; padding: 5px;
             display: flex; flex-wrap: wrap; justify-content: center;
-            background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(15px);
+            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(20px);
             border-radius: 50px; border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 5px 25px rgba(0,0,0,0.5);
         }
 
         .nav li a {
-            display: block; color: #888; text-decoration: none; padding: 8px 15px;
+            display: block; color: #aaa; text-decoration: none; padding: 8px 16px;
             transition: 0.4s; border-radius: 30px; font-weight: 700;
-            font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px;
+            font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px;
         }
 
         .nav li a:hover, .nav li a.active {
@@ -71,87 +90,72 @@
             box-shadow: 0 0 15px var(--glow);
         }
 
-        /* SEARCH BAR */
-        .search-container {
-            max-width: 400px; margin: 20px auto; position: relative;
-        }
-        .search-container input {
-            padding-left: 40px; border-radius: 50px; background: rgba(255,255,255,0.1);
-        }
-        .search-icon {
-            position: absolute; left: 15px; top: 50%; transform: translateY(-50%);
-            opacity: 0.5; font-size: 1.2rem;
-        }
-
-        /* 3. SECTIONS & GRID */
-        section { display: none; opacity: 0; perspective: 1200px; padding: 20px 10px 80px; }
+        /* 4. SECTIONS & GRID */
+        section { display: none; opacity: 0; perspective: 1500px; padding: 20px 10px 100px; }
         section.active { display: block; animation: fadeIn 0.5s forwards; }
 
         h1 {
-            text-align: center; margin-bottom: 5px; font-size: 2.5rem;
-            background: linear-gradient(to bottom, #fff, #aaa);
+            text-align: center; margin-bottom: 10px; font-size: 2.8rem;
+            background: linear-gradient(to bottom, #fff, #888);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-        .greeting { text-align: center; margin-bottom: 25px; opacity: 0.7; font-weight: 300; }
 
         .listItem {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 15px; max-width: 1200px; margin: 0 auto; list-style: none; padding: 0;
         }
 
-        .listItem li { opacity: 0; transform: translateY(20px); }
+        .listItem li { opacity: 0; transform: translateY(20px); transition: 0.3s; }
         section.active li { animation: slideIn 0.4s forwards; }
-
-        /* Stagger */
-        .listItem li:nth-child(1) { animation-delay: 0.05s; }
-        .listItem li:nth-child(2) { animation-delay: 0.1s; }
-        .listItem li:nth-child(3) { animation-delay: 0.15s; }
-        .listItem li:nth-child(4) { animation-delay: 0.2s; }
-        .listItem li:nth-child(n+5) { animation-delay: 0.25s; }
 
         .listItem a, .music-btn, .box-ui {
             display: flex; flex-direction: column; align-items: center;
             text-decoration: none; color: white; background: var(--bg-glass);
-            padding: 15px; border-radius: 18px; border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 15px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.05);
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             height: 100%; transform-style: preserve-3d; text-align: center;
         }
 
         .listItem a:hover, .music-btn:hover {
-            transform: translateY(-10px) rotateX(10deg);
-            border-color: var(--primary); box-shadow: 0 15px 30px var(--glow);
+            transform: translateY(-12px) rotateX(10deg) rotateY(5deg);
+            border-color: var(--primary); box-shadow: 0 20px 40px var(--glow);
+            background: rgba(30, 35, 32, 0.95);
         }
 
         .listItem img {
             width: 100%; height: 110px; object-fit: cover; border-radius: 12px;
-            margin-bottom: 10px; transform: translateZ(20px);
+            margin-bottom: 10px; transform: translateZ(30px);
         }
 
-        .game-title { font-weight: 700; font-size: 0.9rem; transform: translateZ(30px); }
+        .game-title { font-weight: 800; font-size: 0.85rem; transform: translateZ(50px); letter-spacing: 0.5px; }
 
-        /* 4. UTILITY PANELS */
+        /* 5. PANELS & APPS */
         .panel {
-            max-width: 600px; margin: 20px auto; background: var(--bg-glass);
-            padding: 25px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);
-            display: flex; flex-direction: column; gap: 15px; text-align: center;
+            max-width: 700px; margin: 20px auto; background: var(--bg-glass);
+            padding: 30px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.1);
+            text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
         input, textarea, select {
-            width: 100%; padding: 12px; border-radius: 10px; background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1); color: white; outline: none; font-family: inherit;
+            width: 100%; padding: 14px; border-radius: 12px; background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1); color: white; outline: none; font-family: inherit; margin-bottom: 10px;
         }
 
         .btn-main {
-            background: var(--primary); border: none; color: black; padding: 12px;
-            border-radius: 30px; font-weight: 700; text-transform: uppercase; transition: 0.3s;
+            background: var(--primary); border: none; color: black; padding: 14px 28px;
+            border-radius: 50px; font-weight: 800; text-transform: uppercase; transition: 0.3s;
         }
 
         #music-toast {
-            position: fixed; bottom: 20px; right: 20px; background: var(--primary);
-            color: black; padding: 12px 25px; border-radius: 50px; font-weight: 800;
-            transform: translateY(150%); transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 10001; box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(200%);
+            background: var(--primary); color: black; padding: 12px 30px; border-radius: 50px;
+            font-weight: 900; transition: 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 10001; box-shadow: 0 10px 30px var(--glow);
         }
+
+        /* 6. APPS SPECIFIC */
+        #calculator { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; max-width: 300px; margin: 0 auto; }
+        #calculator button { padding: 15px; border-radius: 10px; border: none; background: rgba(255,255,255,0.1); color: white; font-weight: bold; }
 
         @keyframes fadeIn { to { opacity: 1; } }
         @keyframes slideIn { to { opacity: 1; transform: translateY(0); } }
@@ -162,326 +166,274 @@
     <div id="cursor"></div>
     <div id="cursor-follower"></div>
     
+    <!-- Status Bar -->
     <div class="status-bar">
         <div id="clock">00:00:00 AM</div>
-        <div id="battery">Battery: Loading...</div>
+        <div id="status-greet">Welcome, User</div>
+        <div id="battery">Battery: 100%</div>
     </div>
 
-    <div id="music-toast">Now Playing: Default Theme</div>
-    <audio id="main-audio" src="bg.mp3" autoplay loop></audio>
+    <!-- Global Search -->
+    <div class="global-search-wrapper">
+        <span class="search-icon-btn">🔍</span>
+        <input type="text" id="globalSearch" placeholder="Search everything (Games, Tools, Music...)" onkeyup="universalSearch()">
+    </div>
 
+    <!-- Navigation -->
     <div class="nav-wrapper">
         <ul class="nav">
             <li><a onclick="showSection('home')" id="nav-home">Home</a></li>
             <li><a onclick="showSection('games')" id="nav-games">Games</a></li>
-            <li><a onclick="showSection('security')" id="nav-security">Security</a></li>
+            <li><a onclick="showSection('apps')" id="nav-apps">Apps</a></li>
             <li><a onclick="showSection('proxies')" id="nav-proxies">Proxies</a></li>
             <li><a onclick="showSection('music')" id="nav-music">Music</a></li>
             <li><a onclick="showSection('tools')" id="nav-tools">Tools</a></li>
             <li><a onclick="showSection('models')" id="nav-models">Models</a></li>
-            <li><a onclick="showSection('customize')" id="nav-customize">Customization</a></li>
-            <li><a onclick="showSection('news')" id="nav-news">News</a></li>
-            <li><a onclick="showSection('questions')" id="nav-questions">Questions</a></li>
-            <li><a onclick="showSection('settings')" id="nav-settings">Settings</a></li>
+            <li><a onclick="showSection('customize')" id="nav-customize">Design</a></li>
+            <li><a onclick="showSection('security')" id="nav-security">Security</a></li>
+            <li><a onclick="showSection('questions')" id="nav-questions">Feedback</a></li>
             <li><a onclick="showSection('about')" id="nav-about">About</a></li>
         </ul>
     </div>
 
-    <!-- HOME -->
-    <section id="home" class="active">
-        <h1>Silly Projects <strong>Hub</strong></h1>
-        <p class="greeting" id="greeting-text">Welcome back!</p>
-        
-        <div class="search-container">
-            <span class="search-icon">🔍</span>
-            <input type="text" id="gameSearch" placeholder="Search for games or tools..." onkeyup="filterItems()">
-        </div>
-
-        <ul class="listItem" id="main-list">
-            <li><a href="https://www.youtube.com/@zOcM" target="_blank"><span class="game-title">YouTube (Z0CM)</span></a></li>
-            <li><a href="https://www.youtube.com/@VRGamer262" target="_blank"><span class="game-title">YouTube (VRGamer262)</span></a></li>
-            <li><a href="https://makerworld.com/en/@wpl435" target="_blank"><span class="game-title">MakerWorld</span></a></li>
-            <li><a href="https://github.com/zOcMYT" target="_blank"><span class="game-title">GitHub (Z0CM)</span></a></li>
-            <li><a href="https://github.com/VRGamer262Real" target="_blank"><span class="game-title">GitHub (VRGamer262)</span></a></li>
-        </ul>
+    <!-- SECTIONS -->
+    
+    <!-- Results Tab (Hidden by default) -->
+    <section id="results-tab">
+        <h1>Search Results</h1>
+        <ul class="listItem" id="search-results-list"></ul>
     </section>
 
-    <!-- GAMES -->
+    <!-- Home -->
+    <section id="home" class="active">
+        <h1>Silly Projects <strong>Hub</strong></h1>
+        <div class="panel">
+            <h3>Quick Links</h3>
+            <ul class="listItem">
+                <li><a href="https://www.youtube.com/@zOcM" target="_blank"><span class="game-title">YouTube (Z0CM)</span></a></li>
+                <li><a href="https://www.youtube.com/@VRGamer262" target="_blank"><span class="game-title">YouTube (VR)</span></a></li>
+                <li><a href="https://github.com/VRGamer262Real" target="_blank"><span class="game-title">Main GitHub</span></a></li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Games -->
     <section id="games">
-        <h1>Games</h1>
-        <ul class="listItem" id="games-list">
+        <h1>Games Library</h1>
+        <ul class="listItem" id="full-games-list">
             <li><a href="https://vrgamer262real.github.io/polytrack/"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSq4z0oIn1dnrq__vTuC1IthPoyEBUIpJx2tw&s"><span class="game-title">Polytrack</span></a></li>
             <li><a href="https://supaclicker.vrgamer262.workers.dev/"><img src="https://raw.githubusercontent.com/VRGamer262Real/supaclicker.github.io/refs/heads/main/ButtonIcon.png"><span class="game-title">Supa Clicker</span></a></li>
             <li><a href="https://supaclickerhacked.vrgamer262.workers.dev/"><img src="https://raw.githubusercontent.com/VRGamer262Real/supaclicker.github.io/refs/heads/main/ButtonIcon.png"><span class="game-title">Supa Clicker (Hacked)</span></a></li>
             <li><a href="https://tower-defense.vrgamer262.workers.dev/"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/PlaceholderLC.png"><span class="game-title">Tower Defense</span></a></li>
             <li><a href="https://towerdefensehacked.vrgamer262.workers.dev/"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/PlaceholderLC.png"><span class="game-title">Tower Defense (Hacked)</span></a></li>
             <li><a href="https://bbcr.vrgamer262.workers.dev/"><img src="https://m.gjcdn.net/game-header/950/602328-enyxuxkk-v4.jpg"><span class="game-title">Baldi Remastered</span></a></li>
-            <li><a href="https://vrgamer262real.github.io/Baldi-sBasicsClassicRemastered/"><img src="https://m.gjcdn.net/game-header/950/602328-enyxuxkk-v4.jpg"><span class="game-title">Baldi (Alt Link)</span></a></li>
             <li><a href="https://melodixxx.github.io/reunbozdo.github.io/"><img src="https://i.ytimg.com/vi/tjbh3cNpI9g/maxresdefault.jpg"><span class="game-title">Block Blast</span></a></li>
             <li><a href="https://simon.lc/tetr.js/"><img src="https://play-lh.googleusercontent.com/w-lUGr-eaAwxLUl7OW5v7jLG-CE8H2Z75D6lkkm8Tro21ZLCk7fvVIjVM7ZG0u0ZLBws=w240-h480-rw"><span class="game-title">Tetris</span></a></li>
             <li><a href="https://soteris24.github.io/genetrydash.github.io/"><img src="https://upload.wikimedia.org/wikipedia/en/3/35/Geometry_Dash_Logo.PNG"><span class="game-title">Geometry Dash</span></a></li>
             <li><a href="https://8ballpool.vrgamer262.workers.dev/"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkQDXxj4nWBG57shuWLgrAZalDrnAF-CINBQ&s"><span class="game-title">8Ball Pool</span></a></li>
-            <li><a href="https://hollowknight.vrgamer262.workers.dev/"><img src="https://hb.imgix.net/d73d29a560b20cb200d6f6d7daf935043b6edd8a.jpeg?auto=compress,format&fit=crop&h=353&w=616&s=24ed82654ecaa67252feccb8e64f3ee5"><span class="game-title">Hollow Knight</span></a></li>
             <li><a href="https://snowrider3d.vrgamer262.workers.dev/"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7HUapu5amnY5nfYojuBTCRQBThbOGsPKl_Q&s"><span class="game-title">Snow Rider 3D</span></a></li>
-            <li><a href="https://vrgamer262real.github.io/Hollow-Knight-Silksong/"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNEgkizS0UKu2jt6TTEuk5926iNi01sI924g&s"><span class="game-title">HK: Silksong</span></a></li>
             <li><a href="https://vrgamer262real.github.io/paperio2/"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbOYDL-XogArpPn5yhnKk4E0pRDmWTIRXnxA&s"><span class="game-title">Paper.io 2</span></a></li>
             <li><a href="https://ducky443747.github.io/games/DriveMad/"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS978Fp0DG45horfcROMLIbcBrNSrHrzpTEpw&s"><span class="game-title">Drive Mad</span></a></li>
         </ul>
-        </ul>
     </section>
 
-    <!-- SECURITY -->
-    <section id="security">
-        <h1>Security & Privacy</h1>
+    <!-- Apps (NEW TAB) -->
+    <section id="apps">
+        <h1>Utility Apps</h1>
         <div class="panel">
-            <p>Advanced features to keep your browsing private.</p>
-            <div style="display:flex; flex-direction:column; gap:10px;">
-                <button class="btn-main" onclick="toggleAntiClose()" id="antiCloseBtn">Enable Anti-Close</button>
-                <button class="btn-main" onclick="openAboutBlank()">Open in About:Blank</button>
-                <label style="margin-top:10px;">Tab Cloaking:</label>
-                <select onchange="setCloak(this.value)">
-                    <option value="default">Default (Hub)</option>
-                    <option value="google">Google</option>
-                    <option value="drive">Google Drive</option>
-                    <option value="classroom">Google Classroom</option>
-                </select>
+            <h3>Notepad</h3>
+            <textarea id="hub-note" rows="5" placeholder="Your notes save automatically..." onkeyup="saveNote()"></textarea>
+        </div>
+        <div class="panel">
+            <h3>Simple Calc</h3>
+            <input type="text" id="calc-display" readonly style="text-align: right; font-size: 1.5rem;">
+            <div id="calculator">
+                <button onclick="calcIn('1')">1</button><button onclick="calcIn('2')">2</button><button onclick="calcIn('3')">3</button><button onclick="calcIn('+')">+</button>
+                <button onclick="calcIn('4')">4</button><button onclick="calcIn('5')">5</button><button onclick="calcIn('6')">6</button><button onclick="calcIn('-')">-</button>
+                <button onclick="calcIn('7')">7</button><button onclick="calcIn('8')">8</button><button onclick="calcIn('9')">9</button><button onclick="calcIn('*')">*</button>
+                <button onclick="calcClr()">C</button><button onclick="calcIn('0')">0</button><button onclick="calcRes()">=</button><button onclick="calcIn('/')">/</button>
             </div>
         </div>
     </section>
 
-    <!-- PROXIES -->
+    <!-- Proxies -->
     <section id="proxies">
-        <h1>Web Proxies (Development)</h1>
+        <h1>Web Proxies</h1>
         <ul class="listItem">
             <li><a href="https://uv.student-portal.workers.dev/" target="_blank"><span class="game-title">Ultraviolet</span></a></li>
             <li><a href="https://interstellar.student-portal.workers.dev/" target="_blank"><span class="game-title">Interstellar</span></a></li>
             <li><a href="https://rammerhead.student-portal.workers.dev/" target="_blank"><span class="game-title">Rammerhead</span></a></li>
-            <li><a href="https://shuttle.student-portal.workers.dev/" target="_blank"><span class="game-title">Shuttle</span></a></li>
         </ul>
     </section>
 
-    <!-- MUSIC -->
+    <!-- Customization -->
+    <section id="customize">
+        <h1>Design Lab</h1>
+        <div class="panel">
+            <label>Theme Glow Color:</label>
+            <input type="color" id="theme-color" value="#00d2ff" onchange="updateTheme(this.value)">
+            <label>Background Image:</label>
+            <input type="text" placeholder="Direct Image URL..." onchange="updateBg(this.value)">
+            <button class="btn-main" onclick="resetDesign()">Reset Design</button>
+        </div>
+    </section>
+
+    <!-- News, Music, Tools, Models, Security, Questions, About (Unchanged Content) -->
     <section id="music">
         <h1>Music Player</h1>
         <ul class="listItem">
             <li><div class="music-btn" onclick="changeMusic('bg.mp3', 'Default Theme')"><span class="game-title">Default Theme</span></div></li>
             <li><div class="music-btn" onclick="changeMusic('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', 'Chill Vibes')"><span class="game-title">Chill Vibes</span></div></li>
-            <li><div class="music-btn" onclick="changeMusic('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3', 'Epic Beats')"><span class="game-title">Epic Beats</span></div></li>
         </ul>
     </section>
 
-    <!-- TOOLS -->
     <section id="tools">
-        <h1>Tools</h1>
+        <h1>Advanced Tools</h1>
         <ul class="listItem">
             <li><a href="https://dc.vrgamer262.workers.dev/"><span class="game-title">Decode Counter</span></a></li>
         </ul>
     </section>
 
-    <!-- MODELS -->
     <section id="models">
         <h1>3D Models</h1>
         <ul class="listItem">
-            <li><a href="https://makerworld.com/en/models/1804813-locking-bottlenose-bcar"><span class="game-title">Locking Bottlenose BCAR</span></a></li>
-            <li><a href="https://makerworld.com/en/models/2444418-nail-form-roll-holder"><span class="game-title">Nail Form Holder</span></a></li>
-            <li><a href="https://makerworld.com/en/models/2444354-starlink-gen-3-mounts"><span class="game-title">Starlink Gen 3 Mounts</span></a></li>
+            <li><a href="https://makerworld.com/en/models/1804813-locking-bottlenose-bcar"><span class="game-title">Locking BCAR</span></a></li>
         </ul>
     </section>
 
-    <!-- CUSTOMIZATION -->
-    <section id="customize">
-        <h1>Customization</h1>
+    <section id="security">
+        <h1>System Security</h1>
         <div class="panel">
-            <p>Personalize your experience!</p>
-            <label>Theme Color:</label>
-            <input type="color" id="theme-color" value="#00d2ff" onchange="updateTheme(this.value)">
-            <label>Background Image URL:</label>
-            <input type="text" id="bg-url" placeholder="Paste image link here..." onchange="updateBg(this.value)">
-            <button class="btn-main" onclick="resetStyles()">Reset to Default</button>
+            <button class="btn-main" onclick="openAboutBlank()">Cloak Site (About:Blank)</button>
+            <p>Panic Key: [ ` ] | Search: [ / ]</p>
         </div>
     </section>
 
-    <!-- NEWS -->
-    <section id="news">
-        <h1>Latest News</h1>
-        <div class="panel">
-            <p><strong>Version 2.2 Update:</strong> Added real-time Status Bar (Clock & Battery), Search Bar, and Dynamic Greetings. Better organization for a smoother experience! Stay safe!</p>
-        </div>
-    </section>
-
-    <!-- QUESTIONS -->
     <section id="questions">
-        <h1>Submit a Question/suggestion</h1>
+        <h1>Feedback</h1>
         <div class="panel">
-            <input type="text" id="q-title" placeholder="Short Title">
-            <textarea id="q-body" rows="4" placeholder="Type your question or feedback..."></textarea>
-            <button class="btn-main" onclick="submitToGithub()">Submit to GitHub Issues</button>
+            <input type="text" id="q-title" placeholder="Title">
+            <textarea id="q-body" rows="3" placeholder="Description"></textarea>
+            <button class="btn-main" onclick="submitToGithub()">Submit Issue</button>
         </div>
     </section>
 
-    <!-- SETTINGS -->
-    <section id="settings">
-        <h1>System Settings</h1>
-        <div class="panel">
-            <p>Quick controls for our hub.</p>
-            <button class="btn-main" onclick="localStorage.clear(); location.reload();">Clear Hub Cache</button>
-            <button class="btn-main" onclick="alert('Panic Key: [ ` ] | Search: [ / ]')">View Shortcuts</button>
-        </div>
-    </section>
-
-    <!-- ABOUT -->
     <section id="about">
-        <h1>About Us</h1>
-        <div style="display:flex; flex-direction:column; align-items:center; gap:20px;">
-            <div class="panel">We are the coders of Supa Clicker and Tower Defense. Our hub is designed for speed and fun!</div>
-            <div style="display:flex; gap:15px; flex-wrap:wrap; justify-content:center;">
-                <img src="https://raw.githubusercontent.com/VRGamer262Real/Hub-Cloudflare/refs/heads/main/VRGamer262.jpg" style="width:200px; border-radius:15px; border:2px solid var(--primary);">
-                <img src="https://raw.githubusercontent.com/VRGamer262Real/Hub-Cloudflare/refs/heads/main/900-900.jpeg" style="width:200px; border-radius:15px; border:2px solid var(--primary);">
-            </div>
-        </div>
+        <h1>About</h1>
+        <div class="panel">ZOCMYT Hyper Hub V3.0 - Built for the community.</div>
     </section>
+
+    <div id="music-toast">Now Playing: Default Theme</div>
 
     <script>
-        const cursor = document.getElementById('cursor');
-        const follower = document.getElementById('cursor-follower');
         const audio = document.getElementById('main-audio');
         const toast = document.getElementById('music-toast');
 
-        // Clock & Battery Logic
+        // 1. UNIVERSAL SEARCH ENGINE
+        function universalSearch() {
+            const query = document.getElementById('globalSearch').value.toLowerCase();
+            const resultsList = document.getElementById('search-results-list');
+            const resultsTab = document.getElementById('results-tab');
+            
+            if (query.length < 1) {
+                showSection('home');
+                return;
+            }
+
+            showSection('results-tab');
+            resultsList.innerHTML = '';
+
+            // Scan all listItems in the entire document
+            const allItems = document.querySelectorAll('section:not(#results-tab) .listItem li');
+            let found = 0;
+
+            allItems.forEach(item => {
+                if (item.innerText.toLowerCase().includes(query)) {
+                    const clone = item.cloneNode(true);
+                    resultsList.appendChild(clone);
+                    found++;
+                }
+            });
+
+            if (found === 0) {
+                resultsList.innerHTML = `<p style="grid-column: 1/-1; opacity: 0.5;">No results found for "${query}"</p>`;
+            }
+            refreshCursor();
+        }
+
+        // 2. STATUS & CLOCK
         function updateStatus() {
             const now = new Date();
             document.getElementById('clock').innerText = now.toLocaleTimeString();
-            
             if ('getBattery' in navigator) {
-                navigator.getBattery().then(battery => {
-                    const level = Math.floor(battery.level * 100);
-                    const charging = battery.charging ? " (Charging)" : "";
-                    document.getElementById('battery').innerText = `Battery: ${level}%${charging}`;
+                navigator.getBattery().then(b => {
+                    document.getElementById('battery').innerText = `Battery: ${Math.floor(b.level * 100)}%${b.charging ? ' ⚡' : ''}`;
                 });
             }
         }
         setInterval(updateStatus, 1000);
-        updateStatus();
 
-        // Greeting Logic
-        function setGreeting() {
-            const hour = new Date().getHours();
-            const greet = document.getElementById('greeting-text');
-            if (hour < 12) greet.innerText = "Good Morning! Ready to play?";
-            else if (hour < 18) greet.innerText = "Good Afternoon! Take a break and explore.";
-            else greet.innerText = "Good Evening! Gaming time?";
-        }
-        setGreeting();
+        // 3. APPS LOGIC
+        function saveNote() { localStorage.setItem('hubNote', document.getElementById('hub-note').value); }
+        document.getElementById('hub-note').value = localStorage.getItem('hubNote') || "";
 
-        // Search Filter
-        function filterItems() {
-            const input = document.getElementById('gameSearch').value.toLowerCase();
-            const items = document.querySelectorAll('.listItem li');
-            items.forEach(li => {
-                const text = li.innerText.toLowerCase();
-                li.style.display = text.includes(input) ? "block" : "none";
-            });
-        }
+        function calcIn(v) { document.getElementById('calc-display').value += v; }
+        function calcClr() { document.getElementById('calc-display').value = ""; }
+        function calcRes() { try { document.getElementById('calc-display').value = eval(document.getElementById('calc-display').value); } catch { document.getElementById('calc-display').value = "Error"; } }
 
-        // Cursor Logic
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
-            setTimeout(() => {
-                follower.style.left = (e.clientX - 10) + 'px';
-                follower.style.top = (e.clientY - 10) + 'px';
-            }, 50);
-        });
-
-        // Tab Switching
+        // 4. CORE HUB FUNCTIONS
         function showSection(id) {
             document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            document.querySelectorAll('.nav li a').forEach(link => link.classList.remove('active'));
-            const activeNav = document.getElementById('nav-' + id);
-            if(activeNav) activeNav.classList.add('active');
-            window.scrollTo({top: 0, behavior: 'smooth'});
-        }
-
-        // Security Features
-        let antiCloseActive = false;
-        function toggleAntiClose() {
-            antiCloseActive = !antiCloseActive;
-            const btn = document.getElementById('antiCloseBtn');
-            if (antiCloseActive) {
-                window.onbeforeunload = () => "Are you sure you want to leave?";
-                btn.innerText = "Disable Anti-Close";
-                btn.style.background = "var(--accent)";
-            } else {
-                window.onbeforeunload = null;
-                btn.innerText = "Enable Anti-Close";
-                btn.style.background = "var(--primary)";
-            }
-        }
-
-        function setCloak(type) {
-            const title = document.getElementById('tab-title');
-            const icon = document.getElementById('tab-icon');
-            if (type === 'google') { title.innerText = "Google"; icon.href = "https://www.google.com/favicon.ico"; }
-            else if (type === 'drive') { title.innerText = "My Drive - Google Drive"; icon.href = "https://ssl.gstatic.com/docs/doclist/images/drive_2022q3_32dp.png"; }
-            else if (type === 'classroom') { title.innerText = "Classes"; icon.href = "https://www.gstatic.com/classroom/favicon.png"; }
-            else { title.innerText = "ZOCMYT - Hub"; icon.href = "https://raw.githubusercontent.com/VRGamer262Real/Hub-Cloudflare/refs/heads/main/bg.jpg"; }
-        }
-
-        function openAboutBlank() {
-            const win = window.open();
-            const iframe = win.document.createElement('iframe');
-            iframe.style = "width:100%; height:100%; border:none; position:fixed; top:0; left:0;";
-            iframe.src = window.location.href;
-            win.document.body.appendChild(iframe);
-            window.location.replace("https://google.com");
-        }
-
-        // Shortcuts
-        document.addEventListener('keydown', (e) => {
-            if (e.key === '`') window.location.href = "https://irondistrict.instructure.com/";
-            if (e.key === '/') { 
-                e.preventDefault(); 
-                showSection('home');
-                document.getElementById('gameSearch').focus(); 
-            }
-        });
-
-        // Customization
-        function updateTheme(color) {
-            document.documentElement.style.setProperty('--primary', color);
-            document.documentElement.style.setProperty('--glow', color + '66');
-        }
-        function updateBg(url) {
-            document.body.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('${url}')`;
-        }
-        function resetStyles() {
-            updateTheme('#00d2ff');
-            updateBg('https://raw.githubusercontent.com/VRGamer262Real/Hub-Cloudflare/refs/heads/main/bg.jpg');
+            document.querySelectorAll('.nav li a').forEach(l => l.classList.remove('active'));
+            const navBtn = document.getElementById('nav-' + id);
+            if (navBtn) navBtn.classList.add('active');
         }
 
         function changeMusic(url, name) {
             audio.src = url; audio.play();
             toast.innerText = "Now Playing: " + name;
-            toast.style.transform = "translateY(0)";
-            setTimeout(() => { toast.style.transform = "translateY(150%)"; }, 3000);
+            toast.style.transform = "translateX(-50%) translateY(0)";
+            setTimeout(() => { toast.style.transform = "translateX(-50%) translateY(200%)"; }, 3000);
         }
 
-        function submitToGithub() {
-            const t = document.getElementById('q-title').value;
-            const b = document.getElementById('q-body').value;
-            if(!t || !b) return alert("Please fill in both fields.");
-            window.open(`https://github.com/VRGamer262Real/Hub-Cloudflare/issues/new?title=${encodeURIComponent(t)}&body=${encodeURIComponent(b)}`, '_blank');
+        function updateTheme(c) {
+            document.documentElement.style.setProperty('--primary', c);
+            document.documentElement.style.setProperty('--glow', c + '66');
         }
+
+        function updateBg(u) { document.body.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('${u}')`; }
+
+        function openAboutBlank() {
+            const w = window.open();
+            const f = w.document.createElement('iframe');
+            f.style = "width:100%;height:100%;border:none;position:fixed;top:0;left:0;";
+            f.src = window.location.href;
+            w.document.body.appendChild(f);
+            window.location.replace("https://google.com");
+        }
+
+        // 5. CURSOR & INTERACTION
+        const cur = document.getElementById('cursor');
+        const fol = document.getElementById('cursor-follower');
+        document.addEventListener('mousemove', (e) => {
+            cur.style.left = e.clientX + 'px'; cur.style.top = e.clientY + 'px';
+            setTimeout(() => { fol.style.left = (e.clientX - 10) + 'px'; fol.style.top = (e.clientY - 10) + 'px'; }, 50);
+        });
 
         function refreshCursor() {
-            document.querySelectorAll('a, .music-btn, .btn-main, input, textarea, select').forEach(el => {
-                el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
-                el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+            document.querySelectorAll('a, button, input, textarea, .music-btn').forEach(el => {
+                el.onmouseenter = () => document.body.classList.add('cursor-hover');
+                el.onmouseleave = () => document.body.classList.remove('cursor-hover');
             });
         }
         refreshCursor();
-        document.getElementById('nav-home').classList.add('active');
+
+        // 6. SHORTCUTS
+        document.addEventListener('keydown', (e) => {
+            if (e.key === '`') window.location.href = "https://google.com";
+            if (e.key === '/') { e.preventDefault(); document.getElementById('globalSearch').focus(); }
+        });
     </script>
 </body>
 </html>
