@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title id="tab-title">ZOCMYT - Hyper Hub</title>
+    <title id="tab-title">ZOCMYT - Hub</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link id="tab-icon" rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/VRGamer262Real/Hub-Cloudflare/refs/heads/main/bg.jpg">
@@ -10,11 +10,11 @@
             --primary: #00d2ff;
             --secondary: #9d50bb;
             --accent: #ff4b2b;
-            --bg-glass: rgba(15, 18, 17, 0.85);
+            --bg-glass: rgba(15, 18, 17, 0.9);
             --glow: rgba(0, 210, 255, 0.4);
         }
 
-        /* 1. ULTIMATE CURSOR HIDE */
+        /* 1. TOTAL CURSOR CONTROL */
         * { cursor: none !important; box-sizing: border-box; }
         
         body {
@@ -22,140 +22,90 @@
                         url("https://raw.githubusercontent.com/VRGamer262Real/Hub-Cloudflare/refs/heads/main/bg.jpg");
             background-size: cover; background-attachment: fixed; background-position: center;
             color: white; font-family: 'Segoe UI', Roboto, sans-serif;
-            margin: 0; overflow-x: hidden; min-height: 100vh; transition: background 0.5s ease;
+            margin: 0; overflow-x: hidden; min-height: 100vh;
         }
 
         #cursor {
-            width: 10px; height: 10px; background: var(--primary);
+            width: 12px; height: 12px; background: var(--primary);
             border-radius: 50%; position: fixed; pointer-events: none;
             z-index: 10000; transition: transform 0.1s ease;
-            box-shadow: 0 0 15px var(--primary);
+            box-shadow: 0 0 20px var(--primary);
         }
 
         #cursor-follower {
-            width: 30px; height: 30px; border: 2px solid var(--primary);
+            width: 35px; height: 35px; border: 2px solid var(--primary);
             border-radius: 50%; position: fixed; pointer-events: none;
             z-index: 9999; transition: transform 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
-            opacity: 0.5;
+            opacity: 0.4;
         }
 
-        .cursor-hover #cursor { transform: scale(3); background: transparent; border: 1px solid var(--primary); }
+        .cursor-hover #cursor { transform: scale(3.5); background: transparent; border: 1.5px solid var(--primary); }
 
-        /* 2. STATUS BAR & GLOBAL SEARCH */
+        /* 2. STATUS & SEARCH */
         .status-bar {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 8px 20px; background: rgba(0,0,0,0.6); backdrop-filter: blur(10px);
-            font-size: 0.75rem; font-weight: 700; color: rgba(255,255,255,0.8);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex; justify-content: space-between; padding: 10px 25px;
+            background: rgba(0,0,0,0.7); backdrop-filter: blur(15px);
+            font-size: 0.8rem; font-weight: 800; border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
-        .global-search-wrapper {
-            max-width: 500px; margin: 15px auto; position: relative; z-index: 1001;
+        .search-area { max-width: 600px; margin: 20px auto; position: relative; }
+        .search-area input {
+            width: 100%; padding: 15px 50px; border-radius: 50px;
+            background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2);
+            color: white; font-size: 1.1rem; outline: none; transition: 0.3s;
         }
-
-        .global-search-wrapper input {
-            width: 100%; padding: 12px 20px 12px 45px; border-radius: 50px;
-            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
-            color: white; outline: none; transition: 0.3s; font-size: 1rem;
-        }
-
-        .global-search-wrapper input:focus {
-            background: rgba(255,255,255,0.2); border-color: var(--primary);
-            box-shadow: 0 0 20px var(--glow);
-        }
-
-        .search-icon-btn { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); opacity: 0.6; }
+        .search-area input:focus { border-color: var(--primary); box-shadow: 0 0 25px var(--glow); background: rgba(255,255,255,0.15); }
 
         /* 3. NAVIGATION */
-        .nav-wrapper {
-            position: sticky; top: 0; z-index: 1000;
-            display: flex; justify-content: center; width: 100%; padding: 10px;
-        }
-
+        .nav-container { position: sticky; top: 0; z-index: 1000; display: flex; justify-content: center; padding: 10px; }
         .nav {
-            list-style: none; margin: 0; padding: 5px;
-            display: flex; flex-wrap: wrap; justify-content: center;
-            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(20px);
-            border-radius: 50px; border: 1px solid rgba(255, 255, 255, 0.1);
+            list-style: none; margin: 0; padding: 6px; display: flex; flex-wrap: wrap; justify-content: center;
+            background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(25px); border-radius: 50px; border: 1px solid rgba(255, 255, 255, 0.1);
         }
-
         .nav li a {
-            display: block; color: #aaa; text-decoration: none; padding: 8px 16px;
-            transition: 0.4s; border-radius: 30px; font-weight: 700;
-            font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px;
+            color: #999; text-decoration: none; padding: 10px 18px; font-weight: 800; font-size: 0.65rem;
+            text-transform: uppercase; transition: 0.4s; border-radius: 30px; letter-spacing: 1px;
         }
+        .nav li a:hover, .nav li a.active { color: white; background: var(--primary); box-shadow: 0 0 20px var(--glow); }
 
-        .nav li a:hover, .nav li a.active {
-            color: white; background: var(--primary);
-            box-shadow: 0 0 15px var(--glow);
-        }
-
-        /* 4. SECTIONS & GRID */
-        section { display: none; opacity: 0; perspective: 1500px; padding: 20px 10px 100px; }
+        /* 4. SECTIONS & CARDS */
+        section { display: none; opacity: 0; perspective: 1500px; padding: 20px 10px 120px; }
         section.active { display: block; animation: fadeIn 0.5s forwards; }
-
-        h1 {
-            text-align: center; margin-bottom: 10px; font-size: 2.8rem;
-            background: linear-gradient(to bottom, #fff, #888);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
 
         .listItem {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 15px; max-width: 1200px; margin: 0 auto; list-style: none; padding: 0;
+            gap: 15px; max-width: 1250px; margin: 0 auto; list-style: none; padding: 0;
         }
-
-        .listItem li { opacity: 0; transform: translateY(20px); transition: 0.3s; }
+        .listItem li { opacity: 0; transform: translateY(20px); }
         section.active li { animation: slideIn 0.4s forwards; }
 
-        .listItem a, .music-btn, .box-ui {
-            display: flex; flex-direction: column; align-items: center;
-            text-decoration: none; color: white; background: var(--bg-glass);
-            padding: 15px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            height: 100%; transform-style: preserve-3d; text-align: center;
+        .card {
+            display: flex; flex-direction: column; align-items: center; text-decoration: none;
+            color: white; background: var(--bg-glass); padding: 15px; border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            height: 100%; transform-style: preserve-3d;
         }
+        .card:hover { transform: translateY(-12px) rotateX(8deg); border-color: var(--primary); box-shadow: 0 20px 40px var(--glow); }
+        .card img { width: 100%; height: 110px; object-fit: cover; border-radius: 12px; margin-bottom: 12px; transform: translateZ(25px); }
+        .card-title { font-weight: 800; font-size: 0.85rem; transform: translateZ(40px); }
 
-        .listItem a:hover, .music-btn:hover {
-            transform: translateY(-12px) rotateX(10deg) rotateY(5deg);
-            border-color: var(--primary); box-shadow: 0 20px 40px var(--glow);
-            background: rgba(30, 35, 32, 0.95);
-        }
-
-        .listItem img {
-            width: 100%; height: 110px; object-fit: cover; border-radius: 12px;
-            margin-bottom: 10px; transform: translateZ(30px);
-        }
-
-        .game-title { font-weight: 800; font-size: 0.85rem; transform: translateZ(50px); letter-spacing: 0.5px; }
-
-        /* 5. PANELS & APPS */
+        /* 5. APPS & PANELS */
         .panel {
-            max-width: 700px; margin: 20px auto; background: var(--bg-glass);
+            max-width: 750px; margin: 20px auto; background: var(--bg-glass);
             padding: 30px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.1);
-            text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.6);
         }
-
         input, textarea, select {
-            width: 100%; padding: 14px; border-radius: 12px; background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1); color: white; outline: none; font-family: inherit; margin-bottom: 10px;
+            width: 100%; padding: 14px; border-radius: 12px; background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1); color: white; margin-bottom: 15px;
         }
-
-        .btn-main {
-            background: var(--primary); border: none; color: black; padding: 14px 28px;
-            border-radius: 50px; font-weight: 800; text-transform: uppercase; transition: 0.3s;
+        .btn {
+            background: var(--primary); border: none; color: black; padding: 15px 30px;
+            border-radius: 50px; font-weight: 900; text-transform: uppercase; transition: 0.3s;
         }
+        .btn:hover { transform: scale(1.05); filter: brightness(1.2); }
 
-        #music-toast {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(200%);
-            background: var(--primary); color: black; padding: 12px 30px; border-radius: 50px;
-            font-weight: 900; transition: 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 10001; box-shadow: 0 10px 30px var(--glow);
-        }
-
-        /* 6. APPS SPECIFIC */
-        #calculator { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; max-width: 300px; margin: 0 auto; }
-        #calculator button { padding: 15px; border-radius: 10px; border: none; background: rgba(255,255,255,0.1); color: white; font-weight: bold; }
+        #canvas { background: white; border-radius: 15px; cursor: none !important; width: 100%; height: 300px; touch-action: none; }
 
         @keyframes fadeIn { to { opacity: 1; } }
         @keyframes slideIn { to { opacity: 1; transform: translateY(0); } }
@@ -166,273 +116,244 @@
     <div id="cursor"></div>
     <div id="cursor-follower"></div>
     
-    <!-- Status Bar -->
     <div class="status-bar">
-        <div id="clock">00:00:00 AM</div>
-        <div id="status-greet">Welcome, User</div>
-        <div id="battery">Battery: 100%</div>
+        <div id="clock">00:00:00</div>
+        <div id="battery">Battery: Loading...</div>
     </div>
 
-    <!-- Global Search -->
-    <div class="global-search-wrapper">
-        <span class="search-icon-btn">🔍</span>
-        <input type="text" id="globalSearch" placeholder="Search everything (Games, Tools, Music...)" onkeyup="universalSearch()">
+    <div class="search-area">
+        <input type="text" id="universalSearch" placeholder="Search for games, music, or tools..." onkeyup="doSearch()">
     </div>
 
-    <!-- Navigation -->
-    <div class="nav-wrapper">
+    <div class="nav-container">
         <ul class="nav">
-            <li><a onclick="showSection('home')" id="nav-home">Home</a></li>
-            <li><a onclick="showSection('games')" id="nav-games">Games</a></li>
-            <li><a onclick="showSection('apps')" id="nav-apps">Apps</a></li>
-            <li><a onclick="showSection('proxies')" id="nav-proxies">Proxies</a></li>
-            <li><a onclick="showSection('music')" id="nav-music">Music</a></li>
-            <li><a onclick="showSection('tools')" id="nav-tools">Tools</a></li>
-            <li><a onclick="showSection('models')" id="nav-models">Models</a></li>
-            <li><a onclick="showSection('customize')" id="nav-customize">Design</a></li>
-            <li><a onclick="showSection('security')" id="nav-security">Security</a></li>
-            <li><a onclick="showSection('questions')" id="nav-questions">Feedback</a></li>
-            <li><a onclick="showSection('about')" id="nav-about">About</a></li>
+            <li><a onclick="showSec('home')" id="nav-home">Home</a></li>
+            <li><a onclick="showSec('games')" id="nav-games">Games</a></li>
+            <li><a onclick="showSec('apps')" id="nav-apps">Apps</a></li>
+            <li><a onclick="showSec('proxies')" id="nav-proxies">Proxies</a></li>
+            <li><a onclick="showSec('music')" id="nav-music">Music</a></li>
+            <li><a onclick="showSec('tools')" id="nav-tools">Tools</a></li>
+            <li><a onclick="showSec('models')" id="nav-models">Models</a></li>
+            <li><a onclick="showSec('design')" id="nav-design">Design</a></li>
+            <li><a onclick="showSec('sec')" id="nav-sec">Security</a></li>
+            <li><a onclick="showSec('about')" id="nav-about">About</a></li>
         </ul>
     </div>
 
-    <!-- SECTIONS -->
-    
-    <!-- Results Tab (Hidden by default) -->
-    <section id="results-tab">
+    <!-- SEARCH RESULTS SECTION -->
+    <section id="results">
         <h1>Search Results</h1>
-        <ul class="listItem" id="search-results-list"></ul>
+        <ul class="listItem" id="results-list"></ul>
     </section>
 
-    <!-- Home -->
+    <!-- HOME -->
     <section id="home" class="active">
-        <h1>Silly Projects <strong>Hub</strong></h1>
-        <div class="panel">
-            <h3>Quick Links</h3>
-            <ul class="listItem">
-                <li><a href="https://www.youtube.com/@zOcM" target="_blank"><span class="game-title">YouTube (Z0CM)</span></a></li>
-                <li><a href="https://www.youtube.com/@VRGamer262" target="_blank"><span class="game-title">YouTube (VR)</span></a></li>
-                <li><a href="https://github.com/VRGamer262Real" target="_blank"><span class="game-title">Main GitHub</span></a></li>
-            </ul>
-        </div>
-    </section>
-
-    <!-- Games -->
-    <section id="games">
-        <h1>Games Library</h1>
-        <ul class="listItem" id="full-games-list">
-            <li><a href="https://vrgamer262real.github.io/polytrack/"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSq4z0oIn1dnrq__vTuC1IthPoyEBUIpJx2tw&s"><span class="game-title">Polytrack</span></a></li>
-            <li><a href="https://supaclicker.vrgamer262.workers.dev/"><img src="https://raw.githubusercontent.com/VRGamer262Real/supaclicker.github.io/refs/heads/main/ButtonIcon.png"><span class="game-title">Supa Clicker</span></a></li>
-            <li><a href="https://supaclickerhacked.vrgamer262.workers.dev/"><img src="https://raw.githubusercontent.com/VRGamer262Real/supaclicker.github.io/refs/heads/main/ButtonIcon.png"><span class="game-title">Supa Clicker (Hacked)</span></a></li>
-            <li><a href="https://tower-defense.vrgamer262.workers.dev/"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/PlaceholderLC.png"><span class="game-title">Tower Defense</span></a></li>
-            <li><a href="https://towerdefensehacked.vrgamer262.workers.dev/"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/PlaceholderLC.png"><span class="game-title">Tower Defense (Hacked)</span></a></li>
-            <li><a href="https://bbcr.vrgamer262.workers.dev/"><img src="https://m.gjcdn.net/game-header/950/602328-enyxuxkk-v4.jpg"><span class="game-title">Baldi Remastered</span></a></li>
-            <li><a href="https://melodixxx.github.io/reunbozdo.github.io/"><img src="https://i.ytimg.com/vi/tjbh3cNpI9g/maxresdefault.jpg"><span class="game-title">Block Blast</span></a></li>
-            <li><a href="https://simon.lc/tetr.js/"><img src="https://play-lh.googleusercontent.com/w-lUGr-eaAwxLUl7OW5v7jLG-CE8H2Z75D6lkkm8Tro21ZLCk7fvVIjVM7ZG0u0ZLBws=w240-h480-rw"><span class="game-title">Tetris</span></a></li>
-            <li><a href="https://soteris24.github.io/genetrydash.github.io/"><img src="https://upload.wikimedia.org/wikipedia/en/3/35/Geometry_Dash_Logo.PNG"><span class="game-title">Geometry Dash</span></a></li>
-            <li><a href="https://8ballpool.vrgamer262.workers.dev/"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkQDXxj4nWBG57shuWLgrAZalDrnAF-CINBQ&s"><span class="game-title">8Ball Pool</span></a></li>
-            <li><a href="https://snowrider3d.vrgamer262.workers.dev/"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7HUapu5amnY5nfYojuBTCRQBThbOGsPKl_Q&s"><span class="game-title">Snow Rider 3D</span></a></li>
-            <li><a href="https://vrgamer262real.github.io/paperio2/"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbOYDL-XogArpPn5yhnKk4E0pRDmWTIRXnxA&s"><span class="game-title">Paper.io 2</span></a></li>
-            <li><a href="https://ducky443747.github.io/games/DriveMad/"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS978Fp0DG45horfcROMLIbcBrNSrHrzpTEpw&s"><span class="game-title">Drive Mad</span></a></li>
-        </ul>
-    </section>
-
-    <!-- Apps (NEW TAB) -->
-    <section id="apps">
-        <h1>Utility Apps</h1>
-        <div class="panel">
-            <h3>Notepad</h3>
-            <textarea id="hub-note" rows="5" placeholder="Your notes save automatically..." onkeyup="saveNote()"></textarea>
-        </div>
-        <div class="panel">
-            <h3>Simple Calc</h3>
-            <input type="text" id="calc-display" readonly style="text-align: right; font-size: 1.5rem;">
-            <div id="calculator">
-                <button onclick="calcIn('1')">1</button><button onclick="calcIn('2')">2</button><button onclick="calcIn('3')">3</button><button onclick="calcIn('+')">+</button>
-                <button onclick="calcIn('4')">4</button><button onclick="calcIn('5')">5</button><button onclick="calcIn('6')">6</button><button onclick="calcIn('-')">-</button>
-                <button onclick="calcIn('7')">7</button><button onclick="calcIn('8')">8</button><button onclick="calcIn('9')">9</button><button onclick="calcIn('*')">*</button>
-                <button onclick="calcClr()">C</button><button onclick="calcIn('0')">0</button><button onclick="calcRes()">=</button><button onclick="calcIn('/')">/</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Proxies -->
-    <section id="proxies">
-        <h1>Web Proxies</h1>
+        <h1>ZOCMYT <strong>Hyper Hub</strong></h1>
         <ul class="listItem">
-            <li><a href="https://uv.student-portal.workers.dev/" target="_blank"><span class="game-title">Ultraviolet</span></a></li>
-            <li><a href="https://interstellar.student-portal.workers.dev/" target="_blank"><span class="game-title">Interstellar</span></a></li>
-            <li><a href="https://rammerhead.student-portal.workers.dev/" target="_blank"><span class="game-title">Rammerhead</span></a></li>
+            <li><a class="card" href="https://www.youtube.com/@zOcM" target="_blank"><span class="card-title">YouTube (Z0CM)</span></a></li>
+            <li><a class="card" href="https://www.youtube.com/@VRGamer262" target="_blank"><span class="card-title">YouTube (VR)</span></a></li>
+            <li><a class="card" href="https://github.com/VRGamer262Real" target="_blank"><span class="card-title">Main GitHub</span></a></li>
         </ul>
     </section>
 
-    <!-- Customization -->
-    <section id="customize">
-        <h1>Design Lab</h1>
-        <div class="panel">
-            <label>Theme Glow Color:</label>
-            <input type="color" id="theme-color" value="#00d2ff" onchange="updateTheme(this.value)">
-            <label>Background Image:</label>
-            <input type="text" placeholder="Direct Image URL..." onchange="updateBg(this.value)">
-            <button class="btn-main" onclick="resetDesign()">Reset Design</button>
-        </div>
+    <!-- GAMES (FULL RESTORED) -->
+    <section id="games">
+        <h1>Games</h1>
+        <ul class="listItem">
+            <li><a class="card" href="https://vrgamer262real.github.io/polytrack/"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSq4z0oIn1dnrq__vTuC1IthPoyEBUIpJx2tw&s"><span class="card-title">Polytrack</span></a></li>
+            <li><a class="card" href="https://supaclicker.vrgamer262.workers.dev/"><img src="https://raw.githubusercontent.com/VRGamer262Real/supaclicker.github.io/refs/heads/main/ButtonIcon.png"><span class="card-title">Supa Clicker</span></a></li>
+            <li><a class="card" href="https://supaclickerhacked.vrgamer262.workers.dev/"><img src="https://raw.githubusercontent.com/VRGamer262Real/supaclicker.github.io/refs/heads/main/ButtonIcon.png"><span class="card-title">Clicker (Hacked)</span></a></li>
+            <li><a class="card" href="https://tower-defense.vrgamer262.workers.dev/"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/PlaceholderLC.png"><span class="card-title">Tower Defense</span></a></li>
+            <li><a class="card" href="https://towerdefensehacked.vrgamer262.workers.dev/"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/PlaceholderLC.png"><span class="card-title">TD (Hacked)</span></a></li>
+            <li><a class="card" href="https://bbcr.vrgamer262.workers.dev/"><img src="https://m.gjcdn.net/game-header/950/602328-enyxuxkk-v4.jpg"><span class="card-title">Baldi Remaster</span></a></li>
+            <li><a class="card" href="https://melodixxx.github.io/reunbozdo.github.io/"><img src="https://i.ytimg.com/vi/tjbh3cNpI9g/maxresdefault.jpg"><span class="card-title">Block Blast</span></a></li>
+            <li><a class="card" href="https://simon.lc/tetr.js/"><img src="https://play-lh.googleusercontent.com/w-lUGr-eaAwxLUl7OW5v7jLG-CE8H2Z75D6lkkm8Tro21ZLCk7fvVIjVM7ZG0u0ZLBws=w240-h480-rw"><span class="card-title">Tetris</span></a></li>
+            <li><a class="card" href="https://soteris24.github.io/genetrydash.github.io/"><img src="https://upload.wikimedia.org/wikipedia/en/3/35/Geometry_Dash_Logo.PNG"><span class="card-title">Geometry Dash</span></a></li>
+            <li><a class="card" href="https://8ballpool.vrgamer262.workers.dev/"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkQDXxj4nWBG57shuWLgrAZalDrnAF-CINBQ&s"><span class="card-title">8Ball Pool</span></a></li>
+            <li><a class="card" href="https://snowrider3d.vrgamer262.workers.dev/"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7HUapu5amnY5nfYojuBTCRQBThbOGsPKl_Q&s"><span class="card-title">Snow Rider 3D</span></a></li>
+            <li><a class="card" href="https://vrgamer262real.github.io/paperio2/"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbOYDL-XogArpPn5yhnKk4E0pRDmWTIRXnxA&s"><span class="card-title">Paper.io 2</span></a></li>
+            <li><a class="card" href="https://hollowknight.vrgamer262.workers.dev/"><img src="https://hb.imgix.net/d73d29a560b20cb200d6f6d7daf935043b6edd8a.jpeg?auto=compress,format&fit=crop&h=353&w=616&s=24ed82654ecaa67252feccb8e64f3ee5"><span class="card-title">Hollow Knight</span></a></li>
+            <li><a class="card" href="https://vrgamer262real.github.io/Hollow-Knight-Silksong//"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNEgkizS0UKu2jt6TTEuk5926iNi01sI924g&s"><span class="card-title">HK: Silksong</span></a></li>
+        </ul>
     </section>
 
-    <!-- News, Music, Tools, Models, Security, Questions, About (Unchanged Content) -->
+    <!-- MUSIC (RESTORED) -->
     <section id="music">
         <h1>Music Player</h1>
         <ul class="listItem">
-            <li><div class="music-btn" onclick="changeMusic('bg.mp3', 'Default Theme')"><span class="game-title">Default Theme</span></div></li>
-            <li><div class="music-btn" onclick="changeMusic('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', 'Chill Vibes')"><span class="game-title">Chill Vibes</span></div></li>
+            <li><div class="card" onclick="playM('bg.mp3', 'Default')"><span class="card-title">Default Theme</span></div></li>
+            <li><div class="card" onclick="playM('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', 'Chill')"><span class="card-title">Chill Vibes</span></div></li>
+            <li><div class="card" onclick="playM('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3', 'Epic')"><span class="card-title">Epic Beats</span></div></li>
+            <li><div class="card" onclick="playM('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-16.mp3', 'Synth')"><span class="card-title">Synthwave</span></div></li>
         </ul>
     </section>
 
+    <!-- APPS -->
+    <section id="apps">
+        <h1>Apps</h1>
+        <div class="panel">
+            <h3>Drawing Pad</h3>
+            <canvas id="canvas"></canvas>
+            <button class="btn" onclick="clearCanvas()" style="margin-top:10px;">Clear Pad</button>
+        </div>
+        <div class="panel">
+            <h3>Password Generator</h3>
+            <p id="pass-out" style="font-size:1.5rem; letter-spacing:2px; color:var(--primary);">********</p>
+            <button class="btn" onclick="genPass()">Generate</button>
+        </div>
+    </section>
+
+    <!-- TOOLS (RESTORED) -->
     <section id="tools">
-        <h1>Advanced Tools</h1>
+        <h1>Tools</h1>
         <ul class="listItem">
-            <li><a href="https://dc.vrgamer262.workers.dev/"><span class="game-title">Decode Counter</span></a></li>
+            <li><a class="card" href="https://dc.vrgamer262.workers.dev/"><span class="card-title">Decode Counter</span></a></li>
         </ul>
     </section>
 
+    <!-- MODELS (RESTORED) -->
     <section id="models">
         <h1>3D Models</h1>
         <ul class="listItem">
-            <li><a href="https://makerworld.com/en/models/1804813-locking-bottlenose-bcar"><span class="game-title">Locking BCAR</span></a></li>
+            <li><a class="card" href="https://makerworld.com/en/models/1804813-locking-bottlenose-bcar"><span class="card-title">Locking BCAR</span></a></li>
+            <li><a class="card" href="https://makerworld.com/en/models/2444418-nail-form-roll-holder"><span class="card-title">Nail Form Holder</span></a></li>
+            <li><a class="card" href="https://makerworld.com/en/models/2444354-starlink-gen-3-mounts"><span class="card-title">Starlink Mounts</span></a></li>
         </ul>
     </section>
 
-    <section id="security">
-        <h1>System Security</h1>
+    <!-- DESIGN & MASKING -->
+    <section id="design">
+        <h1>Design Lab</h1>
         <div class="panel">
-            <button class="btn-main" onclick="openAboutBlank()">Cloak Site (About:Blank)</button>
-            <p>Panic Key: [ ` ] | Search: [ / ]</p>
+            <h3>Tab Masking (Stealth)</h3>
+            <button class="btn" onclick="mask('Google Classroom', 'https://upload.wikimedia.org/wikipedia/commons/d/d5/Google_Classroom_icon.png')">Google Classroom</button>
+            <button class="btn" onclick="mask('My Drive - Google Drive', 'https://upload.wikimedia.org/wikipedia/commons/1/12/Google_Drive_icon_%282020%29.svg')">Google Drive</button>
+            <button class="btn" onclick="mask('Google Docs', 'https://upload.wikimedia.org/wikipedia/commons/0/01/Google_Docs_logo_%282014-2020%29.svg')">Google Docs</button>
+        </div>
+        <div class="panel">
+            <h3>Colors & BG</h3>
+            <input type="color" onchange="document.documentElement.style.setProperty('--primary', this.value)">
+            <input type="text" placeholder="Custom BG Image URL..." onchange="document.body.style.backgroundImage = `url('${this.value}')` ">
         </div>
     </section>
 
-    <section id="questions">
-        <h1>Feedback</h1>
+    <!-- SECURITY -->
+    <section id="sec">
+        <h1>Security</h1>
         <div class="panel">
-            <input type="text" id="q-title" placeholder="Title">
-            <textarea id="q-body" rows="3" placeholder="Description"></textarea>
-            <button class="btn-main" onclick="submitToGithub()">Submit Issue</button>
+            <button class="btn" onclick="cloak()">Open in About:Blank</button>
+            <p style="margin-top:20px; opacity:0.6;">Panic Key: [ ` ] | Search: [ / ]</p>
         </div>
     </section>
 
-    <section id="about">
-        <h1>About</h1>
-        <div class="panel">ZOCMYT Hyper Hub V3.0 - Built for the community.</div>
-    </section>
-
-    <div id="music-toast">Now Playing: Default Theme</div>
+    <div id="music-toast" style="position:fixed; bottom:-100px; left:50%; transform:translateX(-50%); background:var(--primary); color:black; padding:12px 30px; border-radius:50px; font-weight:900; z-index:10001; transition:0.5s;">Now Playing</div>
+    <audio id="player" src="bg.mp3" autoplay loop></audio>
 
     <script>
-        const audio = document.getElementById('main-audio');
-        const toast = document.getElementById('music-toast');
-
-        // 1. UNIVERSAL SEARCH ENGINE
-        function universalSearch() {
-            const query = document.getElementById('globalSearch').value.toLowerCase();
-            const resultsList = document.getElementById('search-results-list');
-            const resultsTab = document.getElementById('results-tab');
+        // Universal Search
+        function doSearch() {
+            const q = document.getElementById('universalSearch').value.toLowerCase();
+            const resTab = document.getElementById('results');
+            const resList = document.getElementById('results-list');
             
-            if (query.length < 1) {
-                showSection('home');
-                return;
-            }
-
-            showSection('results-tab');
-            resultsList.innerHTML = '';
-
-            // Scan all listItems in the entire document
-            const allItems = document.querySelectorAll('section:not(#results-tab) .listItem li');
-            let found = 0;
-
-            allItems.forEach(item => {
-                if (item.innerText.toLowerCase().includes(query)) {
-                    const clone = item.cloneNode(true);
-                    resultsList.appendChild(clone);
-                    found++;
+            if(q === "") { showSec('home'); return; }
+            
+            showSec('results');
+            resList.innerHTML = "";
+            let items = document.querySelectorAll('section:not(#results) .card');
+            items.forEach(i => {
+                if(i.innerText.toLowerCase().includes(q)) {
+                    let clone = i.parentElement.cloneNode(true);
+                    resList.appendChild(clone);
                 }
             });
-
-            if (found === 0) {
-                resultsList.innerHTML = `<p style="grid-column: 1/-1; opacity: 0.5;">No results found for "${query}"</p>`;
-            }
-            refreshCursor();
+            refresh();
         }
 
-        // 2. STATUS & CLOCK
-        function updateStatus() {
-            const now = new Date();
-            document.getElementById('clock').innerText = now.toLocaleTimeString();
-            if ('getBattery' in navigator) {
-                navigator.getBattery().then(b => {
-                    document.getElementById('battery').innerText = `Battery: ${Math.floor(b.level * 100)}%${b.charging ? ' ⚡' : ''}`;
-                });
-            }
+        // Clock & Battery
+        setInterval(() => {
+            document.getElementById('clock').innerText = new Date().toLocaleTimeString();
+            navigator.getBattery().then(b => {
+                document.getElementById('battery').innerText = `Battery: ${Math.floor(b.level*100)}% ${b.charging ? '⚡' : ''}`;
+            });
+        }, 1000);
+
+        // Drawing Pad
+        const can = document.getElementById('canvas');
+        const ctx = can.getContext('2d');
+        let draw = false;
+        can.width = can.offsetWidth;
+        can.addEventListener('mousedown', () => draw = true);
+        can.addEventListener('mouseup', () => draw = false);
+        can.addEventListener('mousemove', (e) => {
+            if(!draw) return;
+            ctx.fillStyle = document.documentElement.style.getPropertyValue('--primary') || "#00d2ff";
+            ctx.beginPath();
+            ctx.arc(e.offsetX, e.offsetY, 3, 0, Math.PI*2);
+            ctx.fill();
+        });
+        function clearCanvas() { ctx.clearRect(0, 0, can.width, can.height); }
+
+        // Tab Masking
+        function mask(title, icon) {
+            document.getElementById('tab-title').innerText = title;
+            document.getElementById('tab-icon').href = icon;
         }
-        setInterval(updateStatus, 1000);
 
-        // 3. APPS LOGIC
-        function saveNote() { localStorage.setItem('hubNote', document.getElementById('hub-note').value); }
-        document.getElementById('hub-note').value = localStorage.getItem('hubNote') || "";
-
-        function calcIn(v) { document.getElementById('calc-display').value += v; }
-        function calcClr() { document.getElementById('calc-display').value = ""; }
-        function calcRes() { try { document.getElementById('calc-display').value = eval(document.getElementById('calc-display').value); } catch { document.getElementById('calc-display').value = "Error"; } }
-
-        // 4. CORE HUB FUNCTIONS
-        function showSection(id) {
+        // Logic
+        function showSec(id) {
             document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            document.querySelectorAll('.nav li a').forEach(l => l.classList.remove('active'));
-            const navBtn = document.getElementById('nav-' + id);
-            if (navBtn) navBtn.classList.add('active');
+            document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
+            if(document.getElementById('nav-'+id)) document.getElementById('nav-'+id).classList.add('active');
         }
 
-        function changeMusic(url, name) {
-            audio.src = url; audio.play();
-            toast.innerText = "Now Playing: " + name;
-            toast.style.transform = "translateX(-50%) translateY(0)";
-            setTimeout(() => { toast.style.transform = "translateX(-50%) translateY(200%)"; }, 3000);
+        function playM(src, name) {
+            const p = document.getElementById('player');
+            p.src = src; p.play();
+            const t = document.getElementById('music-toast');
+            t.innerText = "Playing: " + name;
+            t.style.bottom = "30px";
+            setTimeout(() => t.style.bottom = "-100px", 3000);
         }
 
-        function updateTheme(c) {
-            document.documentElement.style.setProperty('--primary', c);
-            document.documentElement.style.setProperty('--glow', c + '66');
+        function genPass() {
+            const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%^&*";
+            let pass = "";
+            for(let i=0; i<12; i++) pass += chars.charAt(Math.floor(Math.random()*chars.length));
+            document.getElementById('pass-out').innerText = pass;
         }
 
-        function updateBg(u) { document.body.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('${u}')`; }
-
-        function openAboutBlank() {
-            const w = window.open();
-            const f = w.document.createElement('iframe');
-            f.style = "width:100%;height:100%;border:none;position:fixed;top:0;left:0;";
-            f.src = window.location.href;
-            w.document.body.appendChild(f);
-            window.location.replace("https://google.com");
+        function cloak() {
+            let win = window.open();
+            win.document.body.style.margin = '0';
+            win.document.body.style.height = '100vh';
+            let iframe = win.document.createElement('iframe');
+            iframe.style.border = 'none'; iframe.style.width = '100%'; iframe.style.height = '100%';
+            iframe.src = window.location.href;
+            win.document.body.appendChild(iframe);
+            window.location.replace('https://google.com');
         }
 
-        // 5. CURSOR & INTERACTION
+        // Cursor
         const cur = document.getElementById('cursor');
         const fol = document.getElementById('cursor-follower');
         document.addEventListener('mousemove', (e) => {
             cur.style.left = e.clientX + 'px'; cur.style.top = e.clientY + 'px';
-            setTimeout(() => { fol.style.left = (e.clientX - 10) + 'px'; fol.style.top = (e.clientY - 10) + 'px'; }, 50);
+            setTimeout(() => { fol.style.left = e.clientX-15 + 'px'; fol.style.top = e.clientY-15 + 'px'; }, 50);
         });
 
-        function refreshCursor() {
-            document.querySelectorAll('a, button, input, textarea, .music-btn').forEach(el => {
+        function refresh() {
+            document.querySelectorAll('a, button, .card, input, textarea').forEach(el => {
                 el.onmouseenter = () => document.body.classList.add('cursor-hover');
                 el.onmouseleave = () => document.body.classList.remove('cursor-hover');
             });
         }
-        refreshCursor();
+        refresh();
 
-        // 6. SHORTCUTS
         document.addEventListener('keydown', (e) => {
-            if (e.key === '`') window.location.href = "https://google.com";
-            if (e.key === '/') { e.preventDefault(); document.getElementById('globalSearch').focus(); }
+            if(e.key === '`') window.location.href = "https://google.com";
+            if(e.key === '/') { e.preventDefault(); document.getElementById('universalSearch').focus(); }
         });
     </script>
 </body>
