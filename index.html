@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title id="tab-title">ZOCMYT - Hub</title>
+    <title id="tab-title">ZOCMYT and VRGamer262 - Hub</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link id="tab-icon" rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/VRGamer262Real/Hub-Cloudflare/refs/heads/main/bg.jpg">
+    <link id="tab-icon" rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/VRGamer262Real/Hub/refs/heads/main/bg.jpg">
     <style>
         :root {
             --primary: #00d2ff;
@@ -175,7 +175,7 @@
             <li><a class="item" href="https://bbcr.vrgamer262.workers.dev/"><img src="https://m.gjcdn.net/game-header/950/602328-enyxuxkk-v4.jpg"><span class="item-text">Baldi Remaster</span></a></li>
             <li><a class="item" href="https://melodixxx.github.io/reunbozdo.github.io/"><img src="https://i.ytimg.com/vi/tjbh3cNpI9g/maxresdefault.jpg"><span class="item-text">Block Blast</span></a></li>
             <li><a class="item" href="https://simon.lc/tetr.js/"><img src="https://play-lh.googleusercontent.com/w-lUGr-eaAwxLUl7OW5v7jLG-CE8H2Z75D6lkkm8Tro21ZLCk7fvVIjVM7ZG0u0ZLBws=w240-h480-rw"><span class="item-text">Tetris</span></a></li>
-            <li><a class="item" href="https://soteris24.github.io/genetrydash.github.io/"><img src="https://upload.wikimedia.org/wikipedia/en/3/35/Geometry_Dash_Logo.PNG"><span class="item-text">Geometry Dash</span></a></li>
+            <li><a class="item" href="https://soteris24.github.io/genetrydash.github.io/"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCd8DHW4zOb9QqjJ59t9FpV8LnEeKwIttiaw&s"><span class="item-text">Geometry Dash</span></a></li>
             <li><a class="item" href="https://8ballpool.vrgamer262.workers.dev/"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkQDXxj4nWBG57shuWLgrAZalDrnAF-CINBQ&s"><span class="item-text">8Ball Pool</span></a></li>
             <li><a class="item" href="https://snowrider3d.vrgamer262.workers.dev/"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7HUapu5amnY5nfYojuBTCRQBThbOGsPKl_Q&s"><span class="item-text">Snow Rider 3D</span></a></li>
             <li><a class="item" href="https://vrgamer262real.github.io/paperio2/"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbOYDL-XogArpPn5yhnKk4E0pRDmWTIRXnxA&s"><span class="item-text">Paper.io 2</span></a></li>
@@ -284,12 +284,12 @@
 
     <!-- ABOUT (FIXED) -->
     <section id="about">
-        <h1>About the Hub</h1>
+        <h1>About our Hub</h1>
         <div style="display:flex; flex-direction:column; align-items:center; gap:25px;">
-            <div class="panel">ZOCMYT Ultra Hub is a high-performance gaming and utility portal. Built for speed, privacy, and fun.</div>
+            <div class="panel">VRGamer262 and zOcM were one day bored, and made a website!</div>
             <div style="display:flex; gap:20px; flex-wrap:wrap; justify-content:center;">
-                <img src="https://raw.githubusercontent.com/VRGamer262Real/Hub-Cloudflare/refs/heads/main/VRGamer262.jpg" style="width:220px; border-radius:25px; border:3px solid var(--primary); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
-                <img src="https://raw.githubusercontent.com/VRGamer262Real/Hub-Cloudflare/refs/heads/main/900-900.jpeg" style="width:220px; border-radius:25px; border:3px solid var(--primary); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <img src="https://raw.githubusercontent.com/VRGamer262Real/Hub/refs/heads/main/VRGamer262.jpg" style="width:220px; border-radius:25px; border:3px solid var(--primary); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <img src="https://raw.githubusercontent.com/VRGamer262Real/Hub/refs/heads/main/900-900.jpeg" style="width:220px; border-radius:25px; border:3px solid var(--primary); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
             </div>
         </div>
     </section>
@@ -345,7 +345,7 @@
             const t = document.getElementById('q-title').value;
             const b = document.getElementById('q-body').value;
             if(!t || !b) return alert("Please fill in both fields!");
-            window.open(`https://github.com/VRGamer262Real/Hub-Cloudflare/issues/new?title=${encodeURIComponent(t)}&body=${encodeURIComponent(b)}`);
+            window.open(`https://github.com/VRGamer262Real/Hub/issues/new?title=${encodeURIComponent(t)}&body=${encodeURIComponent(b)}`);
         }
 
         function mask(title, icon) {
@@ -390,7 +390,7 @@
         
         document.getElementById('note').value = localStorage.getItem('hubNote') || "";
         document.addEventListener('keydown', (e) => {
-            if(e.key === '`') window.location.href = "https://google.com";
+            if(e.key === '`') window.location.href = "about:blank";
             if(e.key === '/') { 
                 if(document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
                     e.preventDefault(); 
