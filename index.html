@@ -55,6 +55,23 @@
 
         .cursor-hover #cursor { transform: scale(5); background: transparent; border: 0.5px solid var(--primary); mix-blend-mode: difference; }
 
+        /* PERFORMANCE MODE OVERRIDES */
+        .perf-mode * {
+            backdrop-filter: none !important;
+            animation: none !important;
+            transition: none !important;
+            box-shadow: none !important;
+            cursor: auto !important;
+        }
+        .perf-mode #particle-canvas, 
+        .perf-mode #cursor, 
+        .perf-mode #cursor-follower,
+        .perf-mode .card::before {
+            display: none !important;
+        }
+        .perf-mode .card { background: #111 !important; border: 1px solid #333 !important; }
+        .perf-mode .nav, .perf-mode .status-bar, .perf-mode .panel { background: #0a0a0a !important; }
+
         /* 2. LOADING SCREEN */
         #loader {
             position: fixed; inset: 0; background: #000; z-index: 20000;
@@ -341,6 +358,11 @@
     <section id="design">
         <h1>Design</h1>
         <div class="panel">
+            <h3>Optimization</h3>
+            <p style="opacity: 0.6; font-size: 0.8rem; margin-bottom: 20px;">For Chromebooks or lower-end PCs. Disables background effects, blur, and animations.</p>
+            <button class="btn" id="perf-toggle-btn" onclick="togglePerfMode()">Performance: OFF</button>
+        </div>
+        <div class="panel">
             <h3>Stealth Presets</h3>
             <div style="display:flex; gap:10px; justify-content:center; flex-wrap: wrap;">
                 <button class="btn" onclick="mask('My Drive - Google Drive', 'https://upload.wikimedia.org/wikipedia/commons/1/12/Google_Drive_icon_%282020%29.svg')">Mask: Drive</button>
@@ -403,6 +425,27 @@
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
+        let isPerfMode = localStorage.getItem('hubPerfMode') === 'true';
+
+        function togglePerfMode() {
+            isPerfMode = !isPerfMode;
+            document.body.classList.toggle('perf-mode', isPerfMode);
+            localStorage.setItem('hubPerfMode', isPerfMode);
+            const btn = document.getElementById('perf-toggle-btn');
+            btn.innerText = isPerfMode ? "Performance: ON" : "Performance: OFF";
+            
+            if(isPerfMode) {
+                ctx.clearRect(0,0,canvas.width, canvas.height);
+            } else {
+                drawParticles();
+            }
+        }
+
+        // Initialize mode on load
+        if(isPerfMode) {
+            document.body.classList.add('perf-mode');
+            document.getElementById('perf-toggle-btn').innerText = "Performance: ON";
+        }
         
         function initParticles() {
             canvas.width = window.innerWidth;
@@ -420,6 +463,7 @@
         }
 
         function drawParticles() {
+            if(isPerfMode) return;
             ctx.clearRect(0,0,canvas.width, canvas.height);
             ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--primary');
             ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--primary');
@@ -540,8 +584,6 @@
             btn.innerText = "Pushing...";
             btn.disabled = true;
 
-            // This opens the pre-filled issue page for security.
-            // For a "seamless" direct API post, you would need a proxy to hide your GitHub Token.
             const url = `https://github.com/VRGamer262Real/Hub/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body + "\n\nSent from your hub website")}`;
             
             setTimeout(() => {
@@ -557,6 +599,7 @@
         const startTime = Date.now();
         const cur = document.getElementById('cursor'), fol = document.getElementById('cursor-follower');
         document.addEventListener('mousemove', (e) => {
+            if(isPerfMode) return;
             cur.style.left = e.clientX + 'px'; cur.style.top = e.clientY + 'px';
             fol.style.transform = `translate(${e.clientX - 20}px, ${e.clientY - 20}px)`;
         });
@@ -604,8 +647,8 @@
 
         function refresh() {
             document.querySelectorAll('a, button, .card, input, textarea').forEach(el => {
-                el.onmouseenter = () => document.body.classList.add('cursor-hover');
-                el.onmouseleave = () => document.body.classList.remove('cursor-hover');
+                el.onmouseenter = () => { if(!isPerfMode) document.body.classList.add('cursor-hover'); };
+                el.onmouseleave = () => { if(!isPerfMode) document.body.classList.remove('cursor-hover'); };
             });
         }
         
