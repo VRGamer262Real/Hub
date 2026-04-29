@@ -55,7 +55,7 @@
 
         .cursor-hover #cursor { transform: scale(5); background: transparent; border: 0.5px solid var(--primary); mix-blend-mode: difference; }
 
-        /* PERFORMANCE MODE OVERRIDES - FIXED VISIBILITY */
+        /* PERFORMANCE MODE OVERRIDES */
         .perf-mode * {
             backdrop-filter: none !important;
             animation: none !important;
@@ -63,7 +63,6 @@
             box-shadow: none !important;
             cursor: auto !important;
         }
-        /* Ensure sections and cards are visible when animations are disabled */
         .perf-mode section.active, 
         .perf-mode .grid li { 
             opacity: 1 !important; 
@@ -148,6 +147,18 @@
         .card img { width: 100%; height: 150px; object-fit: cover; border-radius: 24px; margin-bottom: 25px; box-shadow: 0 15px 30px rgba(0,0,0,0.4); }
         .card-text { font-weight: 700; font-size: 1.1rem; letter-spacing: 0.5px; opacity: 0.9; }
 
+        /* IFRAME THEATER MODE */
+        #game-view {
+            position: fixed; inset: 0; z-index: 5000; background: #000;
+            display: none; flex-direction: column;
+        }
+        #game-view.active { display: flex; }
+        #game-frame { border: none; width: 100%; height: 100%; flex-grow: 1; }
+        .game-bar {
+            padding: 10px 30px; background: #111; border-bottom: 1px solid #333;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
         /* 6. PANELS */
         .panel {
             max-width: 850px; margin: 30px auto; background: var(--bg-glass);
@@ -204,6 +215,15 @@
 
     <div id="cursor"></div>
     <div id="cursor-follower"></div>
+
+    <!-- GAME THEATER MODAL -->
+    <div id="game-view">
+        <div class="game-bar">
+            <div id="active-game-name" style="font-weight:900; color:var(--primary); text-transform:uppercase; letter-spacing:2px;">Loading Experience...</div>
+            <button class="btn" style="padding: 10px 25px; font-size:0.7rem;" onclick="closeGame()">Back to Hub</button>
+        </div>
+        <iframe id="game-frame" src="about:blank"></iframe>
+    </div>
     
     <div class="status-bar">
         <div id="greeting">Welcome to awesomness!</div>
@@ -267,26 +287,26 @@
         </ul>
     </section>
 
-    <!-- GAMES -->
+    <!-- GAMES GRID (UPDATED WITH IFRAME LINKS) -->
     <section id="games">
         <h1>Games</h1>
         <ul class="grid">
-            <li><a class="card" href="https://vrgamer262real.github.io/polytrack/"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSq4z0oIn1dnrq__vTuC1IthPoyEBUIpJx2tw&s"><span class="card-text">Polytrack</span></a></li>
-            <li><a class="card" href="https://supaclicker.vrgamer262.workers.dev/"><img src="https://raw.githubusercontent.com/VRGamer262Real/supaclicker.github.io/refs/heads/main/ButtonIcon.png"><span class="card-text">Supa Clicker</span></a></li>
-            <li><a class="card" href="https://supaclickerhacked.vrgamer262.workers.dev/"><img src="https://raw.githubusercontent.com/VRGamer262Real/supaclicker.github.io/refs/heads/main/ButtonIcon.png"><span class="card-text">Clicker (Hacked)</span></a></li>
-            <li><a class="card" href="https://tower-defense.vrgamer262.workers.dev/"><img src="https://raw.githubusercontent.com/VRGamer262Real/Hub/refs/heads/main/TD-Image.png"><span class="card-text">Tower Defense</span></a></li>
-            <li><a class="card" href="https://towerdefensehacked.vrgamer262.workers.dev/"><img src="https://raw.githubusercontent.com/VRGamer262Real/Hub/refs/heads/main/TD-Image.png"><span class="card-text">TD (Hacked)</span></a></li>
-            <li><a class="card" href="https://bbcr.vrgamer262.workers.dev/"><img src="https://m.gjcdn.net/game-header/950/602328-enyxuxkk-v4.jpg"><span class="card-text">Baldi Remaster</span></a></li>
-            <li><a class="card" href="https://melodixxx.github.io/reunbozdo.github.io/"><img src="https://i.ytimg.com/vi/tjbh3cNpI9g/maxresdefault.jpg"><span class="card-text">Block Blast</span></a></li>
-            <li><a class="card" href="https://simon.lc/tetr.js/"><img src="https://play-lh.googleusercontent.com/w-lUGr-eaAwxLUl7OW5v7jLG-CE8H2Z75D6lkkm8Tro21ZLCk7fvVIjVM7ZG0u0ZLBws=w240-h480-rw"><span class="card-text">Tetris</span></a></li>
-            <li><a class="card" href="https://soteris24.github.io/genetrydash.github.io/"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCd8DHW4zOb9QqjJ59t9FpV8LnEeKwIttiaw&s"><span class="card-text">Geometry Dash</span></a></li>
-            <li><a class="card" href="https://8ballpool.vrgamer262.workers.dev/"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkQDXxj4nWBG57shuWLgrAZalDrnAF-CINBQ&s"><span class="card-text">8Ball Pool</span></a></li>
-            <li><a class="card" href="https://snowrider3d.vrgamer262.workers.dev/"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7HUapu5amnY5nfYojuBTCRQBThbOGsPKl_Q&s"><span class="card-text">Snow Rider 3D</span></a></li>
-            <li><a class="card" href="https://vrgamer262real.github.io/paperio2/"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbOYDL-XogArpPn5yhnKk4E0pRDmWTIRXnxA&s"><span class="card-text">Paper.io 2</span></a></li>
-            <li><a class="card" href="https://ducky443747.github.io/games/DriveMad/"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS978Fp0DG45horfcROMLIbcBrNSrHrzpTEpw&s"><span class="card-text">Drive Mad</span></a></li>
-            <li><a class="card" href="https://hollowknight.vrgamer262.workers.dev/"><img src="https://hb.imgix.net/d73d29a560b20cb200d6f6d7daf935043b6edd8a.jpeg?auto=compress,format&fit=crop&h=353&w=616&s=24ed82654ecaa67252feccb8e64f3ee5"><span class="card-text">Hollow Knight</span></a></li>
-            <li><a class="card" href="https://vrgamer262real.github.io/Hollow-Knight-Silksong/"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNEgkizS0UKu2jt6TTEuk5926iNi01sI924g&s"><span class="card-text">HK: Silksong</span></a></li>
-            <li><a class="card" href="https://vrgamer262real.github.io/slopegithub.io/"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUM15tsz1rOyZ_8gi3Vvjxu_6Un3bgbwuteg&s"><span class="card-text">Slope</span></a></li>
+            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/polytrack/', 'Polytrack')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSq4z0oIn1dnrq__vTuC1IthPoyEBUIpJx2tw&s"><span class="card-text">Polytrack</span></div></li>
+            <li><div class="card" onclick="openGame('https://supaclicker.vrgamer262.workers.dev/', 'Supa Clicker')"><img src="https://raw.githubusercontent.com/VRGamer262Real/supaclicker.github.io/refs/heads/main/ButtonIcon.png"><span class="card-text">Supa Clicker</span></div></li>
+            <li><div class="card" onclick="openGame('https://supaclickerhacked.vrgamer262.workers.dev/', 'Supa Clicker (Hacked)')"><img src="https://raw.githubusercontent.com/VRGamer262Real/supaclicker.github.io/refs/heads/main/ButtonIcon.png"><span class="card-text">Clicker (Hacked)</span></div></li>
+            <li><div class="card" onclick="openGame('https://tower-defense.vrgamer262.workers.dev/', 'Tower Defense')"><img src="https://raw.githubusercontent.com/VRGamer262Real/Hub/refs/heads/main/TD-Image.png"><span class="card-text">Tower Defense</span></div></li>
+            <li><div class="card" onclick="openGame('https://towerdefensehacked.vrgamer262.workers.dev/', 'Tower Defense (Hacked)')"><img src="https://raw.githubusercontent.com/VRGamer262Real/Hub/refs/heads/main/TD-Image.png"><span class="card-text">TD (Hacked)</span></div></li>
+            <li><div class="card" onclick="openGame('https://bbcr.vrgamer262.workers.dev/', 'Baldi Remaster')"><img src="https://m.gjcdn.net/game-header/950/602328-enyxuxkk-v4.jpg"><span class="card-text">Baldi Remaster</span></div></li>
+            <li><div class="card" onclick="openGame('https://melodixxx.github.io/reunbozdo.github.io/', 'Block Blast')"><img src="https://i.ytimg.com/vi/tjbh3cNpI9g/maxresdefault.jpg"><span class="card-text">Block Blast</span></div></li>
+            <li><div class="card" onclick="openGame('https://simon.lc/tetr.js/', 'Tetris')"><img src="https://play-lh.googleusercontent.com/w-lUGr-eaAwxLUl7OW5v7jLG-CE8H2Z75D6lkkm8Tro21ZLCk7fvVIjVM7ZG0u0ZLBws=w240-h480-rw"><span class="card-text">Tetris</span></div></li>
+            <li><div class="card" onclick="openGame('https://soteris24.github.io/genetrydash.github.io/', 'Geometry Dash')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCd8DHW4zOb9QqjJ59t9FpV8LnEeKwIttiaw&s"><span class="card-text">Geometry Dash</span></div></li>
+            <li><div class="card" onclick="openGame('https://8ballpool.vrgamer262.workers.dev/', '8Ball Pool')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkQDXxj4nWBG57shuWLgrAZalDrnAF-CINBQ&s"><span class="card-text">8Ball Pool</span></div></li>
+            <li><div class="card" onclick="openGame('https://snowrider3d.vrgamer262.workers.dev/', 'Snow Rider 3D')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7HUapu5amnY5nfYojuBTCRQBThbOGsPKl_Q&s"><span class="card-text">Snow Rider 3D</span></div></li>
+            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/paperio2/', 'Paper.io 2')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbOYDL-XogArpPn5yhnKk4E0pRDmWTIRXnxA&s"><span class="card-text">Paper.io 2</span></div></li>
+            <li><div class="card" onclick="openGame('https://ducky443747.github.io/games/DriveMad/', 'Drive Mad')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS978Fp0DG45horfcROMLIbcBrNSrHrzpTEpw&s"><span class="card-text">Drive Mad</span></div></li>
+            <li><div class="card" onclick="openGame('https://hollowknight.vrgamer262.workers.dev/', 'Hollow Knight')"><img src="https://hb.imgix.net/d73d29a560b20cb200d6f6d7daf935043b6edd8a.jpeg?auto=compress,format&fit=crop&h=353&w=616&s=24ed82654ecaa67252feccb8e64f3ee5"><span class="card-text">Hollow Knight</span></div></li>
+            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/Hollow-Knight-Silksong/', 'HK: Silksong')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNEgkizS0UKu2jt6TTEuk5926iNi01sI924g&s"><span class="card-text">HK: Silksong</span></div></li>
+            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/slopegithub.io/', 'Slope')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUM15tsz1rOyZ_8gi3Vvjxu_6Un3bgbwuteg&s"><span class="card-text">Slope</span></div></li>
         </ul>
     </section>
 
@@ -332,11 +352,9 @@
         <h1>Updates</h1>
         <div class="panel" style="text-align: left;">
             <h2 style="color:var(--primary); margin-top:0;">V6.0</h2>
+            <p>• <strong>Internal Play</strong>: All games now launch in a high-performance IFrame container.</p>
             <p>• <strong>Neural Background</strong>: Added a dynamic canvas particle engine for better visuals.</p>
-            <p>• <strong>Smart Search</strong>: Global search now uses keyboard shortcuts (/).</p>
-            <p>• <strong>GitHub Bridge</strong>: Implemented integrated Issue reporting via GitHub API.</p>
             <p>• <strong>Performance Suite</strong>: Real-time FPS, RAM, and System Uptime monitoring.</p>
-            <p>• <strong>UI Polish</strong>: Added shimmer effects, better glassmorphism, and Space Grotesk font integration.</p>
         </div>
     </section>
 
@@ -427,7 +445,7 @@
     <div id="toast">Ready to play?</div>
 
     <script>
-        // 1. PARTICLE ENGINE
+        // 1. ENGINE & MODES
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -437,15 +455,9 @@
             isPerfMode = !isPerfMode;
             document.body.classList.toggle('perf-mode', isPerfMode);
             localStorage.setItem('hubPerfMode', isPerfMode);
-            const btn = document.getElementById('perf-toggle-btn');
-            btn.innerText = isPerfMode ? "Performance: ON" : "Performance: OFF";
-            
-            if(isPerfMode) {
-                ctx.clearRect(0,0,canvas.width, canvas.height);
-            } else {
-                initParticles();
-                drawParticles();
-            }
+            document.getElementById('perf-toggle-btn').innerText = isPerfMode ? "Performance: ON" : "Performance: OFF";
+            if(isPerfMode) ctx.clearRect(0,0,canvas.width, canvas.height);
+            else { initParticles(); drawParticles(); }
         }
 
         if(isPerfMode) {
@@ -459,11 +471,8 @@
             particles = [];
             for(let i=0; i<80; i++) {
                 particles.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    vx: (Math.random() - 0.5) * 0.5,
-                    vy: (Math.random() - 0.5) * 0.5,
-                    size: Math.random() * 2
+                    x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+                    vx: (Math.random() - 0.5) * 0.5, vy: (Math.random() - 0.5) * 0.5, size: Math.random() * 2
                 });
             }
         }
@@ -472,27 +481,18 @@
             if(isPerfMode) return;
             ctx.clearRect(0,0,canvas.width, canvas.height);
             ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--primary');
-            ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--primary');
-            
+            ctx.strokeStyle = ctx.fillStyle;
             particles.forEach((p, i) => {
                 p.x += p.vx; p.y += p.vy;
                 if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
                 if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
-                
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
-                ctx.fill();
-
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fill();
                 for(let j=i+1; j<particles.length; j++) {
                     const p2 = particles[j];
                     const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
                     if(dist < 120) {
-                        ctx.globalAlpha = 1 - (dist/120);
-                        ctx.lineWidth = 0.5;
-                        ctx.beginPath();
-                        ctx.moveTo(p.x, p.y);
-                        ctx.lineTo(p2.x, p2.y);
-                        ctx.stroke();
+                        ctx.globalAlpha = 1 - (dist/120); ctx.lineWidth = 0.5;
+                        ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
                     }
                 }
                 ctx.globalAlpha = 1;
@@ -501,71 +501,75 @@
         }
 
         window.onload = () => {
-            initParticles();
-            drawParticles();
-            let progress = 0;
-            const interval = setInterval(() => {
-                progress += Math.random() * 40;
-                document.getElementById('load-p').style.width = Math.min(progress, 100) + "%";
-                if(progress >= 100) {
-                    clearInterval(interval);
+            initParticles(); drawParticles();
+            let p = 0;
+            const int = setInterval(() => {
+                p += Math.random() * 40;
+                document.getElementById('load-p').style.width = Math.min(p, 100) + "%";
+                if(p >= 100) {
+                    clearInterval(int);
                     document.getElementById('loader').style.transform = "translateY(-100%)";
-                    setTimeout(() => document.getElementById('loader').style.display = "none", 1000);
                 }
             }, 150);
         };
 
-        // 2. NAVIGATION & SEARCH
+        // 2. NAVIGATION & IFRAME CONTROLS
         function showSec(id) {
             document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
-            const activeNav = document.getElementById('nav-'+id);
-            if(activeNav) activeNav.classList.add('active');
-            
-            document.querySelectorAll('section.active .grid li').forEach((li, index) => {
-                li.style.setProperty('--i', index);
-            });
-            window.scrollTo(0,0);
-            refresh();
+            const n = document.getElementById('nav-'+id);
+            if(n) n.classList.add('active');
+            document.querySelectorAll('section.active .grid li').forEach((li, i) => li.style.setProperty('--i', i));
+            window.scrollTo(0,0); refresh();
+        }
+
+        function openGame(url, name) {
+            const theater = document.getElementById('game-view');
+            const frame = document.getElementById('game-frame');
+            document.getElementById('active-game-name').innerText = name;
+            frame.src = url;
+            theater.classList.add('active');
+            document.body.style.overflow = "hidden";
+        }
+
+        function closeGame() {
+            const theater = document.getElementById('game-view');
+            const frame = document.getElementById('game-frame');
+            theater.classList.remove('active');
+            frame.src = "about:blank";
+            document.body.style.overflow = "auto";
         }
 
         function universalSearch() {
             const q = document.getElementById('universalSearch').value.toLowerCase();
-            const resList = document.getElementById('results-list');
+            const res = document.getElementById('results-list');
             if(q === "") { showSec('home'); return; }
-            showSec('results');
-            resList.innerHTML = "";
+            showSec('results'); res.innerHTML = "";
             document.querySelectorAll('section:not(#results) .card').forEach(i => {
-                if(i.innerText.toLowerCase().includes(q)) {
-                    const clone = i.parentElement.cloneNode(true);
-                    resList.appendChild(clone);
-                }
+                if(i.innerText.toLowerCase().includes(q)) res.appendChild(i.parentElement.cloneNode(true));
             });
             refresh();
         }
 
-        // 3. TOOLS & APPS
+        // 3. TOOLS & STATS
         function cin(v) { document.getElementById('calc-out').value += v; }
         function cclr() { document.getElementById('calc-out').value = ""; }
         function cres() { try { document.getElementById('calc-out').value = eval(document.getElementById('calc-out').value); } catch { document.getElementById('calc-out').value = "Err"; } }
         
-        let swTime = 0, swInterval;
+        let swT = 0, swI;
         function swStart() {
-            const btn = document.getElementById('sw-start');
-            if(btn.innerText === "Start") {
-                swInterval = setInterval(() => {
-                    swTime += 10;
-                    let ms = Math.floor((swTime % 1000) / 10), s = Math.floor((swTime / 1000) % 60), m = Math.floor(swTime / 60000);
+            const b = document.getElementById('sw-start');
+            if(b.innerText === "Start") {
+                swI = setInterval(() => {
+                    swT += 10;
+                    let ms = Math.floor((swT % 1000) / 10), s = Math.floor((swT / 1000) % 60), m = Math.floor(swT / 60000);
                     document.getElementById('sw-display').innerText = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}.${ms.toString().padStart(2,'0')}`;
                 }, 10);
-                btn.innerText = "Stop";
-            } else {
-                clearInterval(swInterval);
-                btn.innerText = "Start";
-            }
+                b.innerText = "Stop";
+            } else { clearInterval(swI); b.innerText = "Start"; }
         }
-        function swReset() { clearInterval(swInterval); swTime = 0; document.getElementById('sw-display').innerText = "00:00.00"; document.getElementById('sw-start').innerText = "Start"; }
+        function swReset() { clearInterval(swI); swT = 0; document.getElementById('sw-display').innerText = "00:00.00"; document.getElementById('sw-start').innerText = "Start"; }
 
         function genPass() {
             const p = Math.random().toString(36).slice(-10) + Math.random().toString(36).toUpperCase().slice(-4);
@@ -578,31 +582,13 @@
             t.style.bottom = "40px"; setTimeout(() => t.style.bottom = "-100px", 4000);
         }
 
-        // 4. GITHUB INTEGRATION
         async function gitSubmit() {
-            const title = document.getElementById('q-title').value;
-            const body = document.getElementById('q-body').value;
-            const btn = document.getElementById('git-btn');
-            const status = document.getElementById('git-status');
-
-            if(!title || !body) return alert("Please fill the issue form.");
-
-            btn.innerText = "Pushing...";
-            btn.disabled = true;
-
-            const url = `https://github.com/VRGamer262Real/Hub/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body + "\n\nSent from your hub website")}`;
-            
-            setTimeout(() => {
-                window.open(url, '_blank');
-                btn.innerText = "Push to GitHub";
-                btn.disabled = false;
-                status.innerText = "Issue ready for confirmation in new tab.";
-                status.style.color = "var(--success)";
-            }, 800);
+            const t = document.getElementById('q-title').value, b = document.getElementById('q-body').value;
+            if(!t || !b) return alert("Fill form.");
+            window.open(`https://github.com/VRGamer262Real/Hub/issues/new?title=${encodeURIComponent(t)}&body=${encodeURIComponent(b)}`, '_blank');
         }
 
-        // 5. SYSTEM STATS
-        const startTime = Date.now();
+        const start = Date.now();
         const cur = document.getElementById('cursor'), fol = document.getElementById('cursor-follower');
         document.addEventListener('mousemove', (e) => {
             if(isPerfMode) return;
@@ -611,52 +597,36 @@
         });
 
         let times = [];
-        let currentPing = Math.floor(Math.random()*15)+5;
-
-        // NEW: Ping updates every 1 sec separately
-        setInterval(() => {
-            currentPing = Math.floor(Math.random()*15)+5;
-        }, 1000);
+        let currentPing = 5;
+        setInterval(() => currentPing = Math.floor(Math.random()*15)+5, 1000);
 
         function updatePerf() {
             const now = performance.now();
             while (times.length > 0 && times[0] <= now - 1000) times.shift();
             times.push(now);
-            
-            // FPS still high frequency, Ping now uses currentPing variable
             document.getElementById('perf').innerText = `FPS: ${times.length} | PING: ${currentPing}ms`;
-            
-            const upSeconds = Math.floor((Date.now() - startTime) / 1000);
-            const m = Math.floor(upSeconds / 60), s = upSeconds % 60;
-            document.getElementById('uptime').innerText = `UPTIME: ${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-            
-            if(window.performance && performance.memory) {
-                document.getElementById('mem-val').innerText = Math.round(performance.memory.usedJSHeapSize / 1048576) + " MB";
-            }
+            const upS = Math.floor((Date.now() - start) / 1000);
+            document.getElementById('uptime').innerText = `UPTIME: ${Math.floor(upS/60).toString().padStart(2,'0')}:${(upS%60).toString().padStart(2,'0')}`;
+            if(window.performance && performance.memory) document.getElementById('mem-val').innerText = Math.round(performance.memory.usedJSHeapSize / 1048576) + " MB";
             requestAnimationFrame(updatePerf);
         }
         updatePerf();
 
         setInterval(() => {
-            const h = new Date().getHours();
-            document.getElementById('greeting').innerText = h < 12 ? "Systems Online. Good Morning" : h < 18 ? "Data Syncing. Good Afternoon" : "Night Mode. Good Evening";
             document.getElementById('clock').innerText = new Date().toLocaleTimeString();
-            if(navigator.getBattery) navigator.getBattery().then(b => {
-                document.getElementById('battery').innerText = `${Math.floor(b.level*100)}% ${b.charging ? '⚡' : ''}`;
-                document.getElementById('battery').style.color = b.level < 0.2 ? 'var(--accent)' : 'inherit';
-            });
+            if(navigator.getBattery) navigator.getBattery().then(b => document.getElementById('battery').innerText = `${Math.floor(b.level*100)}%`);
         }, 1000);
 
-        function mask(title, icon) { document.getElementById('tab-title').innerText = title; document.getElementById('tab-icon').href = icon; }
-        function updateBg(url) { document.getElementById('bg-canvas').style.backgroundImage = `linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('${url}')`; document.getElementById('bg-canvas').style.backgroundSize = "cover"; }
+        function mask(t, i) { document.getElementById('tab-title').innerText = t; document.getElementById('tab-icon').href = i; }
+        function updateBg(u) { document.getElementById('bg-canvas').style.backgroundImage = `linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('${u}')`; document.getElementById('bg-canvas').style.backgroundSize = "cover"; }
         
         function cloak() {
-            let win = window.open();
-            win.document.body.style.margin = '0';
-            let f = win.document.createElement('iframe');
+            let w = window.open();
+            w.document.body.style.margin = '0';
+            let f = w.document.createElement('iframe');
             f.style = "border:none;width:100%;height:100vh";
             f.src = window.location.href;
-            win.document.body.appendChild(f);
+            w.document.body.appendChild(f);
             window.location.replace("https://google.com");
         }
 
@@ -670,18 +640,13 @@
         document.getElementById('note').value = localStorage.getItem('hubNote') || "";
         document.addEventListener('keydown', (e) => {
             if(e.key === '`') window.location.href = "about:blank";
-            if(e.key === '/') { 
-                if(document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
-                    e.preventDefault(); document.getElementById('universalSearch').focus(); 
-                }
-            }
+            if(e.key === '/') { if(document.activeElement.tagName !== 'INPUT') { e.preventDefault(); document.getElementById('universalSearch').focus(); }}
         });
 
-        const quotes = ["Innovate or die.", "The best way to predict the future is to create it.", "Having fun is better than boredom.", "Stay hungry, stay foolish."];
+        const quotes = ["Innovate or die.", "Coding the future.", "Fun is key.", "Stay hungry."];
         document.getElementById('quote-box').innerText = `"${quotes[Math.floor(Math.random()*quotes.length)]}"`;
 
-        refresh();
-        showSec('home');
+        refresh(); showSec('home');
     </script>
 </body>
 </html>
