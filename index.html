@@ -55,13 +55,19 @@
 
         .cursor-hover #cursor { transform: scale(5); background: transparent; border: 0.5px solid var(--primary); mix-blend-mode: difference; }
 
-        /* PERFORMANCE MODE OVERRIDES */
+        /* PERFORMANCE MODE OVERRIDES - FIXED VISIBILITY */
         .perf-mode * {
             backdrop-filter: none !important;
             animation: none !important;
             transition: none !important;
             box-shadow: none !important;
             cursor: auto !important;
+        }
+        /* Ensure sections and cards are visible when animations are disabled */
+        .perf-mode section.active, 
+        .perf-mode .grid li { 
+            opacity: 1 !important; 
+            transform: none !important; 
         }
         .perf-mode #particle-canvas, 
         .perf-mode #cursor, 
@@ -236,7 +242,7 @@
 
     <!-- HOME -->
     <section id="home" class="active">
-        <h1>Our <strong></strong> Hub</h1>
+        <h1>Our Hub</h1>
         
         <div class="widget-row">
             <div class="widget">
@@ -437,11 +443,11 @@
             if(isPerfMode) {
                 ctx.clearRect(0,0,canvas.width, canvas.height);
             } else {
+                initParticles();
                 drawParticles();
             }
         }
 
-        // Initialize mode on load
         if(isPerfMode) {
             document.body.classList.add('perf-mode');
             document.getElementById('perf-toggle-btn').innerText = "Performance: ON";
@@ -605,11 +611,20 @@
         });
 
         let times = [];
+        let currentPing = Math.floor(Math.random()*15)+5;
+
+        // NEW: Ping updates every 1 sec separately
+        setInterval(() => {
+            currentPing = Math.floor(Math.random()*15)+5;
+        }, 1000);
+
         function updatePerf() {
             const now = performance.now();
             while (times.length > 0 && times[0] <= now - 1000) times.shift();
             times.push(now);
-            document.getElementById('perf').innerText = `FPS: ${times.length} | PING: ${Math.floor(Math.random()*15)+5}ms`;
+            
+            // FPS still high frequency, Ping now uses currentPing variable
+            document.getElementById('perf').innerText = `FPS: ${times.length} | PING: ${currentPing}ms`;
             
             const upSeconds = Math.floor((Date.now() - startTime) / 1000);
             const m = Math.floor(upSeconds / 60), s = upSeconds % 60;
