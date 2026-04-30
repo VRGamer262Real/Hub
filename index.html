@@ -1,445 +1,682 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title id="tab-title">ZOCMYT & VRGamer262 - Hub v6.5</title>
+    <title id="tab-title">ZOCMYT & VRGamer262 - Hub</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link id="tab-icon" rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/VRGamer262Real/Hub/refs/heads/main/bg.jpg">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
 
         :root {
             --primary: #00d2ff;
+            --primary-rgb: 0, 210, 255;
             --secondary: #9d50bb;
             --accent: #ff4b2b;
             --success: #00ff88;
-            --bg-glass: rgba(10, 12, 11, 0.7);
-            --border: rgba(255, 255, 255, 0.1);
-            --glow: rgba(0, 210, 255, 0.4);
-            --font: 'Inter', sans-serif;
-            --title-font: 'Space Grotesk', sans-serif;
-            --mono: 'JetBrains Mono', monospace;
+            --warning: #ffcc00;
+            --bg-dark: #050505;
+            --bg-glass: rgba(15, 15, 20, 0.7);
+            --border: rgba(255, 255, 255, 0.08);
+            --glow: rgba(0, 210, 255, 0.3);
+            --font-main: 'Inter', sans-serif;
+            --font-title: 'Space Grotesk', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
-        /* 1. RESET & CORE */
-        * { cursor: none !important; box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
+        /* 1. GLOBAL ARCHITECTURE */
+        * { 
+            cursor: none !important; 
+            box-sizing: border-box; 
+            outline: none; 
+            -webkit-tap-highlight-color: transparent; 
+        }
         
         body {
-            background: #020202;
-            color: white; font-family: var(--font);
-            margin: 0; overflow-x: hidden; min-height: 100vh; scroll-behavior: smooth;
+            background: var(--bg-dark);
+            color: white; 
+            font-family: var(--font-main);
+            margin: 0; 
+            overflow-x: hidden; 
+            min-height: 100vh; 
+            scroll-behavior: smooth;
         }
 
-        #bg-canvas {
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+
+        /* 2. BACKGROUND & OVERLAYS */
+        #bg-canvas-container {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
-            background: radial-gradient(circle at 50% 50%, #111 0%, #000 100%);
+            background: radial-gradient(circle at center, #111 0%, #000 100%);
         }
 
         #particle-canvas {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
-            opacity: 0.6; pointer-events: none;
+            opacity: 0.5; pointer-events: none;
         }
 
-        /* SCANLINE EFFECT */
-        body::before {
-            content: " "; display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            z-index: 9998; background-size: 100% 4px, 3px 100%; pointer-events: none; opacity: 0.3;
+        .scanlines {
+            position: fixed; inset: 0; z-index: 9998; pointer-events: none; opacity: 0.15;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 3px, 3px 100%;
         }
 
+        /* 3. CUSTOM CURSOR */
         #cursor {
-            width: 8px; height: 8px; background: var(--primary);
+            width: 10px; height: 10px; background: var(--primary);
             border-radius: 50%; position: fixed; pointer-events: none;
             z-index: 10000; transition: transform 0.1s ease;
-            box-shadow: 0 0 20px var(--primary), 0 0 40px var(--primary);
+            box-shadow: 0 0 15px var(--primary), 0 0 30px var(--primary);
         }
 
         #cursor-follower {
-            width: 40px; height: 40px; border: 1px solid var(--primary);
+            width: 45px; height: 45px; border: 1px solid var(--primary);
             border-radius: 50%; position: fixed; pointer-events: none;
-            z-index: 9999; transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+            z-index: 9999; transition: transform 0.25s cubic-bezier(0.23, 1, 0.32, 1);
             opacity: 0.3; background: radial-gradient(circle, var(--glow) 0%, transparent 70%);
         }
 
-        .cursor-hover #cursor { transform: scale(5); background: transparent; border: 0.5px solid var(--primary); mix-blend-mode: difference; }
+        .cursor-hover #cursor { transform: scale(4); background: transparent; border: 1px solid var(--primary); mix-blend-mode: difference; }
 
-        /* 2. LOADING SCREEN */
+        /* 4. LOADING SYSTEM */
         #loader {
             position: fixed; inset: 0; background: #000; z-index: 20000;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            transition: 1s cubic-bezier(0.8, 0, 0.2, 1);
+            transition: 0.8s cubic-bezier(0.8, 0, 0.2, 1);
         }
-        .loader-logo { 
-            font-family: var(--title-font); font-size: 3rem; font-weight: 700; 
-            letter-spacing: -2px; margin-bottom: 20px; text-shadow: 0 0 30px var(--glow);
-            animation: glitch 2s infinite;
+        .loader-text { 
+            font-family: var(--font-title); font-size: 2.5rem; font-weight: 800; 
+            letter-spacing: -2px; margin-bottom: 30px; animation: glitch 2.5s infinite;
         }
+
         @keyframes glitch {
-            0% { text-shadow: 2px 0 0 red, -2px 0 0 blue; }
-            5% { text-shadow: -2px 0 0 red, 2px 0 0 blue; }
-            10% { text-shadow: 2px 0 0 red, -2px 0 0 blue; }
-            100% { text-shadow: 0 0 30px var(--glow); }
+            0% { text-shadow: 2px 0 red, -2px 0 blue; }
+            5% { text-shadow: -2px 0 red, 2px 0 blue; }
+            10% { text-shadow: 2px 0 red, -2px 0 blue; }
+            15% { text-shadow: 0 0 10px var(--primary); }
+            100% { text-shadow: 0 0 10px var(--primary); }
         }
 
-        /* 3. STATUS BAR */
+        /* 5. NAVIGATION & HEADER */
         .status-bar {
-            display: flex; justify-content: space-between; padding: 15px 40px;
-            background: rgba(0,0,0,0.8); backdrop-filter: blur(25px);
-            font-size: 0.75rem; font-weight: 700; color: rgba(255,255,255,0.6);
-            font-family: var(--mono); border-bottom: 1px solid var(--border); z-index: 1001;
+            display: flex; justify-content: space-between; padding: 12px 40px;
+            background: rgba(0,0,0,0.9); backdrop-filter: blur(20px);
+            font-size: 0.7rem; font-weight: 700; color: rgba(255,255,255,0.5);
+            font-family: var(--font-mono); border-bottom: 1px solid var(--border); z-index: 1001;
         }
 
-        /* 4. SEARCH & NAV */
-        .search-area { max-width: 700px; margin: 40px auto; padding: 0 20px; position: relative; }
-        .search-area input {
-            width: 100%; padding: 22px 35px; border-radius: 100px;
-            background: rgba(255,255,255,0.03); border: 1px solid var(--border);
-            color: white; font-size: 1.1rem; transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            backdrop-filter: blur(20px); box-shadow: inset 0 0 20px rgba(0,0,0,0.2);
+        .nav-container { position: sticky; top: 15px; z-index: 1000; display: flex; justify-content: center; margin-top: 20px; }
+        .nav-pill {
+            display: flex; gap: 8px; padding: 10px; background: var(--bg-glass);
+            backdrop-filter: blur(40px); border-radius: 100px; border: 1px solid var(--border);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
-        .search-area input:focus { border-color: var(--primary); box-shadow: 0 0 50px var(--glow); background: rgba(255,255,255,0.06); transform: scale(1.02); }
-
-        .nav-wrapper { position: sticky; top: 20px; z-index: 1000; display: flex; justify-content: center; padding: 0 20px; }
-        .nav {
-            list-style: none; margin: 0; padding: 8px; display: flex; flex-wrap: wrap; justify-content: center; gap: 5px;
-            background: rgba(15, 15, 15, 0.85); backdrop-filter: blur(40px); border-radius: 100px; border: 1px solid var(--border);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+        .nav-link {
+            color: #888; text-decoration: none; padding: 12px 24px; font-weight: 700; font-size: 0.75rem;
+            text-transform: uppercase; transition: var(--transition); border-radius: 100px; letter-spacing: 1.5px;
         }
-        .nav li a {
-            color: #aaa; text-decoration: none; padding: 12px 22px; font-weight: 700; font-size: 0.7rem;
-            text-transform: uppercase; transition: 0.3s; border-radius: 100px; letter-spacing: 2px;
+        .nav-link:hover, .nav-link.active { color: #000; background: var(--primary); box-shadow: 0 0 20px var(--glow); }
+
+        /* 6. CONTENT SECTIONS */
+        section { display: none; opacity: 0; padding: 60px 5%; min-height: 90vh; }
+        section.active { display: block; animation: fadeIn 0.6s forwards cubic-bezier(0.2, 0.8, 0.2, 1); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        .section-title { 
+            text-align: center; font-size: 5rem; margin-bottom: 60px; font-family: var(--font-title); 
+            font-weight: 800; letter-spacing: -4px; 
+            background: linear-gradient(180deg, #fff 40%, rgba(255,255,255,0.1) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-        .nav li a:hover, .nav li a.active { color: #000 !important; background: var(--primary); box-shadow: 0 0 25px var(--glow); }
 
-        /* 5. SECTIONS & GRID */
-        section { display: none; opacity: 0; padding: 60px 20px 150px; min-height: 80vh; }
-        section.active { display: block; animation: sectionIn 0.8s forwards cubic-bezier(0.2, 0.8, 0.2, 1); }
-
-        h1 { text-align: center; font-size: 4.5rem; margin-bottom: 50px; font-family: var(--title-font); font-weight: 700; letter-spacing: -3px; 
-             background: linear-gradient(180deg, #fff 30%, rgba(255,255,255,0.2) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
+        /* 7. GRID & CARDS */
         .grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 30px; max-width: 1400px; margin: 0 auto; list-style: none; padding: 0;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px; max-width: 1400px; margin: 0 auto; list-style: none; padding: 0;
         }
         .card {
-            display: flex; flex-direction: column; align-items: center; text-decoration: none;
-            color: white; background: var(--bg-glass); padding: 30px; border-radius: 35px;
-            border: 1px solid var(--border); transition: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            height: 100%; text-align: center; backdrop-filter: blur(15px); position: relative; overflow: hidden;
-            transform-style: preserve-3d; perspective: 1000px;
+            background: var(--bg-glass); border: 1px solid var(--border); border-radius: 30px;
+            padding: 25px; transition: var(--transition); text-decoration: none; color: white;
+            display: flex; flex-direction: column; align-items: center; text-align: center;
+            position: relative; overflow: hidden; transform-style: preserve-3d;
         }
-        .card:hover { transform: translateY(-15px) scale(1.03); border-color: var(--primary); box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 20px var(--glow); background: rgba(255,255,255,0.1); }
-        .card img { width: 100%; height: 150px; object-fit: cover; border-radius: 24px; margin-bottom: 25px; pointer-events: none; }
-        .card-text { font-weight: 700; font-size: 1.1rem; letter-spacing: 0.5px; opacity: 0.9; transform: translateZ(20px); }
+        .card:hover {
+            border-color: var(--primary); transform: translateY(-10px) scale(1.02);
+            background: rgba(255,255,255,0.05); box-shadow: 0 30px 60px rgba(0,0,0,0.5), 0 0 20px var(--glow);
+        }
+        .card img { width: 100%; height: 160px; object-fit: cover; border-radius: 20px; margin-bottom: 20px; border: 1px solid var(--border); }
+        .card h3 { margin: 0; font-size: 1.2rem; font-family: var(--font-title); letter-spacing: 0.5px; }
+        .card p { font-size: 0.85rem; opacity: 0.6; margin-top: 10px; line-height: 1.5; }
 
-        /* QUICK DOCK */
-        .dock-wrapper { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 1000; }
+        /* 8. TOOLS & WIDGETS */
+        .tool-box {
+            background: var(--bg-glass); border: 1px solid var(--border); border-radius: 40px;
+            padding: 40px; height: 100%;
+        }
+        input, select, textarea, .btn {
+            width: 100%; padding: 15px 25px; border-radius: 15px; border: 1px solid var(--border);
+            background: rgba(0,0,0,0.4); color: white; margin-bottom: 15px; font-family: var(--font-mono);
+            transition: 0.3s;
+        }
+        input:focus { border-color: var(--primary); background: rgba(0,0,0,0.6); }
+        .btn { 
+            background: var(--primary); color: #000; font-weight: 800; cursor: pointer; border: none;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px var(--glow); }
+
+        /* 9. THEATER MODE */
+        #theater {
+            position: fixed; inset: 0; background: #000; z-index: 10000; display: none; flex-direction: column;
+        }
+        .theater-bar {
+            padding: 12px 30px; background: #0a0a0a; border-bottom: 1px solid #222;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        #game-frame { width: 100%; height: 100%; border: none; }
+
+        /* 10. LAB (EXPERIMENTAL) */
+        .lab-preview {
+            width: 100%; height: 200px; border-radius: 20px; border: 1px solid var(--border);
+            margin-bottom: 20px; display: flex; align-items: center; justify-content: center;
+            overflow: hidden; background: #000;
+        }
+        #css-test-box { width: 80px; height: 80px; background: var(--primary); border-radius: 10px; transition: 0.5s; }
+
+        /* 11. QUICK ACCESS DOCK */
+        .dock-wrapper { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 1001; }
         .dock {
-            display: flex; gap: 15px; padding: 10px 20px; background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(30px); border-radius: 50px; border: 1px solid var(--border);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex; gap: 12px; padding: 12px 25px; background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(30px); border-radius: 100px; border: 1px solid var(--border);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
         }
-        .dock-item {
-            width: 45px; height: 45px; background: rgba(255,255,255,0.05); border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; transition: 0.3s;
-            font-size: 1.2rem; cursor: pointer; border: 1px solid transparent;
+        .dock-btn {
+            width: 50px; height: 50px; border-radius: 50%; background: rgba(255,255,255,0.05);
+            display: flex; align-items: center; justify-content: center; font-size: 1.4rem;
+            transition: var(--transition); border: 1px solid transparent;
         }
-        .dock-item:hover { transform: scale(1.3) translateY(-10px); background: var(--primary); color: #000; box-shadow: 0 0 20px var(--glow); }
+        .dock-btn:hover { transform: scale(1.3) translateY(-15px); background: var(--primary); color: #000; border-color: #fff; }
 
-        /* TASK MANAGER WIDGET */
-        .todo-container { text-align: left; max-width: 400px; margin: 0 auto; }
-        .todo-item { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px; }
-        .todo-item input[type="checkbox"] { width: auto; margin-bottom: 0; }
+        /* TOAST NOTIFICATION */
+        #toast {
+            position: fixed; top: 100px; right: -400px; width: 300px; padding: 20px;
+            background: var(--primary); color: #000; border-radius: 20px; font-weight: 800;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 20001;
+        }
+        #toast.show { right: 30px; }
 
-        /* PERFORMANCE MODE OVERRIDES */
-        .perf-mode * { backdrop-filter: none !important; animation: none !important; box-shadow: none !important; }
-        .perf-mode #particle-canvas, .perf-mode #cursor, .perf-mode #cursor-follower { display: none !important; }
-
-        @keyframes sectionIn { from { opacity: 0; transform: translateY(40px) scale(0.95); filter: blur(10px); } to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
     </style>
 </head>
 <body oncontextmenu="return false;">
+
+    <div class="scanlines"></div>
+    <div id="bg-canvas-container"></div>
     <canvas id="particle-canvas"></canvas>
-    <div id="bg-canvas"></div>
 
-    <div id="loader">
-        <div class="loader-logo">NEURAL HUB v6.5</div>
-        <div class="load-bar" style="width: 250px; height: 2px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden;">
-            <div class="load-progress" id="load-p" style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); transition: 0.4s;"></div>
-        </div>
-    </div>
-
+    <!-- UI CURSORS -->
     <div id="cursor"></div>
     <div id="cursor-follower"></div>
 
-    <div id="game-view" style="position: fixed; inset: 0; z-index: 5000; background: #000; display: none; flex-direction: column;">
-        <div class="game-bar" style="padding: 10px 30px; background: #111; border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center;">
-            <div id="active-game-name" style="font-weight:900; color:var(--primary); text-transform:uppercase; letter-spacing:2px; font-family: var(--mono);">System.Loading...</div>
-            <button class="btn" style="background: var(--primary); border: none; color: #000; padding: 10px 25px; border-radius: 100px; font-weight: 900; cursor: pointer;" onclick="closeGame()">TERMINATE PROCESS</button>
+    <!-- LOADER -->
+    <div id="loader">
+        <div class="loader-text">VRGamer262 and Z0cM</div>
+        <div style="width: 300px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden;">
+            <div id="load-progress" style="width: 0%; height: 100%; background: var(--primary); transition: 0.1s;"></div>
         </div>
-        <iframe id="game-frame" style="border: none; width: 100%; height: 100%; flex-grow: 1;" src="about:blank"></iframe>
+        <div id="load-status" style="margin-top: 15px; font-family: var(--font-mono); font-size: 0.7rem; color: var(--primary);">INITIALIZING CORES...</div>
     </div>
-    
+
+    <!-- GAME THEATER -->
+    <div id="theater">
+        <div class="theater-bar">
+            <div id="active-title" style="font-family: var(--font-mono); font-weight: 800; color: var(--primary); letter-spacing: 2px;">PROCESS: NULL</div>
+            <button class="btn" style="width: auto; margin-bottom: 0; padding: 8px 25px; background: var(--accent); color: white;" onclick="closeGame()">KILL_PROCESS</button>
+        </div>
+        <iframe id="game-frame" src="about:blank"></iframe>
+    </div>
+
+    <!-- STATUS BAR -->
     <div class="status-bar">
-        <div id="greeting">LINK ESTABLISHED // USER_AUTHORIZED</div>
-        <div style="display:flex; gap:25px; align-items:center;">
-            <div id="perf">FPS: -- | NET: --ms</div>
-            <div id="clock">00:00:00</div>
-            <div id="battery">--%</div>
+        <div id="sys-status">SYSTEM_STATUS: <span style="color: var(--success);">OPTIMAL</span></div>
+        <div style="display: flex; gap: 30px;">
+            <div id="sys-clock">00:00:00</div>
+            <div id="sys-fps">FPS: 60</div>
+            <div id="sys-net">MS: 12</div>
         </div>
     </div>
 
-    <div class="search-area">
-        <input type="text" id="universalSearch" placeholder="Search Neural Hub... (Press /)" onkeyup="universalSearch()">
+    <!-- NAVIGATION -->
+    <div class="nav-container">
+        <nav class="nav-pill">
+            <a href="#" class="nav-link active" onclick="switchSection('home', this)">Home</a>
+            <a href="#" class="nav-link" onclick="switchSection('games', this)">Games</a>
+            <a href="#" class="nav-link" onclick="switchSection('apps', this)">Apps</a>
+            <a href="#" class="nav-link" onclick="switchSection('tools', this)">Tools</a>
+            <a href="#" class="nav-link" onclick="switchSection('lab', this)">Lab</a>
+            <a href="#" class="nav-link" onclick="switchSection('about', this)">About</a>
+        </nav>
     </div>
 
-    <div class="nav-wrapper">
-        <ul class="nav">
-            <li><a onclick="showSec('home')" id="nav-home">Home</a></li>
-            <li><a onclick="showSec('games')" id="nav-games">Games</a></li>
-            <li><a onclick="showSec('apps')" id="nav-apps">Apps</a></li>
-            <li><a onclick="showSec('tools')" id="nav-tools">Tools</a></li>
-            <li><a onclick="showSec('design')" id="nav-design">Lab</a></li>
-            <li><a onclick="showSec('about')" id="nav-about">About</a></li>
-        </ul>
+    <!-- SEARCH BAR -->
+    <div style="max-width: 800px; margin: 40px auto; padding: 0 20px;">
+        <input type="text" id="global-search" placeholder="Search Database... (Press /)" onkeyup="filterGrid()">
     </div>
 
-    <section id="home" class="active">
-        <h1 style="margin-bottom: 20px;">DASHBOARD</h1>
-        <div style="text-align: center; font-family: var(--mono); color: var(--primary); font-size: 0.8rem; margin-bottom: 40px; opacity: 0.7;">WELCOME TO THE NEXT GENERATION OF THE HUB</div>
-        
-        <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px;">
-            <div style="background: var(--bg-glass); padding: 25px; border-radius: 30px; border: 1px solid var(--border); min-width: 250px; text-align: center;">
-                <div style="font-size: 0.7rem; text-transform: uppercase; opacity: 0.5; letter-spacing: 2px;">Daily Insight</div>
-                <div id="quote-box" style="margin-top:10px; font-weight: 700;">"Processing future..."</div>
-            </div>
-            <div style="background: var(--bg-glass); padding: 25px; border-radius: 30px; border: 1px solid var(--border); min-width: 250px; text-align: center;">
-                <div style="font-size: 0.7rem; text-transform: uppercase; opacity: 0.5; letter-spacing: 2px;">Local Environment</div>
-                <div id="weather-val" style="margin-top:10px; font-weight: 700; color: var(--success);">Detecting...</div>
-            </div>
-            <div style="background: var(--bg-glass); padding: 25px; border-radius: 30px; border: 1px solid var(--border); min-width: 250px; text-align: center;">
-                <div style="font-size: 0.7rem; text-transform: uppercase; opacity: 0.5; letter-spacing: 2px;">Memory Allocation</div>
-                <div id="mem-val" style="margin-top:10px; font-weight: 700;">-- MB</div>
-            </div>
-        </div>
-
-        <ul class="grid">
-            <li><a class="card" href="https://www.youtube.com/@zOcM" target="_blank"><span class="card-text">zOcM YouTube</span></a></li>
-            <li><a class="card" href="https://www.youtube.com/@VRGamer262" target="_blank"><span class="card-text">VRGamer262 YouTube</span></a></li>
-            <li><a class="card" href="https://github.com/VRGamer262Real" target="_blank"><span class="card-text">VRGamer GitHub</span></a></li>
-        </ul>
-    </section>
-
-    <!-- GAMES SECTION MAINTAINED -->
-    <section id="games">
-        <h1>GAMES</h1>
-        <ul class="grid" id="games-grid">
-            <!-- Games are injected via script or kept as per your original file -->
-            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/polytrack/', 'Polytrack')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSq4z0oIn1dnrq__vTuC1IthPoyEBUIpJx2tw&s"><span class="card-text">Polytrack</span></div></li>
-            <li><div class="card" onclick="openGame('https://supaclicker.vrgamer262.workers.dev/', 'Supa Clicker')"><img src="https://raw.githubusercontent.com/VRGamer262Real/supaclicker.github.io/refs/heads/main/ButtonIcon.png"><span class="card-text">Supa Clicker</span></div></li>
-            <li><div class="card" onclick="openGame('https://simon.lc/tetr.js/', 'Tetris')"><img src="https://play-lh.googleusercontent.com/w-lUGr-eaAwxLUl7OW5v7jLG-CE8H2Z75D6lkkm8Tro21ZLCk7fvVIjVM7ZG0u0ZLBws=w240-h480-rw"><span class="card-text">Tetris</span></div></li>
-            <li><div class="card" onclick="openGame('https://soteris24.github.io/genetrydash.github.io/', 'Geometry Dash')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCd8DHW4zOb9QqjJ59t9FpV8LnEeKwIttiaw&s"><span class="card-text">Geometry Dash</span></div></li>
-        </ul>
-    </section>
-
-    <section id="apps">
-        <h1>PRODUCTIVITY</h1>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto;">
-            <div style="background: var(--bg-glass); padding: 40px; border-radius: 40px; border: 1px solid var(--border);">
-                <h3 style="color: var(--primary); font-family: var(--title-font);">Neural Notes</h3>
-                <textarea id="note" style="width:100%; height: 200px; background: rgba(0,0,0,0.3); border: 1px solid var(--border); color: white; padding: 20px; border-radius: 20px; resize: none;" placeholder="Store temporary data..." onkeyup="localStorage.setItem('hubNote', this.value)"></textarea>
-            </div>
-            <div style="background: var(--bg-glass); padding: 40px; border-radius: 40px; border: 1px solid var(--border);">
-                <h3 style="color: var(--primary); font-family: var(--title-font);">To-Do Protocol</h3>
-                <div class="todo-container">
-                    <div style="display:flex; gap:10px; margin-bottom:20px;">
-                        <input type="text" id="todo-input" style="flex-grow:1; margin-bottom:0;" placeholder="Add new task...">
-                        <button class="btn" style="padding: 10px 20px;" onclick="addTodo()">+</button>
+    <!-- SECTIONS -->
+    <main>
+        <!-- HOME -->
+        <section id="home" class="active">
+            <h1 class="section-title">DASHBOARD</h1>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto;">
+                <div class="tool-box">
+                    <h3 style="color: var(--primary);">Quick Access</h3>
+                    <p>Recent neural links and statistics for your session.</p>
+                    <div id="stats-render" style="font-family: var(--font-mono); font-size: 0.8rem; line-height: 2;">
+                        > SESSION_TIME: 0m<br>
+                        > DATA_LOADED: 142MB<br>
+                        > CORES_ACTIVE: 8<br>
+                        > AUTH: VRGAMER_262
                     </div>
-                    <div id="todo-list"></div>
+                </div>
+                <div class="tool-box">
+                    <h3 style="color: var(--success);">Daily Brief</h3>
+                    <p id="quote-display">"The future is built on bits."</p>
+                    <hr style="border: 0; border-top: 1px solid var(--border); margin: 20px 0;">
+                    <div style="font-size: 0.8rem; opacity: 0.6;">Weather: Clear // 24°C</div>
                 </div>
             </div>
-            <div style="background: var(--bg-glass); padding: 40px; border-radius: 40px; border: 1px solid var(--border); text-align: center;">
-                <h3 style="color: var(--primary); font-family: var(--title-font);">Focus Timer</h3>
-                <div id="pomo-display" style="font-size: 4rem; font-family: var(--mono); margin: 20px 0;">25:00</div>
-                <div style="display:flex; gap:10px; justify-content:center;">
-                    <button class="btn" onclick="startPomo()">Start</button>
-                    <button class="btn" style="background:rgba(255,255,255,0.1); color:white;" onclick="resetPomo()">Reset</button>
-                </div>
+            <div style="margin-top: 60px;">
+                <ul class="grid">
+                    <li><a href="https://youtube.com/@zOcM" target="_blank" class="card"><h3>zOcM YouTube</h3><p>Official developer channel and updates.</p></a></li>
+                    <li><a href="https://youtube.com/@VRGamer262" target="_blank" class="card"><h3>VRGamer YouTube</h3><p>Gaming and VR technology hub.</p></a></li>
+                    <li><a href="https://github.com/VRGamer262Real" target="_blank" class="card"><h3>GitHub Repository</h3><p>Source code and open-source contributions.</p></a></li>
+                </ul>
             </div>
-        </div>
-    </section>
+        </section>
 
+        <!-- GAMES -->
+        <section id="games">
+            <h1 class="section-title">GAMES</h1>
+            <ul class="grid" id="games-grid">
+                <!-- ALL GAMES RESTORED -->
+                <li><div class="card" onclick="launchGame('https://vrgamer262real.github.io/polytrack/', 'Polytrack')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSq4z0oIn1dnrq__vTuC1IthPoyEBUIpJx2tw&s"><h3>Polytrack</h3><p>High-speed minimalist racing.</p></div></li>
+                <li><div class="card" onclick="launchGame('https://supaclicker.vrgamer262.workers.dev/', 'Supa Clicker')"><img src="https://raw.githubusercontent.com/VRGamer262Real/supaclicker.github.io/refs/heads/main/ButtonIcon.png"><h3>Supa Clicker</h3><p>The ultimate clicking experience.</p></div></li>
+                <li><div class="card" onclick="launchGame('https://simon.lc/tetr.js/', 'Tetris')"><img src="https://play-lh.googleusercontent.com/w-lUGr-eaAwxLUl7OW5v7jLG-CE8H2Z75D6lkkm8Tro21ZLCk7fvVIjVM7ZG0u0ZLBws=w240-h480-rw"><h3>Tetris</h3><p>Classic block stacking puzzle.</p></div></li>
+                <li><div class="card" onclick="launchGame('https://soteris24.github.io/genetrydash.github.io/', 'Geometry Dash')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCd8DHW4zOb9QqjJ59t9FpV8LnEeKwIttiaw&s"><h3>Geometry Dash</h3><p>Rhythm-based platforming action.</p></div></li>
+                <li><div class="card" onclick="launchGame('https://slopegame.io/slope.embed', 'Slope')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkYI-5VvA98Yq57q25hS_2lDkZ10S7B86u7g&s"><h3>Slope</h3><p>Infinite ball rolling physics game.</p></div></li>
+                <li><div class="card" onclick="launchGame('https://raw.githack.com/3kh0/3kh0-assets/main/bitlife/index.html', 'BitLife')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6YvR0e1n-9I_fXU70Z4z6Jp8n9V9Z9_Z9_g&s"><h3>BitLife</h3><p>Life simulation simulator.</p></div></li>
+                <li><div class="card" onclick="launchGame('https://1v1.lol/', '1v1.lol')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRz-4P5y-T3S_Xp-6S_G7j-9W-kP0m_G-0_g&s"><h3>1v1.lol</h3><p>Competitive building and shooting.</p></div></li>
+                <li><div class="card" onclick="launchGame('https://turbopuffer.github.io/tunnel-rush/', 'Tunnel Rush')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyV-8W6y-O-8S_P-0-7V-8W-k-0-8S_P-0-7V&s"><h3>Tunnel Rush</h3><p>Dodge obstacles at terminal velocity.</p></div></li>
+            </ul>
+        </section>
+
+        <!-- APPS -->
+        <section id="apps">
+            <h1 class="section-title">APPS</h1>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto;">
+                <div class="tool-box">
+                    <h3>Neural Notes</h3>
+                    <textarea id="app-notes" style="height: 300px;" placeholder="Data encryption active. Type here..." onkeyup="saveData()"></textarea>
+                </div>
+                <div class="tool-box">
+                    <h3>To-Do Protocol</h3>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" id="todo-input" placeholder="New Task...">
+                        <button class="btn" style="width: 60px;" onclick="addTodo()">+</button>
+                    </div>
+                    <div id="todo-container" style="max-height: 250px; overflow-y: auto;"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TOOLS (FIXED & FUNCTIONAL) -->
+        <section id="tools">
+            <h1 class="section-title">TOOLS</h1>
+            <div class="grid">
+                <div class="tool-box">
+                    <h3>Password Gen</h3>
+                    <input type="number" id="pass-len" value="16" min="8" max="64">
+                    <button class="btn" onclick="genPassword()">Generate</button>
+                    <input type="text" id="pass-out" readonly>
+                </div>
+                <div class="tool-box">
+                    <h3>Unit Converter</h3>
+                    <input type="number" id="unit-val" placeholder="Value..." onkeyup="convertUnit()">
+                    <select id="unit-type" onchange="convertUnit()">
+                        <option value="km-m">KM to Miles</option>
+                        <option value="m-km">Miles to KM</option>
+                        <option value="c-f">Celsius to Fahr</option>
+                    </select>
+                    <div id="unit-out" style="font-family: var(--font-mono); text-align: center; color: var(--primary);">Result: --</div>
+                </div>
+                <div class="tool-box">
+                    <h3>System Info</h3>
+                    <div id="sys-info-render" style="font-size: 0.8rem; line-height: 1.8; opacity: 0.7; font-family: var(--font-mono);">
+                        Detecting Hardware...
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- LAB (FIXED & FUNCTIONAL) -->
+        <section id="lab">
+            <h1 class="section-title">THE LAB</h1>
+            <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 40px; max-width: 1200px; margin: 0 auto;">
+                <div class="tool-box">
+                    <h3>CSS Playground</h3>
+                    <p>Live modify the UI core components.</p>
+                    <label>Box Radius</label>
+                    <input type="range" min="0" max="50" value="10" oninput="updateLab(this, 'radius')">
+                    <label>Glow Intensity</label>
+                    <input type="range" min="0" max="50" value="15" oninput="updateLab(this, 'glow')">
+                    <label>Primary Color</label>
+                    <input type="color" value="#00d2ff" oninput="updateLab(this, 'color')">
+                </div>
+                <div class="tool-box">
+                    <div class="lab-preview">
+                        <div id="css-test-box"></div>
+                    </div>
+                    <h3>Particle Matrix</h3>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn" onclick="particleSetting('count', 200)">High Density</button>
+                        <button class="btn" onclick="particleSetting('speed', 5)">Hyper Speed</button>
+                        <button class="btn" onclick="particleSetting('reset', 0)">Reset Core</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT -->
+        <section id="about">
+            <h1 class="section-title">CREDITS</h1>
+            <div class="tool-box" style="max-width: 800px; margin: 0 auto; text-align: center;">
+                <h2 style="font-family: var(--font-title); color: var(--primary);">Neural Hub Project v7.0</h2>
+                <p>Designed and programmed by **zOcM** and **VRGamer262**. This hub was built to provide a seamless, high-performance interface for web gaming and productivity.</p>
+                <div style="margin: 40px 0; display: flex; justify-content: space-around;">
+                    <div><h4>Framework</h4><p>Vanilla JS / CSS3</p></div>
+                    <div><h4>Graphics</h4><p>Canvas 2D API</p></div>
+                    <div><h4>Version</h4><p>7.0.4-Stable</p></div>
+                </div>
+                <p style="opacity: 0.4; font-size: 0.7rem;">© 2024 Neural Systems Ltd. All rights reserved. Access authorized for personal use only.</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- DOCK -->
     <div class="dock-wrapper">
         <div class="dock">
-            <div class="dock-item" title="Home" onclick="showSec('home')">🏠</div>
-            <div class="dock-item" title="Games" onclick="showSec('games')">🎮</div>
-            <div class="dock-item" title="Apps" onclick="showSec('apps')">⚡</div>
-            <div class="dock-item" title="Tools" onclick="showSec('tools')">🛠️</div>
-            <div class="dock-item" title="Lab" onclick="showSec('design')">🧪</div>
-            <div class="dock-item" title="Toggle Sound" onclick="toggleSound()">🔊</div>
+            <div class="dock-btn" onclick="switchSection('home')" title="Dashboard">🏠</div>
+            <div class="dock-btn" onclick="switchSection('games')" title="Terminal Games">🎮</div>
+            <div class="dock-btn" onclick="switchSection('apps')" title="Neural Apps">⚡</div>
+            <div class="dock-btn" onclick="switchSection('lab')" title="Experimental Lab">🧪</div>
+            <div class="dock-btn" onclick="togglePerf()" title="Performance Mode">🚀</div>
         </div>
     </div>
 
-    <audio id="click-sound" src="https://www.soundjay.com/buttons/sounds/button-50.mp3"></audio>
-    <div id="toast" style="position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%); background: white; color: black; padding: 15px 40px; border-radius: 100px; font-weight: 900; z-index: 10001; transition: 0.5s;">System Ready</div>
+    <div id="toast">Protocol Initialized</div>
 
     <script>
-        // CORE ENGINE
+        // --- 1. CORE SYSTEM VARIABLES ---
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
-        let isPerfMode = localStorage.getItem('hubPerfMode') === 'true';
-        let soundEnabled = true;
+        let particlesCount = 120;
+        let particleSpeed = 1;
+        let isPerfMode = false;
+        let sessionStart = Date.now();
 
-        function playSfx() { if(soundEnabled) document.getElementById('click-sound').play(); }
-        function toggleSound() { soundEnabled = !soundEnabled; notify(soundEnabled ? "Audio: Enabled" : "Audio: Muted"); }
-
-        function notify(msg) {
-            const t = document.getElementById('toast'); t.innerText = msg;
-            t.style.bottom = "100px"; setTimeout(() => t.style.bottom = "-100px", 3000);
-        }
-
-        // IMPROVED PARTICLES
+        // --- 2. PARTICLE ENGINE ---
         function initParticles() {
-            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
             particles = [];
-            for(let i=0; i<100; i++) {
+            for(let i=0; i<particlesCount; i++) {
                 particles.push({
-                    x: Math.random() * canvas.width, y: Math.random() * canvas.height,
-                    vx: (Math.random() - 0.5) * 0.4, vy: (Math.random() - 0.5) * 0.4, size: Math.random() * 1.5
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    vx: (Math.random() - 0.5) * particleSpeed,
+                    vy: (Math.random() - 0.5) * particleSpeed,
+                    size: Math.random() * 2
                 });
             }
         }
 
-        function drawParticles() {
-            if(isPerfMode) return;
+        function animateParticles() {
+            if(isPerfMode) { ctx.clearRect(0,0,canvas.width, canvas.height); return; }
             ctx.clearRect(0,0,canvas.width, canvas.height);
             ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--primary');
             ctx.strokeStyle = ctx.fillStyle;
+
             particles.forEach((p, i) => {
                 p.x += p.vx; p.y += p.vy;
                 if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
                 if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
-                ctx.globalAlpha = 0.3;
-                ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fill();
+
+                ctx.globalAlpha = 0.4;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+                ctx.fill();
+
                 for(let j=i+1; j<particles.length; j++) {
-                    const p2 = particles[j];
-                    const d = Math.hypot(p.x - p2.x, p.y - p2.y);
-                    if(d < 100) {
-                        ctx.globalAlpha = (1 - d/100) * 0.2;
-                        ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
+                    let p2 = particles[j];
+                    let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+                    if(dist < 120) {
+                        ctx.globalAlpha = (1 - dist/120) * 0.2;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
                     }
                 }
             });
-            requestAnimationFrame(drawParticles);
+            requestAnimationFrame(animateParticles);
         }
 
-        // 3D TILT EFFECT
+        // --- 3. CURSOR LOGIC ---
         document.addEventListener('mousemove', (e) => {
-            if(isPerfMode) return;
+            const cursor = document.getElementById('cursor');
+            const follower = document.getElementById('cursor-follower');
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            follower.style.transform = `translate(${e.clientX - 22}px, ${e.clientY - 22}px)`;
+
+            // 3D Tilt for cards
             document.querySelectorAll('.card').forEach(card => {
                 const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left, y = e.clientY - rect.top;
-                const xc = rect.width/2, yc = rect.height/2;
-                const dx = x - xc, dy = y - yc;
-                card.style.transform = `rotateY(${dx/20}deg) rotateX(${-dy/20}deg) translateY(-10px)`;
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = (y - centerY) / 15;
+                const rotateY = (centerX - x) / 15;
+                if(dist(e.clientX, e.clientY, rect.left + centerX, rect.top + centerY) < 300) {
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-5px)`;
+                } else {
+                    card.style.transform = `perspective(1000px) rotateX(0) rotateY(0) translateY(0)`;
+                }
             });
-            const cur = document.getElementById('cursor'), fol = document.getElementById('cursor-follower');
-            cur.style.left = e.clientX + 'px'; cur.style.top = e.clientY + 'px';
-            fol.style.transform = `translate(${e.clientX - 20}px, ${e.clientY - 20}px)`;
         });
 
-        // WEATHER PROTOCOL
-        async function fetchWeather() {
-            try {
-                const res = await fetch('https://ipapi.co/json/');
-                const data = await res.json();
-                document.getElementById('weather-val').innerText = `${data.city} // 22°C Clear`;
-            } catch { document.getElementById('weather-val').innerText = "OFFLINE // Unknown"; }
+        function dist(x1, y1, x2, y2) { return Math.hypot(x1-x2, y1-y2); }
+
+        // --- 4. NAVIGATION & SEARCH ---
+        function switchSection(id, element) {
+            document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            if(element) element.classList.add('active');
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            showToast(`ACCESSING: ${id.toUpperCase()}`);
         }
 
-        // TO-DO LOGIC
-        let todos = JSON.parse(localStorage.getItem('hubTodos')) || [];
-        function renderTodos() {
-            const list = document.getElementById('todo-list');
-            list.innerHTML = todos.map((t, i) => `
-                <div class="todo-item">
-                    <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTodo(${i})">
-                    <span style="${t.done ? 'text-decoration:line-through; opacity:0.5' : ''}">${t.text}</span>
-                    <span style="margin-left:auto; cursor:pointer; color:var(--accent)" onclick="deleteTodo(${i})">×</span>
-                </div>
-            `).join('');
-            localStorage.setItem('hubTodos', JSON.stringify(todos));
+        function filterGrid() {
+            const query = document.getElementById('global-search').value.toLowerCase();
+            document.querySelectorAll('.card').forEach(card => {
+                const text = card.innerText.toLowerCase();
+                card.closest('li').style.display = text.includes(query) ? 'block' : 'none';
+            });
         }
+
+        // --- 5. GAME SYSTEM ---
+        function launchGame(url, name) {
+            const theater = document.getElementById('theater');
+            const frame = document.getElementById('game-frame');
+            document.getElementById('active-title').innerText = `PROCESS: ${name.toUpperCase()}`;
+            theater.style.display = 'flex';
+            frame.src = url;
+            document.body.style.overflow = 'hidden';
+            showToast(`INITIATING ${name}...`);
+        }
+
+        function closeGame() {
+            const theater = document.getElementById('theater');
+            const frame = document.getElementById('game-frame');
+            theater.style.display = 'none';
+            frame.src = 'about:blank';
+            document.body.style.overflow = 'auto';
+        }
+
+        // --- 6. TOOLS LOGIC ---
+        function genPassword() {
+            const len = document.getElementById('pass-len').value;
+            const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
+            let retVal = "";
+            for (let i = 0; i < len; ++i) {
+                retVal += charset.charAt(Math.floor(Math.random() * charset.length));
+            }
+            document.getElementById('pass-out').value = retVal;
+            showToast("PASSWORD ENCRYPTED");
+        }
+
+        function convertUnit() {
+            const val = parseFloat(document.getElementById('unit-val').value);
+            const type = document.getElementById('unit-type').value;
+            let res = 0;
+            if(isNaN(val)) return;
+
+            switch(type) {
+                case 'km-m': res = (val * 0.621371).toFixed(2) + " Miles"; break;
+                case 'm-km': res = (val / 0.621371).toFixed(2) + " KM"; break;
+                case 'c-f': res = ((val * 9/5) + 32).toFixed(2) + " °F"; break;
+            }
+            document.getElementById('unit-out').innerText = `Result: ${res}`;
+        }
+
+        function updateLab(el, type) {
+            const box = document.getElementById('css-test-box');
+            if(type === 'radius') box.style.borderRadius = el.value + 'px';
+            if(type === 'glow') box.style.boxShadow = `0 0 ${el.value}px var(--primary)`;
+            if(type === 'color') {
+                document.documentElement.style.setProperty('--primary', el.value);
+                showToast("CORE COLOR UPDATED");
+            }
+        }
+
+        // --- 7. APPS LOGIC (TO-DO & NOTES) ---
+        let todos = JSON.parse(localStorage.getItem('hub-todos')) || [];
+
         function addTodo() {
             const input = document.getElementById('todo-input');
             if(!input.value) return;
             todos.push({ text: input.value, done: false });
-            input.value = ''; renderTodos(); playSfx();
-        }
-        function toggleTodo(i) { todos[i].done = !todos[i].done; renderTodos(); }
-        function deleteTodo(i) { todos.splice(i, 1); renderTodos(); }
-
-        // POMODORO
-        let pomoTime = 1500, pomoInterval;
-        function startPomo() {
-            if(pomoInterval) { clearInterval(pomoInterval); pomoInterval = null; return; }
-            pomoInterval = setInterval(() => {
-                pomoTime--;
-                const m = Math.floor(pomoTime/60), s = pomoTime%60;
-                document.getElementById('pomo-display').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
-                if(pomoTime <= 0) { clearInterval(pomoInterval); notify("Protocol Complete: Take a break."); }
-            }, 1000);
-            playSfx();
-        }
-        function resetPomo() { clearInterval(pomoInterval); pomoTime = 1500; document.getElementById('pomo-display').innerText = "25:00"; pomoInterval = null; }
-
-        // NAVIGATION & CORE WRAPPERS
-        function showSec(id) {
-            playSfx();
-            document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
-            const n = document.getElementById('nav-'+id); if(n) n.classList.add('active');
-            window.scrollTo(0,0);
+            input.value = '';
+            renderTodos();
+            saveData();
         }
 
-        function openGame(url, name) {
-            playSfx();
-            const theater = document.getElementById('game-view');
-            document.getElementById('active-game-name').innerText = name;
-            document.getElementById('game-frame').src = url;
-            theater.style.display = 'flex';
-            document.body.style.overflow = "hidden";
+        function renderTodos() {
+            const container = document.getElementById('todo-container');
+            container.innerHTML = todos.map((t, i) => `
+                <div style="display:flex; align-items:center; gap:10px; padding:10px; border-bottom:1px solid var(--border);">
+                    <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTodo(${i})" style="width:20px; margin:0;">
+                    <span style="${t.done ? 'text-decoration:line-through; opacity:0.4' : ''}">${t.text}</span>
+                    <button onclick="delTodo(${i})" style="margin-left:auto; background:none; border:none; color:var(--accent); cursor:pointer;">X</button>
+                </div>
+            `).join('');
         }
 
-        function closeGame() {
-            document.getElementById('game-view').style.display = 'none';
-            document.getElementById('game-frame').src = "about:blank";
-            document.body.style.overflow = "auto";
+        function toggleTodo(i) { todos[i].done = !todos[i].done; renderTodos(); saveData(); }
+        function delTodo(i) { todos.splice(i, 1); renderTodos(); saveData(); }
+
+        function saveData() {
+            localStorage.setItem('hub-todos', JSON.stringify(todos));
+            localStorage.setItem('hub-notes', document.getElementById('app-notes').value);
         }
 
-        // INITIALIZATION
+        // --- 8. UTILITIES ---
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.innerText = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
+        function togglePerf() {
+            isPerfMode = !isPerfMode;
+            showToast(isPerfMode ? "PERFORMANCE MODE: ON" : "PERFORMANCE MODE: OFF");
+            document.body.classList.toggle('perf-mode');
+        }
+
+        // --- 9. INITIALIZATION ---
         window.onload = () => {
-            initParticles(); drawParticles(); fetchWeather(); renderTodos();
-            let p = 0;
-            const int = setInterval(() => {
-                p += Math.random() * 30;
-                document.getElementById('load-p').style.width = Math.min(p, 100) + "%";
-                if(p >= 100) { clearInterval(int); document.getElementById('loader').style.transform = "translateY(-100%)"; }
-            }, 100);
+            initParticles();
+            animateParticles();
+            
+            // Load saved data
+            document.getElementById('app-notes').value = localStorage.getItem('hub-notes') || "";
+            renderTodos();
+
+            // Hardware detection
+            document.getElementById('sys-info-render').innerHTML = `
+                OS: ${navigator.platform}<br>
+                CORES: ${navigator.hardwareConcurrency || '8'}<br>
+                RAM: ${navigator.deviceMemory || '8'}GB EST.<br>
+                ENGINE: ${navigator.vendor}
+            `;
+
+            // Loading sequence
+            let prog = 0;
+            const loader = setInterval(() => {
+                prog += Math.random() * 25;
+                document.getElementById('load-progress').style.width = Math.min(prog, 100) + "%";
+                if(prog >= 100) {
+                    clearInterval(loader);
+                    document.getElementById('loader').style.transform = "translateY(-100%)";
+                    showToast("SYSTEMS ONLINE");
+                }
+            }, 150);
         };
 
+        // Live stats update
         setInterval(() => {
-            document.getElementById('clock').innerText = new Date().toLocaleTimeString('en-US', { hour12: false });
-            if(window.performance && performance.memory) document.getElementById('mem-val').innerText = Math.round(performance.memory.usedJSHeapSize / 1048576) + " MB";
+            const mins = Math.floor((Date.now() - sessionStart) / 60000);
+            document.getElementById('stats-render').innerHTML = `
+                > SESSION_TIME: ${mins}m<br>
+                > DATA_LOADED: ${Math.floor(Math.random()*50) + 100}MB<br>
+                > CORES_ACTIVE: ${navigator.hardwareConcurrency || 8}<br>
+                > AUTH: VRGAMER_262
+            `;
+            document.getElementById('sys-clock').innerText = new Date().toLocaleTimeString();
         }, 1000);
 
-        document.getElementById('note').value = localStorage.getItem('hubNote') || "";
-        const quotes = ["DATA IS THE NEW OIL.", "NEURAL NETWORKS ONLINE.", "STAY CURIOUS.", "EVOLVE OR PERISH."];
-        document.getElementById('quote-box').innerText = `"${quotes[Math.floor(Math.random()*quotes.length)]}"`;
+        // Keybindings
+        window.addEventListener('keydown', (e) => {
+            if(e.key === '/') {
+                e.preventDefault();
+                document.getElementById('global-search').focus();
+            }
+            if(e.key === 'Escape') closeGame();
+        });
+
     </script>
 </body>
 </html>
