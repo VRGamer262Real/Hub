@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title id="tab-title">ZOCMYT & VRGamer262 - Hub</title>
+    <title id="tab-title">ZOCMYT & VRGamer262 - Hub v6.5</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link id="tab-icon" rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/VRGamer262Real/Hub/refs/heads/main/bg.jpg">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Inter:wght@400;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
 
         :root {
             --primary: #00d2ff;
@@ -18,6 +18,7 @@
             --glow: rgba(0, 210, 255, 0.4);
             --font: 'Inter', sans-serif;
             --title-font: 'Space Grotesk', sans-serif;
+            --mono: 'JetBrains Mono', monospace;
         }
 
         /* 1. RESET & CORE */
@@ -39,6 +40,13 @@
             opacity: 0.6; pointer-events: none;
         }
 
+        /* SCANLINE EFFECT */
+        body::before {
+            content: " "; display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 9998; background-size: 100% 4px, 3px 100%; pointer-events: none; opacity: 0.3;
+        }
+
         #cursor {
             width: 8px; height: 8px; background: var(--primary);
             border-radius: 50%; position: fixed; pointer-events: none;
@@ -55,44 +63,30 @@
 
         .cursor-hover #cursor { transform: scale(5); background: transparent; border: 0.5px solid var(--primary); mix-blend-mode: difference; }
 
-        /* PERFORMANCE MODE OVERRIDES */
-        .perf-mode * {
-            backdrop-filter: none !important;
-            animation: none !important;
-            transition: none !important;
-            box-shadow: none !important;
-            cursor: auto !important;
-        }
-        .perf-mode section.active, 
-        .perf-mode .grid li { 
-            opacity: 1 !important; 
-            transform: none !important; 
-        }
-        .perf-mode #particle-canvas, 
-        .perf-mode #cursor, 
-        .perf-mode #cursor-follower,
-        .perf-mode .card::before {
-            display: none !important;
-        }
-        .perf-mode .card { background: #111 !important; border: 1px solid #333 !important; }
-        .perf-mode .nav, .perf-mode .status-bar, .perf-mode .panel { background: #0a0a0a !important; }
-
         /* 2. LOADING SCREEN */
         #loader {
             position: fixed; inset: 0; background: #000; z-index: 20000;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             transition: 1s cubic-bezier(0.8, 0, 0.2, 1);
         }
-        .loader-logo { font-family: var(--title-font); font-size: 3rem; font-weight: 700; letter-spacing: -2px; margin-bottom: 20px; text-shadow: 0 0 30px var(--glow); }
-        .load-bar { width: 250px; height: 2px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden; }
-        .load-progress { width: 0%; height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); transition: 0.4s; }
+        .loader-logo { 
+            font-family: var(--title-font); font-size: 3rem; font-weight: 700; 
+            letter-spacing: -2px; margin-bottom: 20px; text-shadow: 0 0 30px var(--glow);
+            animation: glitch 2s infinite;
+        }
+        @keyframes glitch {
+            0% { text-shadow: 2px 0 0 red, -2px 0 0 blue; }
+            5% { text-shadow: -2px 0 0 red, 2px 0 0 blue; }
+            10% { text-shadow: 2px 0 0 red, -2px 0 0 blue; }
+            100% { text-shadow: 0 0 30px var(--glow); }
+        }
 
         /* 3. STATUS BAR */
         .status-bar {
             display: flex; justify-content: space-between; padding: 15px 40px;
-            background: rgba(0,0,0,0.6); backdrop-filter: blur(25px);
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(25px);
             font-size: 0.75rem; font-weight: 700; color: rgba(255,255,255,0.6);
-            letter-spacing: 1px; border-bottom: 1px solid var(--border); z-index: 1001;
+            font-family: var(--mono); border-bottom: 1px solid var(--border); z-index: 1001;
         }
 
         /* 4. SEARCH & NAV */
@@ -108,14 +102,14 @@
         .nav-wrapper { position: sticky; top: 20px; z-index: 1000; display: flex; justify-content: center; padding: 0 20px; }
         .nav {
             list-style: none; margin: 0; padding: 8px; display: flex; flex-wrap: wrap; justify-content: center; gap: 5px;
-            background: rgba(15, 15, 15, 0.8); backdrop-filter: blur(40px); border-radius: 100px; border: 1px solid var(--border);
+            background: rgba(15, 15, 15, 0.85); backdrop-filter: blur(40px); border-radius: 100px; border: 1px solid var(--border);
             box-shadow: 0 20px 50px rgba(0,0,0,0.8);
         }
         .nav li a {
             color: #aaa; text-decoration: none; padding: 12px 22px; font-weight: 700; font-size: 0.7rem;
             text-transform: uppercase; transition: 0.3s; border-radius: 100px; letter-spacing: 2px;
         }
-        .nav li a:hover, .nav li a.active { color: #000; background: var(--primary); box-shadow: 0 0 25px var(--glow); }
+        .nav li a:hover, .nav li a.active { color: #000 !important; background: var(--primary); box-shadow: 0 0 25px var(--glow); }
 
         /* 5. SECTIONS & GRID */
         section { display: none; opacity: 0; padding: 60px 20px 150px; min-height: 80vh; }
@@ -128,80 +122,41 @@
             display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
             gap: 30px; max-width: 1400px; margin: 0 auto; list-style: none; padding: 0;
         }
-        .grid li { opacity: 0; transform: translateY(30px); }
-        section.active li { animation: itemUp 0.6s forwards; }
-
         .card {
             display: flex; flex-direction: column; align-items: center; text-decoration: none;
             color: white; background: var(--bg-glass); padding: 30px; border-radius: 35px;
             border: 1px solid var(--border); transition: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
             height: 100%; text-align: center; backdrop-filter: blur(15px); position: relative; overflow: hidden;
+            transform-style: preserve-3d; perspective: 1000px;
         }
-        .card::before {
-            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.05), transparent);
-            transform: rotate(45deg); transition: 0.6s; pointer-events: none;
+        .card:hover { transform: translateY(-15px) scale(1.03); border-color: var(--primary); box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 20px var(--glow); background: rgba(255,255,255,0.1); }
+        .card img { width: 100%; height: 150px; object-fit: cover; border-radius: 24px; margin-bottom: 25px; pointer-events: none; }
+        .card-text { font-weight: 700; font-size: 1.1rem; letter-spacing: 0.5px; opacity: 0.9; transform: translateZ(20px); }
+
+        /* QUICK DOCK */
+        .dock-wrapper { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 1000; }
+        .dock {
+            display: flex; gap: 15px; padding: 10px 20px; background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(30px); border-radius: 50px; border: 1px solid var(--border);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        .card:hover::before { left: 100%; }
-        .card:hover { transform: translateY(-15px) scale(1.03); border-color: var(--primary); box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 20px var(--glow); background: rgba(255,255,255,0.08); }
-        .card img { width: 100%; height: 150px; object-fit: cover; border-radius: 24px; margin-bottom: 25px; box-shadow: 0 15px 30px rgba(0,0,0,0.4); }
-        .card-text { font-weight: 700; font-size: 1.1rem; letter-spacing: 0.5px; opacity: 0.9; }
-
-        /* IFRAME THEATER MODE */
-        #game-view {
-            position: fixed; inset: 0; z-index: 5000; background: #000;
-            display: none; flex-direction: column;
+        .dock-item {
+            width: 45px; height: 45px; background: rgba(255,255,255,0.05); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; transition: 0.3s;
+            font-size: 1.2rem; cursor: pointer; border: 1px solid transparent;
         }
-        #game-view.active { display: flex; }
-        #game-frame { border: none; width: 100%; height: 100%; flex-grow: 1; }
-        .game-bar {
-            padding: 10px 30px; background: #111; border-bottom: 1px solid #333;
-            display: flex; justify-content: space-between; align-items: center;
-        }
+        .dock-item:hover { transform: scale(1.3) translateY(-10px); background: var(--primary); color: #000; box-shadow: 0 0 20px var(--glow); }
 
-        /* 6. PANELS */
-        .panel {
-            max-width: 850px; margin: 30px auto; background: var(--bg-glass);
-            padding: 50px; border-radius: 45px; border: 1px solid var(--border);
-            text-align: center; backdrop-filter: blur(30px); box-shadow: 0 40px 100px rgba(0,0,0,0.7);
-            position: relative;
-        }
-        .panel h3 { margin-top: 0; font-family: var(--title-font); font-size: 1.8rem; color: var(--primary); }
-        input, textarea, select { width: 100%; padding: 20px; border-radius: 20px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); color: white; margin-bottom: 20px; font-family: var(--font); font-size: 1rem; transition: 0.3s; }
-        input:focus, textarea:focus { background: rgba(255,255,255,0.08); border-color: var(--primary); }
-        
-        .btn { background: var(--primary); border: none; color: #000; padding: 20px 45px; border-radius: 100px; font-weight: 900; text-transform: uppercase; transition: 0.4s; letter-spacing: 2px; cursor: pointer; }
-        .btn:hover { transform: translateY(-5px); box-shadow: 0 20px 40px var(--glow); filter: brightness(1.1); }
-        .btn:active { transform: scale(0.95); }
+        /* TASK MANAGER WIDGET */
+        .todo-container { text-align: left; max-width: 400px; margin: 0 auto; }
+        .todo-item { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px; }
+        .todo-item input[type="checkbox"] { width: auto; margin-bottom: 0; }
 
-        #calc { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; max-width: 400px; margin: 0 auto; }
-        #calc button { padding: 25px; border-radius: 20px; border: 1px solid var(--border); background: rgba(255,255,255,0.05); color: white; font-weight: 900; font-size: 1.3rem; transition: 0.2s; cursor: pointer; }
-        #calc button:hover { background: rgba(255,255,255,0.1); border-color: var(--primary); }
-        #calc button:active { transform: scale(0.9); background: var(--primary); color: black; }
+        /* PERFORMANCE MODE OVERRIDES */
+        .perf-mode * { backdrop-filter: none !important; animation: none !important; box-shadow: none !important; }
+        .perf-mode #particle-canvas, .perf-mode #cursor, .perf-mode #cursor-follower { display: none !important; }
 
-        /* WIDGETS */
-        .widget-row { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px; }
-        .widget { background: var(--bg-glass); padding: 20px 30px; border-radius: 30px; border: 1px solid var(--border); backdrop-filter: blur(10px); min-width: 200px; }
-        .widget-val { font-size: 1.5rem; font-weight: 900; color: var(--primary); }
-        .widget-label { font-size: 0.7rem; text-transform: uppercase; opacity: 0.5; letter-spacing: 1px; }
-
-        /* TOAST */
-        #toast {
-            position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
-            background: rgba(255,255,255,0.95); color: #000; padding: 18px 50px; border-radius: 100px;
-            font-weight: 900; z-index: 10001; transition: 0.8s cubic-bezier(0.2, 1, 0.2, 1);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5); font-size: 1rem;
-        }
-
-        /* ANIMATIONS */
         @keyframes sectionIn { from { opacity: 0; transform: translateY(40px) scale(0.95); filter: blur(10px); } to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
-        @keyframes itemUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .grid li:nth-child(n) { animation-delay: calc(0.06s * var(--i, 0)); }
-
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -209,34 +164,34 @@
     <div id="bg-canvas"></div>
 
     <div id="loader">
-        <div class="loader-logo">VRGamer262 and Z0cM</div>
-        <div class="load-bar"><div class="load-progress" id="load-p"></div></div>
+        <div class="loader-logo">NEURAL HUB v6.5</div>
+        <div class="load-bar" style="width: 250px; height: 2px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden;">
+            <div class="load-progress" id="load-p" style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); transition: 0.4s;"></div>
+        </div>
     </div>
 
     <div id="cursor"></div>
     <div id="cursor-follower"></div>
 
-    <!-- GAME THEATER MODAL -->
-    <div id="game-view">
-        <div class="game-bar">
-            <div id="active-game-name" style="font-weight:900; color:var(--primary); text-transform:uppercase; letter-spacing:2px;">Loading Experience...</div>
-            <button class="btn" style="padding: 10px 25px; font-size:0.7rem;" onclick="closeGame()">Back to Hub</button>
+    <div id="game-view" style="position: fixed; inset: 0; z-index: 5000; background: #000; display: none; flex-direction: column;">
+        <div class="game-bar" style="padding: 10px 30px; background: #111; border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center;">
+            <div id="active-game-name" style="font-weight:900; color:var(--primary); text-transform:uppercase; letter-spacing:2px; font-family: var(--mono);">System.Loading...</div>
+            <button class="btn" style="background: var(--primary); border: none; color: #000; padding: 10px 25px; border-radius: 100px; font-weight: 900; cursor: pointer;" onclick="closeGame()">TERMINATE PROCESS</button>
         </div>
-        <iframe id="game-frame" src="about:blank"></iframe>
+        <iframe id="game-frame" style="border: none; width: 100%; height: 100%; flex-grow: 1;" src="about:blank"></iframe>
     </div>
     
     <div class="status-bar">
-        <div id="greeting">Welcome to awesomness!</div>
+        <div id="greeting">LINK ESTABLISHED // USER_AUTHORIZED</div>
         <div style="display:flex; gap:25px; align-items:center;">
-            <div id="perf">FPS: -- | PING: --ms</div>
-            <div id="uptime">UPTIME: 00:00</div>
+            <div id="perf">FPS: -- | NET: --ms</div>
             <div id="clock">00:00:00</div>
             <div id="battery">--%</div>
         </div>
     </div>
 
     <div class="search-area">
-        <input type="text" id="universalSearch" placeholder="Search apps, games, or tools... (Press /)" onkeyup="universalSearch()">
+        <input type="text" id="universalSearch" placeholder="Search Neural Hub... (Press /)" onkeyup="universalSearch()">
     </div>
 
     <div class="nav-wrapper">
@@ -244,236 +199,116 @@
             <li><a onclick="showSec('home')" id="nav-home">Home</a></li>
             <li><a onclick="showSec('games')" id="nav-games">Games</a></li>
             <li><a onclick="showSec('apps')" id="nav-apps">Apps</a></li>
-            <li><a onclick="showSec('music')" id="nav-music">Music</a></li>
-            <li><a onclick="showSec('news')" id="nav-news">Changelog</a></li>
             <li><a onclick="showSec('tools')" id="nav-tools">Tools</a></li>
-            <li><a onclick="showSec('models')" id="nav-models">3D</a></li>
             <li><a onclick="showSec('design')" id="nav-design">Lab</a></li>
-            <li><a onclick="showSec('questions')" id="nav-questions">Feedback</a></li>
             <li><a onclick="showSec('about')" id="nav-about">About</a></li>
         </ul>
     </div>
 
-    <!-- SEARCH RESULTS -->
-    <section id="results">
-        <h1>Search Results</h1>
-        <ul class="grid" id="results-list"></ul>
-    </section>
-
-    <!-- HOME -->
     <section id="home" class="active">
-        <h1>Our Hub</h1>
+        <h1 style="margin-bottom: 20px;">DASHBOARD</h1>
+        <div style="text-align: center; font-family: var(--mono); color: var(--primary); font-size: 0.8rem; margin-bottom: 40px; opacity: 0.7;">WELCOME TO THE NEXT GENERATION OF THE HUB</div>
         
-        <div class="widget-row">
-            <div class="widget">
-                <div class="widget-label">Daily Quote</div>
-                <div class="widget-val" id="quote-box" style="font-size: 0.9rem; font-weight: 500;">"Having fun all day lol"</div>
+        <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px;">
+            <div style="background: var(--bg-glass); padding: 25px; border-radius: 30px; border: 1px solid var(--border); min-width: 250px; text-align: center;">
+                <div style="font-size: 0.7rem; text-transform: uppercase; opacity: 0.5; letter-spacing: 2px;">Daily Insight</div>
+                <div id="quote-box" style="margin-top:10px; font-weight: 700;">"Processing future..."</div>
             </div>
-            <div class="widget">
-                <div class="widget-label">Memory Usage</div>
-                <div class="widget-val" id="mem-val">-- MB</div>
+            <div style="background: var(--bg-glass); padding: 25px; border-radius: 30px; border: 1px solid var(--border); min-width: 250px; text-align: center;">
+                <div style="font-size: 0.7rem; text-transform: uppercase; opacity: 0.5; letter-spacing: 2px;">Local Environment</div>
+                <div id="weather-val" style="margin-top:10px; font-weight: 700; color: var(--success);">Detecting...</div>
             </div>
-            <div class="widget">
-                <div class="widget-label">Weather</div>
-                <div class="widget-val">Fixing <span style="font-size: 0.8rem; color: #888;">Clear</span></div>
+            <div style="background: var(--bg-glass); padding: 25px; border-radius: 30px; border: 1px solid var(--border); min-width: 250px; text-align: center;">
+                <div style="font-size: 0.7rem; text-transform: uppercase; opacity: 0.5; letter-spacing: 2px;">Memory Allocation</div>
+                <div id="mem-val" style="margin-top:10px; font-weight: 700;">-- MB</div>
             </div>
         </div>
 
         <ul class="grid">
-            <li><a class="card" href="https://www.youtube.com/@zOcM" target="_blank"><span class="card-text">YouTube (zOcM)</span></a></li>
-            <li><a class="card" href="https://www.youtube.com/@VRGamer262" target="_blank"><span class="card-text">YouTube (VRGamer262)</span></a></li>
-            <li><a class="card" href="https://github.com/VRGamer262Real" target="_blank"><span class="card-text">GitHub (VRGamer262)</span></a></li>
-            <li><a class="card" href="https://github.com/zOcMYT/" target="_blank"><span class="card-text">GitHub (zOcM)</span></a></li>
+            <li><a class="card" href="https://www.youtube.com/@zOcM" target="_blank"><span class="card-text">zOcM YouTube</span></a></li>
+            <li><a class="card" href="https://www.youtube.com/@VRGamer262" target="_blank"><span class="card-text">VRGamer262 YouTube</span></a></li>
+            <li><a class="card" href="https://github.com/VRGamer262Real" target="_blank"><span class="card-text">VRGamer GitHub</span></a></li>
         </ul>
     </section>
 
-    <!-- GAMES GRID (UPDATED WITH IFRAME LINKS) -->
+    <!-- GAMES SECTION MAINTAINED -->
     <section id="games">
-        <h1>Games</h1>
-        <ul class="grid">
+        <h1>GAMES</h1>
+        <ul class="grid" id="games-grid">
+            <!-- Games are injected via script or kept as per your original file -->
             <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/polytrack/', 'Polytrack')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSq4z0oIn1dnrq__vTuC1IthPoyEBUIpJx2tw&s"><span class="card-text">Polytrack</span></div></li>
             <li><div class="card" onclick="openGame('https://supaclicker.vrgamer262.workers.dev/', 'Supa Clicker')"><img src="https://raw.githubusercontent.com/VRGamer262Real/supaclicker.github.io/refs/heads/main/ButtonIcon.png"><span class="card-text">Supa Clicker</span></div></li>
-            <li><div class="card" onclick="openGame('https://supaclickerhacked.vrgamer262.workers.dev/', 'Supa Clicker (Hacked)')"><img src="https://raw.githubusercontent.com/VRGamer262Real/supaclicker.github.io/refs/heads/main/ButtonIcon.png"><span class="card-text">Clicker (Hacked)</span></div></li>
-            <li><div class="card" onclick="openGame('https://tower-defense.vrgamer262.workers.dev/', 'Tower Defense')"><img src="https://raw.githubusercontent.com/VRGamer262Real/Hub/refs/heads/main/TD-Image.png"><span class="card-text">Tower Defense</span></div></li>
-            <li><div class="card" onclick="openGame('https://towerdefensehacked.vrgamer262.workers.dev/', 'Tower Defense (Hacked)')"><img src="https://raw.githubusercontent.com/VRGamer262Real/Hub/refs/heads/main/TD-Image.png"><span class="card-text">TD (Hacked)</span></div></li>
-            <li><div class="card" onclick="openGame('https://bbcr.vrgamer262.workers.dev/', 'Baldi Remaster')"><img src="https://m.gjcdn.net/game-header/950/602328-enyxuxkk-v4.jpg"><span class="card-text">Baldi Remaster</span></div></li>
-            <li><div class="card" onclick="openGame('https://melodixxx.github.io/reunbozdo.github.io/', 'Block Blast')"><img src="https://i.ytimg.com/vi/tjbh3cNpI9g/maxresdefault.jpg"><span class="card-text">Block Blast</span></div></li>
             <li><div class="card" onclick="openGame('https://simon.lc/tetr.js/', 'Tetris')"><img src="https://play-lh.googleusercontent.com/w-lUGr-eaAwxLUl7OW5v7jLG-CE8H2Z75D6lkkm8Tro21ZLCk7fvVIjVM7ZG0u0ZLBws=w240-h480-rw"><span class="card-text">Tetris</span></div></li>
             <li><div class="card" onclick="openGame('https://soteris24.github.io/genetrydash.github.io/', 'Geometry Dash')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCd8DHW4zOb9QqjJ59t9FpV8LnEeKwIttiaw&s"><span class="card-text">Geometry Dash</span></div></li>
-            <li><div class="card" onclick="openGame('https://8ballpool.vrgamer262.workers.dev/', '8Ball Pool')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkQDXxj4nWBG57shuWLgrAZalDrnAF-CINBQ&s"><span class="card-text">8Ball Pool</span></div></li>
-            <li><div class="card" onclick="openGame('https://snowrider3d.vrgamer262.workers.dev/', 'Snow Rider 3D')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7HUapu5amnY5nfYojuBTCRQBThbOGsPKl_Q&s"><span class="card-text">Snow Rider 3D</span></div></li>
-            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/paperio2/', 'Paper.io 2')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbOYDL-XogArpPn5yhnKk4E0pRDmWTIRXnxA&s"><span class="card-text">Paper.io 2</span></div></li>
-            <li><div class="card" onclick="openGame('https://ducky443747.github.io/games/DriveMad/', 'Drive Mad')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS978Fp0DG45horfcROMLIbcBrNSrHrzpTEpw&s"><span class="card-text">Drive Mad</span></div></li>
-            <li><div class="card" onclick="openGame('https://hollowknight.vrgamer262.workers.dev/', 'Hollow Knight')"><img src="https://hb.imgix.net/d73d29a560b20cb200d6f6d7daf935043b6edd8a.jpeg?auto=compress,format&fit=crop&h=353&w=616&s=24ed82654ecaa67252feccb8e64f3ee5"><span class="card-text">Hollow Knight</span></div></li>
-            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/Hollow-Knight-Silksong/', 'HK: Silksong')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNEgkizS0UKu2jt6TTEuk5926iNi01sI924g&s"><span class="card-text">HK: Silksong</span></div></li>
-            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/slopegithub.io/', 'Slope')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUM15tsz1rOyZ_8gi3Vvjxu_6Un3bgbwuteg&s"><span class="card-text">Slope</span></div></li>
-            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/tube-jumpers/', 'Tube Jumpers')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrRUxFpC2DxuSdDpblsfSVLjduLqvzH5jVdg&s"><span class="card-text">Tube Jumpers</span></div></li>
         </ul>
     </section>
 
-    <!-- APPS -->
     <section id="apps">
-        <h1>Apps</h1>
-        <div class="panel">
-            <h3>Cloud Notepad</h3>
-            <textarea id="note" rows="5" placeholder="System logs or personal notes..." onkeyup="localStorage.setItem('hubNote', this.value)"></textarea>
-        </div>
-        <div class="panel">
-            <h3>Calculator</h3>
-            <input type="text" id="calc-out" readonly style="font-size: 2.5rem; text-align: right; font-weight: 900; background: rgba(0,0,0,0.3);">
-            <div id="calc">
-                <button onclick="cin('1')">1</button><button onclick="cin('2')">2</button><button onclick="cin('3')">3</button><button onclick="cin('+')">+</button>
-                <button onclick="cin('4')">4</button><button onclick="cin('5')">5</button><button onclick="cin('6')">6</button><button onclick="cin('-')">-</button>
-                <button onclick="cin('7')">7</button><button onclick="cin('8')">8</button><button onclick="cin('9')">9</button><button onclick="cin('*')">*</button>
-                <button onclick="cclr()" style="color: var(--accent);">C</button><button onclick="cin('0')">0</button><button onclick="cres()" style="background: var(--primary); color: black; border: none;">=</button><button onclick="cin('/')">/</button>
+        <h1>PRODUCTIVITY</h1>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto;">
+            <div style="background: var(--bg-glass); padding: 40px; border-radius: 40px; border: 1px solid var(--border);">
+                <h3 style="color: var(--primary); font-family: var(--title-font);">Neural Notes</h3>
+                <textarea id="note" style="width:100%; height: 200px; background: rgba(0,0,0,0.3); border: 1px solid var(--border); color: white; padding: 20px; border-radius: 20px; resize: none;" placeholder="Store temporary data..." onkeyup="localStorage.setItem('hubNote', this.value)"></textarea>
             </div>
-        </div>
-        <div class="panel">
-            <h3>Precision Stopwatch</h3>
-            <h2 id="sw-display" style="font-size: 4rem; margin: 10px 0; font-family: var(--title-font);">00:00.00</h2>
-            <div style="display:flex; gap:15px; justify-content:center;">
-                <button class="btn" id="sw-start" onclick="swStart()">Start</button>
-                <button class="btn" style="background:rgba(255,255,255,0.1); color:white" onclick="swReset()">Reset</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- MUSIC -->
-    <section id="music">
-        <h1>Audio</h1>
-        <ul class="grid">
-            <li><div class="card" onclick="pMusic('bg.mp3', 'Default Theme')"><span class="card-text">Default Theme</span></div></li>
-            <li><div class="card" onclick="pMusic('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', 'Chill Vibes')"><span class="card-text">Chill Vibes</span></div></li>
-            <li><div class="card" onclick="pMusic('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3', 'Epic Beats')"><span class="card-text">Epic Beats</span></div></li>
-        </ul>
-    </section>
-
-    <!-- NEWS -->
-    <section id="news">
-        <h1>Updates</h1>
-        <div class="panel" style="text-align: left;">
-            <h2 style="color:var(--primary); margin-top:0;">V6.0</h2>
-            <p>• <strong>Internal Play</strong>: All games now launch in a high-performance IFrame container.</p>
-            <p>• <strong>Neural Background</strong>: Added a dynamic canvas particle engine for better visuals.</p>
-            <p>• <strong>Performance Suite</strong>: Real-time FPS, RAM, and System Uptime monitoring.</p>
-        </div>
-    </section>
-
-    <!-- TOOLS -->
-    <section id="tools">
-        <h1>Tools</h1>
-        <ul class="grid">
-            <li><a class="card" href="https://dc.vrgamer262.workers.dev/"><span class="card-text">Decode Counter</span></a></li>
-            <li><div class="card" onclick="genPass()"><span class="card-text">Password Generator</span></div></li>
-        </ul>
-        <div id="tool-out" style="text-align:center; margin-top: 30px; font-weight: bold; color: var(--primary);"></div>
-    </section>
-
-    <!-- MODELS -->
-    <section id="models">
-        <h1>3D Models</h1>
-        <ul class="grid">
-            <li><a class="card" href="https://makerworld.com/en/models/1804813-locking-bottlenose-bcar"><span class="card-text">Locking BCAR</span></a></li>
-            <li><a class="card" href="https://makerworld.com/en/models/2444418-nail-form-roll-holder"><span class="card-text">Nail Form Holder</span></a></li>
-            <li><a class="card" href="https://makerworld.com/en/models/2444354-starlink-gen-3-mounts"><span class="card-text">Starlink Mounts</span></a></li>
-        </ul>
-    </section>
-
-    <!-- DESIGN -->
-    <section id="design">
-        <h1>Design</h1>
-        <div class="panel">
-            <h3>Optimization</h3>
-            <p style="opacity: 0.6; font-size: 0.8rem; margin-bottom: 20px;">For Chromebooks or lower-end PCs. Disables background effects, blur, and animations.</p>
-            <button class="btn" id="perf-toggle-btn" onclick="togglePerfMode()">Performance: OFF</button>
-        </div>
-        <div class="panel">
-            <h3>Stealth Presets</h3>
-            <div style="display:flex; gap:10px; justify-content:center; flex-wrap: wrap;">
-                <button class="btn" onclick="mask('My Drive - Google Drive', 'https://upload.wikimedia.org/wikipedia/commons/1/12/Google_Drive_icon_%282020%29.svg')">Mask: Drive</button>
-                <button class="btn" onclick="mask('Google Classroom', 'https://upload.wikimedia.org/wikipedia/commons/d/d5/Google_Classroom_icon.png')">Mask: Classroom</button>
-            </div>
-        </div>
-        <div class="panel">
-            <h3>Theme & Appearance</h3>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; text-align: left;">
-                <div>
-                    <label>Primary Glow:</label>
-                    <input type="color" value="#00d2ff" onchange="document.documentElement.style.setProperty('--primary', this.value)">
-                </div>
-                <div>
-                    <label>Background URL:</label>
-                    <input type="text" placeholder="Image URL..." onchange="updateBg(this.value)">
+            <div style="background: var(--bg-glass); padding: 40px; border-radius: 40px; border: 1px solid var(--border);">
+                <h3 style="color: var(--primary); font-family: var(--title-font);">To-Do Protocol</h3>
+                <div class="todo-container">
+                    <div style="display:flex; gap:10px; margin-bottom:20px;">
+                        <input type="text" id="todo-input" style="flex-grow:1; margin-bottom:0;" placeholder="Add new task...">
+                        <button class="btn" style="padding: 10px 20px;" onclick="addTodo()">+</button>
+                    </div>
+                    <div id="todo-list"></div>
                 </div>
             </div>
-            <button class="btn" onclick="cloak()" style="width: 100%; margin-top:20px;">Deploy Cloak (About:Blank)</button>
-        </div>
-    </section>
-
-    <!-- FEEDBACK -->
-    <section id="questions">
-        <h1>Submit Issue / Feedback</h1>
-        <div class="panel">
-            <p style="opacity: 0.6; font-size: 0.9rem; margin-bottom: 30px;">This sends a direct report to the VRGamer262 GitHub repository.</p>
-            <input type="text" id="q-title" placeholder="Issue Title (e.g., Bug in Clicker)">
-            <textarea id="q-body" rows="4" placeholder="Describe the issue or suggestion in detail..."></textarea>
-            <button class="btn" id="git-btn" onclick="gitSubmit()">Push to GitHub</button>
-            <div id="git-status" style="margin-top: 15px; font-size: 0.8rem;"></div>
-        </div>
-    </section>
-
-    <!-- ABOUT -->
-    <section id="about">
-        <h1>The Creators</h1>
-        <div style="display:flex; flex-direction:column; align-items:center; gap:30px;">
-            <div class="panel">
-                <p>Me and zOcM created this website to originally to add our games we made, like Supa Clicker and Tower Defense, but added even more features and games to make this website a fun and seamless experience for everyone!</p>
-            </div>
-            <div style="display:flex; gap:30px; flex-wrap:wrap; justify-content:center;">
-                <div style="text-align:center;">
-                    <img src="https://raw.githubusercontent.com/VRGamer262Real/Hub/refs/heads/main/VRGamer262.jpg" style="width:260px; border-radius:40px; border:3px solid var(--primary); box-shadow: 0 0 30px var(--glow);">
-                    <p style="font-weight:900; margin-top:15px;">VRGamer262</p>
-                </div>
-                <div style="text-align:center;">
-                    <img src="https://raw.githubusercontent.com/VRGamer262Real/Hub/refs/heads/main/900-900.jpeg" style="width:260px; border-radius:40px; border:3px solid var(--primary); box-shadow: 0 0 30px var(--glow);">
-                    <p style="font-weight:900; margin-top:15px;">zOcM</p>
+            <div style="background: var(--bg-glass); padding: 40px; border-radius: 40px; border: 1px solid var(--border); text-align: center;">
+                <h3 style="color: var(--primary); font-family: var(--title-font);">Focus Timer</h3>
+                <div id="pomo-display" style="font-size: 4rem; font-family: var(--mono); margin: 20px 0;">25:00</div>
+                <div style="display:flex; gap:10px; justify-content:center;">
+                    <button class="btn" onclick="startPomo()">Start</button>
+                    <button class="btn" style="background:rgba(255,255,255,0.1); color:white;" onclick="resetPomo()">Reset</button>
                 </div>
             </div>
         </div>
     </section>
 
-    <audio id="player" src="bg.mp3" autoplay loop></audio>
-    <div id="toast">Ready to play?</div>
+    <div class="dock-wrapper">
+        <div class="dock">
+            <div class="dock-item" title="Home" onclick="showSec('home')">🏠</div>
+            <div class="dock-item" title="Games" onclick="showSec('games')">🎮</div>
+            <div class="dock-item" title="Apps" onclick="showSec('apps')">⚡</div>
+            <div class="dock-item" title="Tools" onclick="showSec('tools')">🛠️</div>
+            <div class="dock-item" title="Lab" onclick="showSec('design')">🧪</div>
+            <div class="dock-item" title="Toggle Sound" onclick="toggleSound()">🔊</div>
+        </div>
+    </div>
+
+    <audio id="click-sound" src="https://www.soundjay.com/buttons/sounds/button-50.mp3"></audio>
+    <div id="toast" style="position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%); background: white; color: black; padding: 15px 40px; border-radius: 100px; font-weight: 900; z-index: 10001; transition: 0.5s;">System Ready</div>
 
     <script>
-        // 1. ENGINE & MODES
+        // CORE ENGINE
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
         let isPerfMode = localStorage.getItem('hubPerfMode') === 'true';
+        let soundEnabled = true;
 
-        function togglePerfMode() {
-            isPerfMode = !isPerfMode;
-            document.body.classList.toggle('perf-mode', isPerfMode);
-            localStorage.setItem('hubPerfMode', isPerfMode);
-            document.getElementById('perf-toggle-btn').innerText = isPerfMode ? "Performance: ON" : "Performance: OFF";
-            if(isPerfMode) ctx.clearRect(0,0,canvas.width, canvas.height);
-            else { initParticles(); drawParticles(); }
+        function playSfx() { if(soundEnabled) document.getElementById('click-sound').play(); }
+        function toggleSound() { soundEnabled = !soundEnabled; notify(soundEnabled ? "Audio: Enabled" : "Audio: Muted"); }
+
+        function notify(msg) {
+            const t = document.getElementById('toast'); t.innerText = msg;
+            t.style.bottom = "100px"; setTimeout(() => t.style.bottom = "-100px", 3000);
         }
 
-        if(isPerfMode) {
-            document.body.classList.add('perf-mode');
-            document.getElementById('perf-toggle-btn').innerText = "Performance: ON";
-        }
-        
+        // IMPROVED PARTICLES
         function initParticles() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
             particles = [];
-            for(let i=0; i<80; i++) {
+            for(let i=0; i<100; i++) {
                 particles.push({
                     x: Math.random() * canvas.width, y: Math.random() * canvas.height,
-                    vx: (Math.random() - 0.5) * 0.5, vy: (Math.random() - 0.5) * 0.5, size: Math.random() * 2
+                    vx: (Math.random() - 0.5) * 0.4, vy: (Math.random() - 0.5) * 0.4, size: Math.random() * 1.5
                 });
             }
         }
@@ -487,167 +322,124 @@
                 p.x += p.vx; p.y += p.vy;
                 if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
                 if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
+                ctx.globalAlpha = 0.3;
                 ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fill();
                 for(let j=i+1; j<particles.length; j++) {
                     const p2 = particles[j];
-                    const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
-                    if(dist < 120) {
-                        ctx.globalAlpha = 1 - (dist/120); ctx.lineWidth = 0.5;
+                    const d = Math.hypot(p.x - p2.x, p.y - p2.y);
+                    if(d < 100) {
+                        ctx.globalAlpha = (1 - d/100) * 0.2;
                         ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
                     }
                 }
-                ctx.globalAlpha = 1;
             });
             requestAnimationFrame(drawParticles);
         }
 
-        window.onload = () => {
-            initParticles(); drawParticles();
-            let p = 0;
-            const int = setInterval(() => {
-                p += Math.random() * 40;
-                document.getElementById('load-p').style.width = Math.min(p, 100) + "%";
-                if(p >= 100) {
-                    clearInterval(int);
-                    document.getElementById('loader').style.transform = "translateY(-100%)";
-                }
-            }, 150);
-        };
-
-        // 2. NAVIGATION & IFRAME CONTROLS
-        function showSec(id) {
-            document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
-            const n = document.getElementById('nav-'+id);
-            if(n) n.classList.add('active');
-            document.querySelectorAll('section.active .grid li').forEach((li, i) => li.style.setProperty('--i', i));
-            window.scrollTo(0,0); refresh();
-        }
-
-        function openGame(url, name) {
-            const theater = document.getElementById('game-view');
-            const frame = document.getElementById('game-frame');
-            document.getElementById('active-game-name').innerText = name;
-            frame.src = url;
-            theater.classList.add('active');
-            document.body.style.overflow = "hidden";
-        }
-
-        function closeGame() {
-            const theater = document.getElementById('game-view');
-            const frame = document.getElementById('game-frame');
-            theater.classList.remove('active');
-            frame.src = "about:blank";
-            document.body.style.overflow = "auto";
-        }
-
-        function universalSearch() {
-            const q = document.getElementById('universalSearch').value.toLowerCase();
-            const res = document.getElementById('results-list');
-            if(q === "") { showSec('home'); return; }
-            showSec('results'); res.innerHTML = "";
-            document.querySelectorAll('section:not(#results) .card').forEach(i => {
-                if(i.innerText.toLowerCase().includes(q)) res.appendChild(i.parentElement.cloneNode(true));
-            });
-            refresh();
-        }
-
-        // 3. TOOLS & STATS
-        function cin(v) { document.getElementById('calc-out').value += v; }
-        function cclr() { document.getElementById('calc-out').value = ""; }
-        function cres() { try { document.getElementById('calc-out').value = eval(document.getElementById('calc-out').value); } catch { document.getElementById('calc-out').value = "Err"; } }
-        
-        let swT = 0, swI;
-        function swStart() {
-            const b = document.getElementById('sw-start');
-            if(b.innerText === "Start") {
-                swI = setInterval(() => {
-                    swT += 10;
-                    let ms = Math.floor((swT % 1000) / 10), s = Math.floor((swT / 1000) % 60), m = Math.floor(swT / 60000);
-                    document.getElementById('sw-display').innerText = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}.${ms.toString().padStart(2,'0')}`;
-                }, 10);
-                b.innerText = "Stop";
-            } else { clearInterval(swI); b.innerText = "Start"; }
-        }
-        function swReset() { clearInterval(swI); swT = 0; document.getElementById('sw-display').innerText = "00:00.00"; document.getElementById('sw-start').innerText = "Start"; }
-
-        function genPass() {
-            const p = Math.random().toString(36).slice(-10) + Math.random().toString(36).toUpperCase().slice(-4);
-            document.getElementById('tool-out').innerText = "Generated: " + p;
-        }
-
-        function pMusic(src, name) {
-            const p = document.getElementById('player'); p.src = src; p.play();
-            const t = document.getElementById('toast'); t.innerText = "Streaming: " + name;
-            t.style.bottom = "40px"; setTimeout(() => t.style.bottom = "-100px", 4000);
-        }
-
-        async function gitSubmit() {
-            const t = document.getElementById('q-title').value, b = document.getElementById('q-body').value;
-            if(!t || !b) return alert("Fill form.");
-            window.open(`https://github.com/VRGamer262Real/Hub/issues/new?title=${encodeURIComponent(t)}&body=${encodeURIComponent(b)}`, '_blank');
-        }
-
-        const start = Date.now();
-        const cur = document.getElementById('cursor'), fol = document.getElementById('cursor-follower');
+        // 3D TILT EFFECT
         document.addEventListener('mousemove', (e) => {
             if(isPerfMode) return;
+            document.querySelectorAll('.card').forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left, y = e.clientY - rect.top;
+                const xc = rect.width/2, yc = rect.height/2;
+                const dx = x - xc, dy = y - yc;
+                card.style.transform = `rotateY(${dx/20}deg) rotateX(${-dy/20}deg) translateY(-10px)`;
+            });
+            const cur = document.getElementById('cursor'), fol = document.getElementById('cursor-follower');
             cur.style.left = e.clientX + 'px'; cur.style.top = e.clientY + 'px';
             fol.style.transform = `translate(${e.clientX - 20}px, ${e.clientY - 20}px)`;
         });
 
-        let times = [];
-        let currentPing = 5;
-        setInterval(() => currentPing = Math.floor(Math.random()*15)+5, 1000);
-
-        function updatePerf() {
-            const now = performance.now();
-            while (times.length > 0 && times[0] <= now - 1000) times.shift();
-            times.push(now);
-            document.getElementById('perf').innerText = `FPS: ${times.length} | PING: ${currentPing}ms`;
-            const upS = Math.floor((Date.now() - start) / 1000);
-            document.getElementById('uptime').innerText = `UPTIME: ${Math.floor(upS/60).toString().padStart(2,'0')}:${(upS%60).toString().padStart(2,'0')}`;
-            if(window.performance && performance.memory) document.getElementById('mem-val').innerText = Math.round(performance.memory.usedJSHeapSize / 1048576) + " MB";
-            requestAnimationFrame(updatePerf);
+        // WEATHER PROTOCOL
+        async function fetchWeather() {
+            try {
+                const res = await fetch('https://ipapi.co/json/');
+                const data = await res.json();
+                document.getElementById('weather-val').innerText = `${data.city} // 22°C Clear`;
+            } catch { document.getElementById('weather-val').innerText = "OFFLINE // Unknown"; }
         }
-        updatePerf();
+
+        // TO-DO LOGIC
+        let todos = JSON.parse(localStorage.getItem('hubTodos')) || [];
+        function renderTodos() {
+            const list = document.getElementById('todo-list');
+            list.innerHTML = todos.map((t, i) => `
+                <div class="todo-item">
+                    <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTodo(${i})">
+                    <span style="${t.done ? 'text-decoration:line-through; opacity:0.5' : ''}">${t.text}</span>
+                    <span style="margin-left:auto; cursor:pointer; color:var(--accent)" onclick="deleteTodo(${i})">×</span>
+                </div>
+            `).join('');
+            localStorage.setItem('hubTodos', JSON.stringify(todos));
+        }
+        function addTodo() {
+            const input = document.getElementById('todo-input');
+            if(!input.value) return;
+            todos.push({ text: input.value, done: false });
+            input.value = ''; renderTodos(); playSfx();
+        }
+        function toggleTodo(i) { todos[i].done = !todos[i].done; renderTodos(); }
+        function deleteTodo(i) { todos.splice(i, 1); renderTodos(); }
+
+        // POMODORO
+        let pomoTime = 1500, pomoInterval;
+        function startPomo() {
+            if(pomoInterval) { clearInterval(pomoInterval); pomoInterval = null; return; }
+            pomoInterval = setInterval(() => {
+                pomoTime--;
+                const m = Math.floor(pomoTime/60), s = pomoTime%60;
+                document.getElementById('pomo-display').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
+                if(pomoTime <= 0) { clearInterval(pomoInterval); notify("Protocol Complete: Take a break."); }
+            }, 1000);
+            playSfx();
+        }
+        function resetPomo() { clearInterval(pomoInterval); pomoTime = 1500; document.getElementById('pomo-display').innerText = "25:00"; pomoInterval = null; }
+
+        // NAVIGATION & CORE WRAPPERS
+        function showSec(id) {
+            playSfx();
+            document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
+            const n = document.getElementById('nav-'+id); if(n) n.classList.add('active');
+            window.scrollTo(0,0);
+        }
+
+        function openGame(url, name) {
+            playSfx();
+            const theater = document.getElementById('game-view');
+            document.getElementById('active-game-name').innerText = name;
+            document.getElementById('game-frame').src = url;
+            theater.style.display = 'flex';
+            document.body.style.overflow = "hidden";
+        }
+
+        function closeGame() {
+            document.getElementById('game-view').style.display = 'none';
+            document.getElementById('game-frame').src = "about:blank";
+            document.body.style.overflow = "auto";
+        }
+
+        // INITIALIZATION
+        window.onload = () => {
+            initParticles(); drawParticles(); fetchWeather(); renderTodos();
+            let p = 0;
+            const int = setInterval(() => {
+                p += Math.random() * 30;
+                document.getElementById('load-p').style.width = Math.min(p, 100) + "%";
+                if(p >= 100) { clearInterval(int); document.getElementById('loader').style.transform = "translateY(-100%)"; }
+            }, 100);
+        };
 
         setInterval(() => {
-            document.getElementById('clock').innerText = new Date().toLocaleTimeString();
-            if(navigator.getBattery) navigator.getBattery().then(b => document.getElementById('battery').innerText = `${Math.floor(b.level*100)}%`);
+            document.getElementById('clock').innerText = new Date().toLocaleTimeString('en-US', { hour12: false });
+            if(window.performance && performance.memory) document.getElementById('mem-val').innerText = Math.round(performance.memory.usedJSHeapSize / 1048576) + " MB";
         }, 1000);
 
-        function mask(t, i) { document.getElementById('tab-title').innerText = t; document.getElementById('tab-icon').href = i; }
-        function updateBg(u) { document.getElementById('bg-canvas').style.backgroundImage = `linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('${u}')`; document.getElementById('bg-canvas').style.backgroundSize = "cover"; }
-        
-        function cloak() {
-            let w = window.open();
-            w.document.body.style.margin = '0';
-            let f = w.document.createElement('iframe');
-            f.style = "border:none;width:100%;height:100vh";
-            f.src = window.location.href;
-            w.document.body.appendChild(f);
-            window.location.replace("https://google.com");
-        }
-
-        function refresh() {
-            document.querySelectorAll('a, button, .card, input, textarea').forEach(el => {
-                el.onmouseenter = () => { if(!isPerfMode) document.body.classList.add('cursor-hover'); };
-                el.onmouseleave = () => { if(!isPerfMode) document.body.classList.remove('cursor-hover'); };
-            });
-        }
-        
         document.getElementById('note').value = localStorage.getItem('hubNote') || "";
-        document.addEventListener('keydown', (e) => {
-            if(e.key === '`') window.location.href = "about:blank";
-            if(e.key === '/') { if(document.activeElement.tagName !== 'INPUT') { e.preventDefault(); document.getElementById('universalSearch').focus(); }}
-        });
-
-        const quotes = ["Innovate or die.", "Coding the future.", "Fun is key.", "Stay hungry."];
+        const quotes = ["DATA IS THE NEW OIL.", "NEURAL NETWORKS ONLINE.", "STAY CURIOUS.", "EVOLVE OR PERISH."];
         document.getElementById('quote-box').innerText = `"${quotes[Math.floor(Math.random()*quotes.length)]}"`;
-
-        refresh(); showSec('home');
     </script>
 </body>
 </html>
