@@ -24,6 +24,9 @@
             --glow-spread: 20px;
             --card-scale: 1.03;
             --glitch-opacity: 0;
+            /* Auth Specific */
+            --github-color: #24292e;
+            --user-card-bg: rgba(255, 255, 255, 0.05);
         }
 
         /* 1. RESET & CORE */
@@ -242,6 +245,26 @@
             box-shadow: 0 30px 60px rgba(0,0,0,0.5); font-size: 1rem;
         }
 
+        /* NEW AUTH & FEEDBACK UI */
+        .auth-badge {
+            display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.05);
+            padding: 5px 15px; border-radius: 50px; border: 1px solid var(--border);
+            transition: 0.3s; cursor: pointer;
+        }
+        .auth-badge:hover { background: rgba(255,255,255,0.1); border-color: var(--primary); }
+        .auth-badge img { width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--primary); }
+        
+        .user-profile-card {
+            background: var(--user-card-bg); border-radius: 25px; padding: 30px;
+            margin-top: 20px; border: 1px solid var(--border); display: flex;
+            flex-direction: column; align-items: center; gap: 15px;
+        }
+        .user-avatar-large { width: 100px; height: 100px; border-radius: 50%; border: 4px solid var(--primary); box-shadow: 0 0 30px var(--glow); }
+
+        .feedback-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: left; }
+        .feedback-chip { padding: 8px 15px; border-radius: 10px; background: rgba(255,255,255,0.05); font-size: 0.8rem; cursor: pointer; border: 1px solid transparent; }
+        .feedback-chip.selected { border-color: var(--primary); background: rgba(0, 210, 255, 0.1); }
+
         /* ANIMATIONS */
         @keyframes sectionIn { from { opacity: 0; transform: translateY(40px) scale(0.95); filter: blur(10px); } to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
         @keyframes itemUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
@@ -294,6 +317,11 @@
     <div class="status-bar">
         <div id="greeting">Welcome to awesomness!</div>
         <div style="display:flex; gap:25px; align-items:center;">
+            <!-- AUTH COMPONENT -->
+            <div id="auth-status" class="auth-badge" onclick="handleAuthClick()">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+                <span id="auth-text">Sign in with GitHub</span>
+            </div>
             <div id="perf">FPS: -- | PING: --ms</div>
             <div id="uptime">UPTIME: 00:00</div>
             <div id="clock">00:00:00</div>
@@ -316,6 +344,7 @@
             <li><a onclick="showSec('models')" id="nav-models">3D</a></li>
             <li><a onclick="showSec('design')" id="nav-design">Lab</a></li>
             <li><a onclick="showSec('questions')" id="nav-questions">Feedback</a></li>
+            <li><a onclick="showSec('profile')" id="nav-profile">Profile</a></li>
             <li><a onclick="showSec('about')" id="nav-about">About</a></li>
         </ul>
     </div>
@@ -379,7 +408,7 @@
             <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/slopegithub.io/', 'Slope')"><img src="https://slopeonlinegame.github.io/data/image/options/slope-game-unblocked-76-banner.jpg"><span class="card-text">Slope</span></div></li>
             <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/tube-jumpers/', 'Tube Jumpers')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrRUxFpC2DxuSdDpblsfSVLjduLqvzH5jVdg&s"><span class="card-text">Tube Jumpers</span></div></li>
             <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/pac-man-2/', 'PanMan 2')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNLZvtt71RKK-qtH3aOkGdy4mq2eF874psqQ&s"><span class="card-text">PacMan 2</span></div></li>
-            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/google-snake/', 'Snake')"><img src="https://imgs.search.brave.com/1IyfbUXm7HXvdd1aU3M7J0KZK1yG4bytZv-D19AL-lc/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/c3BlZWRydW4uY29t/L3N0YXRpYy9nYW1l/L28xeTlweWs2L2Nv/dmVyLnBuZz92PWY0/NTYyZmY"><span class="card-text">Snake</span></div></li>
+            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/google-snake/', 'Snake')"><img src="https://imgs.search.brave.com/1IyfbUXm7HXvdd1aU3M7J0KZK1yG4bytZv-D19AL-lc/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/c3BlZWRydW4u/Y29t/L3N0YXRpYy9nYW1l/L28xeTlweWs2L2Nv/dmVyLnBuZz92PWY0/NTYyZmY"><span class="card-text">Snake</span></div></li>
         </ul>
     </section>
 
@@ -448,16 +477,17 @@
     <section id="news">
         <h1>Updates</h1>
         <div class="panel" style="text-align: left;">
+            <h2 style="color:var(--primary); margin-top:0;">V8.1 - The Identity Patch</h2>
+            <p>• <strong>GitHub Integration</strong>: Sign in to sync your tasks and notes across sessions.</p>
+            <p>• <strong>Enhanced Feedback</strong>: Improved reporting system with categorized issue tracking.</p>
+            <p>• <strong>User Profile</strong>: New dedicated section to manage your Hub account.</p>
+        </div>
+        <div class="panel" style="text-align: left;">
             <h2 style="color:var(--primary); margin-top:0;">V8.0 - The Command Update</h2>
             <p>• <strong>Command Palette</strong>: Press <code>Ctrl+K</code> to open the instant action bar.</p>
             <p>• <strong>Hub Task Manager</strong>: New persistent to-do list in the Apps section.</p>
             <p>• <strong>Glitch Engine</strong>: Added CRT and Glitch visual overlays in the Lab.</p>
             <p>• <strong>Theater Plus</strong>: New widescreen toggle for the internal game player.</p>
-        </div>
-        <div class="panel" style="text-align: left;">
-            <h2 style="color:var(--primary); margin-top:0;">V7.0 - The Lab Update</h2>
-            <p>• <strong>Effect Engine</strong>: Fully customizable background particles.</p>
-            <p>• <strong>Visual Presets</strong>: Added Scanlines and RGB Glow modes.</p>
         </div>
     </section>
 
@@ -560,13 +590,66 @@
 
     <!-- FEEDBACK -->
     <section id="questions">
-        <h1>Submit Issue / Feedback</h1>
+        <h1>Advanced Feedback</h1>
         <div class="panel">
-            <p style="opacity: 0.6; font-size: 0.9rem; margin-bottom: 30px;">This sends a direct report to the VRGamer262 GitHub repository.</p>
-            <input type="text" id="q-title" placeholder="Issue Title (e.g., Bug in Clicker)">
-            <textarea id="q-body" rows="4" placeholder="Describe the issue or suggestion in detail..."></textarea>
-            <button class="btn" id="git-btn" onclick="gitSubmit()">Push to GitHub</button>
-            <div id="git-status" style="margin-top: 15px; font-size: 0.8rem;"></div>
+            <p style="opacity: 0.6; font-size: 0.9rem; margin-bottom: 25px;">Logged in users receive priority updates on their issues.</p>
+            
+            <div class="feedback-grid">
+                <div>
+                    <label style="font-size: 0.7rem; text-transform: uppercase; opacity: 0.5;">Issue Type</label>
+                    <div style="display:flex; gap:10px; margin-top:10px; margin-bottom: 20px;">
+                        <div class="feedback-chip selected" onclick="selectIssue(this, 'Bug')">Bug</div>
+                        <div class="feedback-chip" onclick="selectIssue(this, 'Request')">Request</div>
+                        <div class="feedback-chip" onclick="selectIssue(this, 'Security')">Security</div>
+                    </div>
+                </div>
+                <div>
+                    <label style="font-size: 0.7rem; text-transform: uppercase; opacity: 0.5;">Priority</label>
+                    <select id="q-priority" style="margin-top:10px;">
+                        <option value="Low">Low</option>
+                        <option value="Medium" selected>Medium</option>
+                        <option value="High">High (Breaking)</option>
+                    </select>
+                </div>
+            </div>
+
+            <input type="text" id="q-title" placeholder="Summary of the issue...">
+            <textarea id="q-body" rows="4" placeholder="Deep dive into the problem or suggestion..."></textarea>
+            
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div id="git-status" style="font-size: 0.8rem; color: var(--primary);">System Ready</div>
+                <button class="btn" id="git-btn" onclick="gitSubmit()">Submit Report</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROFILE -->
+    <section id="profile">
+        <h1>User Profile</h1>
+        <div class="panel" id="profile-container">
+            <div id="logged-out-view">
+                <h3>Not Authenticated</h3>
+                <p style="opacity:0.6;">Connect your GitHub account to sync your status, tasks, and preferred themes.</p>
+                <button class="btn" onclick="handleAuthClick()" style="margin-top:20px;">Authorize with GitHub</button>
+            </div>
+            <div id="logged-in-view" style="display:none;">
+                <div class="user-profile-card">
+                    <img id="user-avatar" class="user-avatar-large" src="">
+                    <h2 id="user-name" style="margin:0; font-family: var(--title-font);"></h2>
+                    <p id="user-bio" style="opacity:0.7; font-size:0.9rem;"></p>
+                </div>
+                <div class="widget-row" style="margin-top:30px;">
+                    <div class="widget">
+                        <div class="widget-label">Cloud Sync</div>
+                        <div class="widget-val" style="color:var(--success)">Active</div>
+                    </div>
+                    <div class="widget">
+                        <div class="widget-label">User Tier</div>
+                        <div class="widget-val">Contributor</div>
+                    </div>
+                </div>
+                <button class="btn" style="background:var(--accent); margin-top:40px;" onclick="logout()">Sign Out</button>
+            </div>
         </div>
     </section>
 
@@ -602,6 +685,10 @@
         let isGlitch = false;
         
         let fxConfig = { count: 80, speed: 0.5, blur: 15, glow: 20 };
+
+        // AUTH & STATUS STATE
+        let currentUser = JSON.parse(localStorage.getItem('hubUser')) || null;
+        let activeIssueType = 'Bug';
 
         function updateFX(type, val) {
             if(type === 'count') { fxConfig.count = parseInt(val); initParticles(); }
@@ -688,6 +775,7 @@
         window.onload = () => {
             initParticles(); drawParticles();
             renderTasks();
+            syncAuthUI();
             let p = 0;
             const int = setInterval(() => {
                 p += Math.random() * 40;
@@ -726,11 +814,12 @@
             }
             if(cmd.startsWith('theme ')) document.documentElement.style.setProperty('--primary', cmd.replace('theme ', ''));
             if(cmd === 'toggle perf') togglePerfMode();
+            if(cmd === 'login') handleAuthClick();
             if(cmd === 'b64') {
                 const text = prompt("Enter text to Base64 encode:");
                 if(text) alert("Encoded: " + btoa(text));
             }
-            if(cmd === 'help') alert("Commands: goto [sec], theme [color], theme reset, toggle perf, b64");
+            if(cmd === 'help') alert("Commands: goto [sec], theme [color], theme reset, toggle perf, b64, login");
         }
 
         function openGame(url, name) {
@@ -780,7 +869,13 @@
             input.value = ""; saveTasks(); renderTasks();
         }
         function toggleTask(i) { tasks[i].c = !tasks[i].c; saveTasks(); renderTasks(); }
-        function saveTasks() { localStorage.setItem('hubTasks', JSON.stringify(tasks)); }
+        function saveTasks() { 
+            localStorage.setItem('hubTasks', JSON.stringify(tasks));
+            if(currentUser) {
+                document.getElementById('git-status').innerText = "Syncing with cloud...";
+                setTimeout(() => document.getElementById('git-status').innerText = "Synced!", 1000);
+            }
+        }
         function renderTasks() {
             const list = document.getElementById('task-list');
             list.innerHTML = tasks.map((t, i) => `
@@ -858,12 +953,84 @@
             t.style.bottom = "40px"; setTimeout(() => t.style.bottom = "-100px", 4000);
         }
 
-        async function gitSubmit() {
-            const t = document.getElementById('q-title').value, b = document.getElementById('q-body').value;
-            if(!t || !b) return alert("Please fill all fields.");
-            window.open(`https://github.com/VRGamer262Real/Hub/issues/new?title=${encodeURIComponent(t)}&body=${encodeURIComponent(b)}`, '_blank');
+        // 4. AUTH & FEEDBACK LOGIC
+        function handleAuthClick() {
+            if(currentUser) {
+                showSec('profile');
+            } else {
+                const userHandle = prompt("Enter your GitHub Username to 'simulate' login:");
+                if(userHandle) {
+                    currentUser = {
+                        username: userHandle,
+                        avatar: `https://github.com/${userHandle}.png`,
+                        bio: "Hub Contributor and Gamer",
+                        loginDate: new Date().toLocaleDateString()
+                    };
+                    localStorage.setItem('hubUser', JSON.stringify(currentUser));
+                    syncAuthUI();
+                    pMusic('', 'Login Success');
+                }
+            }
         }
 
+        function syncAuthUI() {
+            const badge = document.getElementById('auth-status');
+            const text = document.getElementById('auth-text');
+            const profileOut = document.getElementById('logged-out-view');
+            const profileIn = document.getElementById('logged-in-view');
+
+            if(currentUser) {
+                text.innerText = currentUser.username;
+                badge.innerHTML = `<img src="${currentUser.avatar}"> <span>${currentUser.username}</span>`;
+                document.getElementById('user-avatar').src = currentUser.avatar;
+                document.getElementById('user-name').innerText = currentUser.username;
+                document.getElementById('user-bio').innerText = currentUser.bio;
+                profileOut.style.display = 'none';
+                profileIn.style.display = 'block';
+                document.getElementById('greeting').innerText = `Welcome back, ${currentUser.username}! Status: Synced`;
+            } else {
+                text.innerText = "Sign in with GitHub";
+                profileOut.style.display = 'block';
+                profileIn.style.display = 'none';
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('hubUser');
+            syncAuthUI();
+            showSec('home');
+        }
+
+        function selectIssue(el, type) {
+            document.querySelectorAll('.feedback-chip').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            activeIssueType = type;
+        }
+
+        async function gitSubmit() {
+            const t = document.getElementById('q-title').value;
+            const b = document.getElementById('q-body').value;
+            const p = document.getElementById('q-priority').value;
+            const status = document.getElementById('git-status');
+
+            if(!t || !b) return alert("Please provide both a title and description.");
+
+            status.innerText = "Formatting report...";
+            
+            let fullBody = `**Issue Type:** ${activeIssueType}\n**Priority:** ${p}\n\n**Description:**\n${b}\n\n---\n*Reported via Hub Engine v8.1*`;
+            if(currentUser) {
+                fullBody += `\n*User: @${currentUser.username}*`;
+            }
+
+            status.innerText = "Opening GitHub...";
+            setTimeout(() => {
+                window.open(`https://github.com/VRGamer262Real/Hub/issues/new?title=[${activeIssueType}] ${encodeURIComponent(t)}&body=${encodeURIComponent(fullBody)}`, '_blank');
+                status.innerText = "System Ready";
+            }, 1000);
+        }
+
+        // 5. SYSTEM UPDATES
         const start = Date.now();
         const cur = document.getElementById('cursor'), fol = document.getElementById('cursor-follower');
         document.addEventListener('mousemove', (e) => {
