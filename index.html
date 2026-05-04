@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link id="tab-icon" rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/VRGamer262Real/Hub/refs/heads/main/bg.jpg">
     <style>
-        /* [KEEPING ALL ORIGINAL STYLES] */
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Inter:wght@400;700;900&family=Fira+Code:wght@400;500&display=swap');
 
         :root {
@@ -20,15 +19,17 @@
             --glow: rgba(0, 210, 255, 0.4);
             --font: 'Inter', sans-serif;
             --title-font: 'Space Grotesk', sans-serif;
+            /* Dynamic Effect Variables */
             --blur-val: 15px;
             --glow-spread: 20px;
             --card-scale: 1.03;
             --glitch-opacity: 0;
+            /* Auth Specific */
             --github-color: #24292e;
             --user-card-bg: rgba(255, 255, 255, 0.05);
-            --input-focus: rgba(0, 210, 255, 0.2);
         }
 
+        /* 1. RESET & CORE */
         * { cursor: none !important; box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
         
         body {
@@ -49,6 +50,7 @@
             opacity: 0.6; pointer-events: none;
         }
 
+        /* SCANLINE & OVERLAYS */
         #scanlines {
             position: fixed; inset: 0; pointer-events: none; z-index: 9998;
             background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
@@ -77,6 +79,7 @@
 
         .cursor-hover #cursor { transform: scale(5); background: transparent; border: 0.5px solid var(--primary); mix-blend-mode: difference; }
 
+        /* PERFORMANCE MODE OVERRIDES */
         .perf-mode * {
             backdrop-filter: none !important;
             animation: none !important;
@@ -100,6 +103,7 @@
         .perf-mode .card { background: #111 !important; border: 1px solid #333 !important; }
         .perf-mode .nav, .perf-mode .status-bar, .perf-mode .panel { background: #0a0a0a !important; }
 
+        /* 2. LOADING SCREEN */
         #loader {
             position: fixed; inset: 0; background: #000; z-index: 20000;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -109,6 +113,7 @@
         .load-bar { width: 250px; height: 2px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden; }
         .load-progress { width: 0%; height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); transition: 0.4s; }
 
+        /* 3. STATUS BAR */
         .status-bar {
             display: flex; justify-content: space-between; padding: 15px 40px;
             background: rgba(0,0,0,0.6); backdrop-filter: blur(25px);
@@ -117,6 +122,7 @@
             position: sticky; top: 0;
         }
 
+        /* 4. SEARCH & NAV */
         .search-area { max-width: 700px; margin: 40px auto; padding: 0 20px; position: relative; }
         .search-area input {
             width: 100%; padding: 22px 35px; border-radius: 100px;
@@ -138,6 +144,7 @@
         }
         .nav li a:hover, .nav li a.active { color: #000; background: var(--primary); box-shadow: 0 0 25px var(--glow); }
 
+        /* 5. SECTIONS & GRID */
         section { display: none; opacity: 0; padding: 60px 20px 150px; min-height: 80vh; }
         section.active { display: block; animation: sectionIn 0.8s forwards cubic-bezier(0.2, 0.8, 0.2, 1); }
 
@@ -167,6 +174,7 @@
         .card img { width: 100%; height: 150px; object-fit: cover; border-radius: 24px; margin-bottom: 25px; box-shadow: 0 15px 30px rgba(0,0,0,0.4); }
         .card-text { font-weight: 700; font-size: 1.1rem; letter-spacing: 0.5px; opacity: 0.9; }
 
+        /* IFRAME THEATER MODE */
         #game-view {
             position: fixed; inset: 0; z-index: 5000; background: #000;
             display: none; flex-direction: column;
@@ -178,6 +186,7 @@
             display: flex; justify-content: space-between; align-items: center;
         }
 
+        /* 6. PANELS */
         .panel {
             max-width: 850px; margin: 30px auto; background: var(--bg-glass);
             padding: 50px; border-radius: 45px; border: 1px solid var(--border);
@@ -187,32 +196,35 @@
         .panel:hover { border-color: rgba(255,255,255,0.2); }
         .panel h3 { margin-top: 0; font-family: var(--title-font); font-size: 1.8rem; color: var(--primary); }
         input, textarea, select { width: 100%; padding: 20px; border-radius: 20px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); color: white; margin-bottom: 20px; font-family: var(--font); font-size: 1rem; transition: 0.3s; }
-        input:focus, textarea:focus { background: rgba(255,255,255,0.08); border-color: var(--primary); box-shadow: 0 0 20px var(--input-focus); }
+        input:focus, textarea:focus { background: rgba(255,255,255,0.08); border-color: var(--primary); }
         
         .btn { background: var(--primary); border: none; color: #000; padding: 20px 45px; border-radius: 100px; font-weight: 900; text-transform: uppercase; transition: 0.4s; letter-spacing: 2px; cursor: pointer; }
         .btn:hover { transform: translateY(-5px); box-shadow: 0 20px 40px var(--glow); filter: brightness(1.1); }
         .btn:active { transform: scale(0.95); }
-        .btn.loading { opacity: 0.5; pointer-events: none; filter: grayscale(1); }
 
         #calc { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; max-width: 400px; margin: 0 auto; }
         #calc button { padding: 25px; border-radius: 20px; border: 1px solid var(--border); background: rgba(255,255,255,0.05); color: white; font-weight: 900; font-size: 1.3rem; transition: 0.2s; cursor: pointer; }
         #calc button:hover { background: rgba(255,255,255,0.1); border-color: var(--primary); }
         #calc button:active { transform: scale(0.9); background: var(--primary); color: black; }
 
+        /* WIDGETS */
         .widget-row { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px; }
         .widget { background: var(--bg-glass); padding: 20px 30px; border-radius: 30px; border: 1px solid var(--border); backdrop-filter: blur(10px); min-width: 200px; transition: 0.3s; position: relative; }
         .widget:hover { transform: translateY(-5px); border-color: var(--primary); }
         .widget-val { font-size: 1.5rem; font-weight: 900; color: var(--primary); }
         .widget-label { font-size: 0.7rem; text-transform: uppercase; opacity: 0.5; letter-spacing: 1px; }
 
+        /* TASK LIST */
         .task-item { display: flex; align-items: center; gap: 15px; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 15px; margin-bottom: 10px; transition: 0.3s; text-align: left; }
         .task-item:hover { background: rgba(255,255,255,0.08); }
         .task-item input[type="checkbox"] { width: 20px; height: 20px; margin: 0; cursor: pointer; }
 
+        /* FX SLIDERS */
         .fx-control { display: flex; align-items: center; gap: 20px; margin-bottom: 20px; background: rgba(255,255,255,0.02); padding: 15px 25px; border-radius: 20px; }
         .fx-control label { min-width: 140px; font-weight: 700; font-size: 0.8rem; text-transform: uppercase; color: var(--primary); }
         input[type="range"] { margin: 0; padding: 0; height: 6px; background: rgba(255,255,255,0.1); accent-color: var(--primary); }
 
+        /* COMMAND PALETTE */
         #cmd-palette {
             position: fixed; top: 20%; left: 50%; transform: translateX(-50%) scale(0.9);
             width: 500px; background: rgba(10,10,10,0.95); backdrop-filter: blur(50px);
@@ -225,6 +237,7 @@
         .cmd-item { padding: 12px 20px; border-radius: 10px; cursor: pointer; transition: 0.2s; font-size: 0.9rem; }
         .cmd-item:hover { background: var(--primary); color: black; }
 
+        /* TOAST */
         #toast {
             position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
             background: rgba(255,255,255,0.95); color: #000; padding: 18px 50px; border-radius: 100px;
@@ -232,6 +245,7 @@
             box-shadow: 0 30px 60px rgba(0,0,0,0.5); font-size: 1rem;
         }
 
+        /* NEW AUTH & FEEDBACK UI */
         .auth-badge {
             display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.05);
             padding: 5px 15px; border-radius: 50px; border: 1px solid var(--border);
@@ -251,17 +265,7 @@
         .feedback-chip { padding: 8px 15px; border-radius: 10px; background: rgba(255,255,255,0.05); font-size: 0.8rem; cursor: pointer; border: 1px solid transparent; }
         .feedback-chip.selected { border-color: var(--primary); background: rgba(0, 210, 255, 0.1); }
 
-        .login-form {
-            display: flex; flex-direction: column; gap: 15px; max-width: 400px; margin: 0 auto;
-            text-align: left; animation: itemUp 0.6s forwards;
-        }
-        .login-form label { font-size: 0.7rem; text-transform: uppercase; font-weight: 900; opacity: 0.5; margin-left: 10px; }
-        .input-group { position: relative; }
-        .input-group svg { position: absolute; left: 20px; top: 18px; opacity: 0.4; }
-        .input-group input { padding-left: 55px; }
-
-        #login-status-msg { margin-top: 20px; font-size: 0.8rem; font-family: 'Fira Code', monospace; color: var(--primary); }
-
+        /* ANIMATIONS */
         @keyframes sectionIn { from { opacity: 0; transform: translateY(40px) scale(0.95); filter: blur(10px); } to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
         @keyframes itemUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
@@ -282,9 +286,10 @@
     <div id="loader">
         <div class="loader-logo">VRGamer262 and Z0cM</div>
         <div class="load-bar"><div class="load-progress" id="load-p"></div></div>
-        <div style="font-size: 0.6rem; margin-top: 10px; opacity: 0.4; letter-spacing: 2px;">INITIALIZING HUB ENGINE V9.0</div>
+        <div style="font-size: 0.6rem; margin-top: 10px; opacity: 0.4; letter-spacing: 2px;">INITIALIZING HUB ENGINE V8.0</div>
     </div>
 
+    <!-- COMMAND PALETTE -->
     <div id="cmd-palette">
         <input type="text" id="cmd-input" placeholder="Type a command (e.g. 'theme red', 'goto games')..." onkeyup="handleCmd(event)">
         <div class="cmd-results" id="cmd-results">
@@ -297,6 +302,7 @@
     <div id="cursor"></div>
     <div id="cursor-follower"></div>
 
+    <!-- GAME THEATER MODAL -->
     <div id="game-view">
         <div class="game-bar">
             <div id="active-game-name" style="font-weight:900; color:var(--primary); text-transform:uppercase; letter-spacing:2px;">Loading Experience...</div>
@@ -309,11 +315,12 @@
     </div>
     
     <div class="status-bar">
-        <div id="greeting">Welcome to Hub OS v9.0</div>
+        <div id="greeting">Welcome to awesomness!</div>
         <div style="display:flex; gap:25px; align-items:center;">
-            <div id="auth-status" class="auth-badge" onclick="showSec('profile')">
+            <!-- AUTH COMPONENT -->
+            <div id="auth-status" class="auth-badge" onclick="handleAuthClick()">
                 <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
-                <span id="auth-text">Sign in to Cloud</span>
+                <span id="auth-text">Sign in with GitHub</span>
             </div>
             <div id="perf">FPS: -- | PING: --ms</div>
             <div id="uptime">UPTIME: 00:00</div>
@@ -342,11 +349,13 @@
         </ul>
     </div>
 
+    <!-- SEARCH RESULTS -->
     <section id="results">
         <h1>Search Results</h1>
         <ul class="grid" id="results-list"></ul>
     </section>
 
+    <!-- HOME -->
     <section id="home" class="active">
         <h1>Our Hub</h1>
         
@@ -377,6 +386,7 @@
         </ul>
     </section>
 
+    <!-- GAMES GRID -->
     <section id="games">
         <h1>Games</h1>
         <ul class="grid">
@@ -402,8 +412,10 @@
         </ul>
     </section>
 
+    <!-- APPS -->
     <section id="apps">
         <h1>Apps</h1>
+        
         <div class="panel">
             <h3>Hub Task Manager</h3>
             <div id="task-list" style="margin-bottom: 20px;"></div>
@@ -450,6 +462,7 @@
         </div>
     </section>
 
+    <!-- MUSIC -->
     <section id="music">
         <h1>Audio</h1>
         <ul class="grid">
@@ -460,21 +473,25 @@
         </ul>
     </section>
 
+    <!-- NEWS -->
     <section id="news">
         <h1>Updates</h1>
-        <div class="panel" style="text-align: left;">
-            <h2 style="color:var(--primary); margin-top:0;">V9.0 - The Webhook Update</h2>
-            <p>• <strong>Silent Feedback Bridge</strong>: Send reports directly via Webhooks without new tabs.</p>
-            <p>• <strong>New Login Terminal</strong>: Enter GitHub credentials directly on the Profile page.</p>
-            <p>• <strong>Lab Webhook Config</strong>: Set your own endpoint in the Lab section.</p>
-        </div>
         <div class="panel" style="text-align: left;">
             <h2 style="color:var(--primary); margin-top:0;">V8.1 - The Identity Patch</h2>
             <p>• <strong>GitHub Integration</strong>: Sign in to sync your tasks and notes across sessions.</p>
             <p>• <strong>Enhanced Feedback</strong>: Improved reporting system with categorized issue tracking.</p>
+            <p>• <strong>User Profile</strong>: New dedicated section to manage your Hub account.</p>
+        </div>
+        <div class="panel" style="text-align: left;">
+            <h2 style="color:var(--primary); margin-top:0;">V8.0 - The Command Update</h2>
+            <p>• <strong>Command Palette</strong>: Press <code>Ctrl+K</code> to open the instant action bar.</p>
+            <p>• <strong>Hub Task Manager</strong>: New persistent to-do list in the Apps section.</p>
+            <p>• <strong>Glitch Engine</strong>: Added CRT and Glitch visual overlays in the Lab.</p>
+            <p>• <strong>Theater Plus</strong>: New widescreen toggle for the internal game player.</p>
         </div>
     </section>
 
+    <!-- TOOLS -->
     <section id="tools">
         <h1>Tools</h1>
         <ul class="grid">
@@ -485,17 +502,37 @@
             <li><div class="card" onclick="execCmd('b64')"><span class="card-text">Base64 Converter</span></div></li>
         </ul>
         <div id="tool-out" style="text-align:center; margin-top: 30px; font-weight: bold; color: var(--primary); font-family: 'Fira Code';"></div>
+        
+        <div id="unit-panel" class="panel" style="display:none; margin-top: 40px;">
+            <h3>Unit Converter</h3>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <input type="number" id="unit-input" placeholder="Value" oninput="convertUnit()">
+                <select id="unit-type" onchange="convertUnit()">
+                    <option value="cm-in">cm to inches</option>
+                    <option value="in-cm">inches to cm</option>
+                    <option value="kg-lb">kg to lbs</option>
+                    <option value="lb-kg">lbs to kg</option>
+                    <option value="c-f">C° to F°</option>
+                    <option value="f-c">F° to C°</option>
+                </select>
+            </div>
+            <h2 id="unit-result" style="color:var(--primary)">0.00</h2>
+        </div>
     </section>
 
+    <!-- MODELS -->
+    <section id="models">
+        <h1>3D Models</h1>
+        <ul class="grid">
+            <li><a class="card" href="https://makerworld.com/en/models/1804813-locking-bottlenose-bcar"><span class="card-text">Locking BCAR</span></a></li>
+            <li><a class="card" href="https://makerworld.com/en/models/2444418-nail-form-roll-holder"><span class="card-text">Nail Form Holder</span></a></li>
+            <li><a class="card" href="https://makerworld.com/en/models/2444354-starlink-gen-3-mounts"><span class="card-text">Starlink Mounts</span></a></li>
+        </ul>
+    </section>
+
+    <!-- DESIGN -->
     <section id="design">
         <h1>The Lab</h1>
-        <div class="panel">
-            <h3>Webhook Configuration</h3>
-            <p style="opacity:0.5; font-size:0.8rem; margin-bottom:15px;">Enter your GitHub/Discord webhook URL to enable background reporting.</p>
-            <input type="text" id="webhook-url-input" placeholder="https://github.com/..." onchange="localStorage.setItem('hubWebhook', this.value)">
-            <button class="btn" onclick="testWebhook()" style="width:100%">Test Bridge Connection</button>
-        </div>
-
         <div class="panel">
             <h3>Effect Intensity</h3>
             <div class="fx-control">
@@ -509,6 +546,10 @@
             <div class="fx-control">
                 <label>Blur Intensity</label>
                 <input type="range" min="0" max="50" value="15" oninput="updateFX('blur', this.value)">
+            </div>
+            <div class="fx-control">
+                <label>Glow Strength</label>
+                <input type="range" min="0" max="100" value="20" oninput="updateFX('glow', this.value)">
             </div>
         </div>
 
@@ -527,14 +568,31 @@
             <div style="display:flex; gap:10px; justify-content:center; flex-wrap: wrap;">
                 <button class="btn" onclick="mask('My Drive - Google Drive', 'https://upload.wikimedia.org/wikipedia/commons/1/12/Google_Drive_icon_%282020%29.svg')">Mask: Drive</button>
                 <button class="btn" onclick="mask('Google Classroom', 'https://upload.wikimedia.org/wikipedia/commons/d/d5/Google_Classroom_icon.png')">Mask: Classroom</button>
+                <button class="btn" onclick="mask('ZOCMYT & VRGamer262 - Hub', 'https://raw.githubusercontent.com/VRGamer262Real/Hub/refs/heads/main/bg.jpg')">Reset Mask</button>
             </div>
+        </div>
+
+        <div class="panel">
+            <h3>Theme & Appearance</h3>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; text-align: left;">
+                <div>
+                    <label>Primary Glow:</label>
+                    <input type="color" value="#00d2ff" onchange="document.documentElement.style.setProperty('--primary', this.value)">
+                </div>
+                <div>
+                    <label>Background URL:</label>
+                    <input type="text" placeholder="Image URL..." onchange="updateBg(this.value)">
+                </div>
+            </div>
+            <button class="btn" onclick="cloak()" style="width: 100%; margin-top:20px;">Deploy Cloak (About:Blank)</button>
         </div>
     </section>
 
+    <!-- FEEDBACK -->
     <section id="questions">
-        <h1>Silent Feedback</h1>
+        <h1>Advanced Feedback</h1>
         <div class="panel">
-            <p style="opacity: 0.6; font-size: 0.9rem; margin-bottom: 25px;">Data is encrypted and sent directly to the development logs.</p>
+            <p style="opacity: 0.6; font-size: 0.9rem; margin-bottom: 25px;">Logged in users receive priority updates on their issues.</p>
             
             <div class="feedback-grid">
                 <div>
@@ -556,36 +614,24 @@
             </div>
 
             <input type="text" id="q-title" placeholder="Summary of the issue...">
-            <textarea id="q-body" rows="4" placeholder="How can we improve? No tabs will open upon clicking submit."></textarea>
+            <textarea id="q-body" rows="4" placeholder="Deep dive into the problem or suggestion..."></textarea>
             
             <div style="display:flex; justify-content:space-between; align-items:center;">
-                <div id="git-status" style="font-size: 0.8rem; color: var(--primary);">Link Active</div>
-                <button class="btn" id="webhook-submit-btn" onclick="submitSilentFeedback()">Send Encrypted Report</button>
+                <div id="git-status" style="font-size: 0.8rem; color: var(--primary);">System Ready</div>
+                <button class="btn" id="git-btn" onclick="gitSubmit()">Submit Report</button>
             </div>
         </div>
     </section>
 
+    <!-- PROFILE -->
     <section id="profile">
-        <h1>Cloud Identity</h1>
+        <h1>User Profile</h1>
         <div class="panel" id="profile-container">
             <div id="logged-out-view">
-                <h3>Authorize Terminal</h3>
-                <div class="login-form">
-                    <div class="input-group">
-                        <label>GitHub Username</label>
-                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
-                        <input type="text" id="login-username" placeholder="Username">
-                    </div>
-                    <div class="input-group">
-                        <label>GitHub Password</label>
-                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/></svg>
-                        <input type="password" id="login-password" placeholder="••••••••">
-                    </div>
-                    <button class="btn" id="login-btn" onclick="processLogin()">Connect to GitHub</button>
-                </div>
-                <div id="login-status-msg">Waiting for user input...</div>
+                <h3>Not Authenticated</h3>
+                <p style="opacity:0.6;">Connect your GitHub account to sync your status, tasks, and preferred themes.</p>
+                <button class="btn" onclick="handleAuthClick()" style="margin-top:20px;">Authorize with GitHub</button>
             </div>
-
             <div id="logged-in-view" style="display:none;">
                 <div class="user-profile-card">
                     <img id="user-avatar" class="user-avatar-large" src="">
@@ -598,20 +644,21 @@
                         <div class="widget-val" style="color:var(--success)">Active</div>
                     </div>
                     <div class="widget">
-                        <div class="widget-label">Auth Level</div>
-                        <div class="widget-val" id="auth-level">Verified</div>
+                        <div class="widget-label">User Tier</div>
+                        <div class="widget-val">Contributor</div>
                     </div>
                 </div>
-                <button class="btn" style="background:var(--accent); margin-top:40px;" onclick="logout()">Disconnect Account</button>
+                <button class="btn" style="background:var(--accent); margin-top:40px;" onclick="logout()">Sign Out</button>
             </div>
         </div>
     </section>
 
+    <!-- ABOUT -->
     <section id="about">
         <h1>The Creators</h1>
         <div style="display:flex; flex-direction:column; align-items:center; gap:30px;">
             <div class="panel">
-                <p>Me and zOcM created this website originally to add our games, but now it's a full-fledged Hub OS!</p>
+                <p>Me and zOcM created this website originally to add our games, like Supa Clicker and Tower Defense, but added even more features to make this website a fun and seamless experience for everyone!</p>
             </div>
             <div style="display:flex; gap:30px; flex-wrap:wrap; justify-content:center;">
                 <div style="text-align:center;">
@@ -639,18 +686,15 @@
         
         let fxConfig = { count: 80, speed: 0.5, blur: 15, glow: 20 };
 
+        // AUTH & STATUS STATE
         let currentUser = JSON.parse(localStorage.getItem('hubUser')) || null;
         let activeIssueType = 'Bug';
-        let webhookUrl = localStorage.getItem('hubWebhook') || "";
-
-        // POMODORO & STOPWATCH STATE
-        let pomoInterval, pomoTime = 1500;
-        let swInterval, swTime = 0, swRunning = false;
 
         function updateFX(type, val) {
             if(type === 'count') { fxConfig.count = parseInt(val); initParticles(); }
             if(type === 'speed') fxConfig.speed = val / 20;
             if(type === 'blur') document.documentElement.style.setProperty('--blur-val', val + 'px');
+            if(type === 'glow') document.documentElement.style.setProperty('--glow-spread', val + 'px');
         }
 
         function toggleScanlines() {
@@ -663,13 +707,36 @@
             document.documentElement.style.setProperty('--glitch-opacity', isGlitch ? '0.15' : '0');
         }
 
+        let rgbInterval;
+        function toggleRGBPulse() {
+            if(rgbInterval) {
+                clearInterval(rgbInterval);
+                rgbInterval = null;
+                document.documentElement.style.setProperty('--primary', '#00d2ff');
+            } else {
+                let hue = 0;
+                rgbInterval = setInterval(() => {
+                    hue = (hue + 1) % 360;
+                    document.documentElement.style.setProperty('--primary', `hsl(${hue}, 100%, 50%)`);
+                    document.documentElement.style.setProperty('--glow', `hsla(${hue}, 100%, 50%, 0.4)`);
+                }, 50);
+            }
+        }
+
         function togglePerfMode() {
             isPerfMode = !isPerfMode;
             document.body.classList.toggle('perf-mode', isPerfMode);
             localStorage.setItem('hubPerfMode', isPerfMode);
             document.getElementById('perf-toggle-btn').innerText = isPerfMode ? "Performance: ON" : "Performance: OFF";
+            if(isPerfMode) ctx.clearRect(0,0,canvas.width, canvas.height);
+            else { initParticles(); drawParticles(); }
         }
 
+        if(isPerfMode) {
+            document.body.classList.add('perf-mode');
+            document.getElementById('perf-toggle-btn').innerText = "Performance: ON";
+        }
+        
         function initParticles() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -709,54 +776,73 @@
             initParticles(); drawParticles();
             renderTasks();
             syncAuthUI();
-            document.getElementById('webhook-url-input').value = webhookUrl;
             let p = 0;
             const int = setInterval(() => {
                 p += Math.random() * 40;
                 document.getElementById('load-p').style.width = Math.min(p, 100) + "%";
-                if(p >= 100) { clearInterval(int); document.getElementById('loader').style.transform = "translateY(-100%)"; }
+                if(p >= 100) {
+                    clearInterval(int);
+                    document.getElementById('loader').style.transform = "translateY(-100%)";
+                }
             }, 100);
-            
-            // Auto-load notes
-            document.getElementById('note').value = localStorage.getItem('hubNote') || "";
         };
 
         // 2. NAVIGATION & COMMANDS
         function showSec(id) {
             document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
-            const target = document.getElementById(id);
-            if(target) target.classList.add('active');
+            document.getElementById(id).classList.add('active');
             document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
             const n = document.getElementById('nav-'+id);
             if(n) n.classList.add('active');
+            document.querySelectorAll('section.active .grid li').forEach((li, i) => li.style.setProperty('--i', i));
             window.scrollTo(0,0); refresh();
         }
 
-        function handleCmd(e) { if(e.key === 'Enter') execCmd(document.getElementById('cmd-input').value); }
+        function handleCmd(e) {
+            if(e.key === 'Enter') execCmd(document.getElementById('cmd-input').value);
+        }
+
         function execCmd(raw) {
             const cmd = raw.toLowerCase().trim();
             document.getElementById('cmd-palette').classList.remove('active');
             document.getElementById('cmd-input').value = "";
+            
             if(cmd.startsWith('goto ')) showSec(cmd.replace('goto ', ''));
-            if(cmd === 'theme reset') { document.documentElement.style.setProperty('--primary', '#00d2ff'); }
-            if(cmd === 'b64') { 
-                const text = prompt("Enter text to convert to Base64:");
-                if(text) alert("Result: " + btoa(text));
+            if(cmd === 'theme reset') {
+                document.documentElement.style.setProperty('--primary', '#00d2ff');
+                updateBg('');
             }
+            if(cmd.startsWith('theme ')) document.documentElement.style.setProperty('--primary', cmd.replace('theme ', ''));
             if(cmd === 'toggle perf') togglePerfMode();
+            if(cmd === 'login') handleAuthClick();
+            if(cmd === 'b64') {
+                const text = prompt("Enter text to Base64 encode:");
+                if(text) alert("Encoded: " + btoa(text));
+            }
+            if(cmd === 'help') alert("Commands: goto [sec], theme [color], theme reset, toggle perf, b64, login");
         }
 
         function openGame(url, name) {
             const theater = document.getElementById('game-view');
+            const frame = document.getElementById('game-frame');
             document.getElementById('active-game-name').innerText = name;
-            document.getElementById('game-frame').src = url;
+            frame.src = url;
             theater.classList.add('active');
-            showToast("Opening " + name);
+            document.body.style.overflow = "hidden";
+        }
+
+        function toggleTheaterSize() {
+            const frame = document.getElementById('game-frame');
+            frame.style.width = frame.style.width === '80%' ? '100%' : '80%';
+            frame.style.margin = '0 auto';
         }
 
         function closeGame() {
-            document.getElementById('game-view').classList.remove('active');
-            document.getElementById('game-frame').src = "about:blank";
+            const theater = document.getElementById('game-view');
+            const frame = document.getElementById('game-frame');
+            theater.classList.remove('active');
+            frame.src = "about:blank";
+            document.body.style.overflow = "auto";
         }
 
         function universalSearch() {
@@ -767,48 +853,124 @@
             document.querySelectorAll('section:not(#results) .card').forEach(i => {
                 if(i.innerText.toLowerCase().includes(q)) {
                     let li = i.parentElement.cloneNode(true);
-                    li.onclick = i.parentElement.onclick;
+                    li.onclick = i.parentElement.onclick; // Preserve click
                     res.appendChild(li);
                 }
             });
             refresh();
         }
 
-        // 3. AUTH LOGIC
-        async function processLogin() {
-            const user = document.getElementById('login-username').value;
-            const pass = document.getElementById('login-password').value;
-            const status = document.getElementById('login-status-msg');
-            const btn = document.getElementById('login-btn');
+        // 3. TASKS & TOOLS
+        let tasks = JSON.parse(localStorage.getItem('hubTasks')) || [{t: "Explore the new Hub V8", c: false}];
+        function addTask() {
+            const input = document.getElementById('new-task-input');
+            if(!input.value) return;
+            tasks.push({t: input.value, c: false});
+            input.value = ""; saveTasks(); renderTasks();
+        }
+        function toggleTask(i) { tasks[i].c = !tasks[i].c; saveTasks(); renderTasks(); }
+        function saveTasks() { 
+            localStorage.setItem('hubTasks', JSON.stringify(tasks));
+            if(currentUser) {
+                document.getElementById('git-status').innerText = "Syncing with cloud...";
+                setTimeout(() => document.getElementById('git-status').innerText = "Synced!", 1000);
+            }
+        }
+        function renderTasks() {
+            const list = document.getElementById('task-list');
+            list.innerHTML = tasks.map((t, i) => `
+                <div class="task-item">
+                    <input type="checkbox" ${t.c ? 'checked' : ''} onclick="toggleTask(${i})">
+                    <span style="${t.c ? 'text-decoration:line-through; opacity:0.5' : ''}">${t.t}</span>
+                </div>
+            `).join('');
+        }
 
-            if(!user || !pass) return status.innerText = "Error: Credentials missing.";
+        function cin(v) { document.getElementById('calc-out').value += v; }
+        function cclr() { document.getElementById('calc-out').value = ""; }
+        function cres() { try { document.getElementById('calc-out').value = eval(document.getElementById('calc-out').value); } catch { document.getElementById('calc-out').value = "Err"; } }
+        
+        let swT = 0, swI;
+        function swStart() {
+            const b = document.getElementById('sw-start');
+            if(b.innerText === "Start") {
+                swI = setInterval(() => {
+                    swT += 10;
+                    let ms = Math.floor((swT % 1000) / 10), s = Math.floor((swT / 1000) % 60), m = Math.floor(swT / 60000);
+                    document.getElementById('sw-display').innerText = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}.${ms.toString().padStart(2,'0')}`;
+                }, 10);
+                b.innerText = "Stop";
+            } else { clearInterval(swI); b.innerText = "Start"; }
+        }
+        function swReset() { clearInterval(swI); swT = 0; document.getElementById('sw-display').innerText = "00:00.00"; document.getElementById('sw-start').innerText = "Start"; }
 
-            btn.classList.add('loading');
-            status.innerText = "Initializing SSH Handshake...";
-            
-            await new Promise(r => setTimeout(r, 1000));
-            status.innerText = "Verifying @github/" + user + "...";
-            
-            await new Promise(r => setTimeout(r, 1200));
-            status.innerText = "Cryptographic verification in progress...";
-
-            await new Promise(r => setTimeout(r, 800));
-            
-            currentUser = {
-                username: user,
-                avatar: `https://github.com/${user}.png`,
-                bio: "Hub Terminal User | Session Active",
-                loginDate: new Date().toLocaleDateString()
-            };
-
-            localStorage.setItem('hubUser', JSON.stringify(currentUser));
-            status.innerText = "Auth Successful. Syncing profile...";
-            
-            setTimeout(() => {
-                btn.classList.remove('loading');
-                syncAuthUI();
-                showToast("Welcome back, " + user);
+        let pomoI;
+        function startPomo(mins) {
+            clearInterval(pomoI);
+            let time = mins * 60;
+            pomoI = setInterval(() => {
+                let m = Math.floor(time / 60), s = time % 60;
+                document.getElementById('pomo-display').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
+                if(time <= 0) { clearInterval(pomoI); alert("Focus period complete!"); }
+                time--;
             }, 1000);
+        }
+        function resetPomo() { clearInterval(pomoI); document.getElementById('pomo-display').innerText = "25:00"; }
+
+        function showUnitConverter() { document.getElementById('unit-panel').style.display = 'block'; window.scrollTo(0, document.body.scrollHeight); }
+        function convertUnit() {
+            const val = parseFloat(document.getElementById('unit-input').value);
+            const type = document.getElementById('unit-type').value;
+            let res = 0;
+            if(type === 'cm-in') res = val / 2.54;
+            if(type === 'in-cm') res = val * 2.54;
+            if(type === 'kg-lb') res = val * 2.20462;
+            if(type === 'lb-kg') res = val / 2.20462;
+            if(type === 'c-f') res = (val * 9/5) + 32;
+            if(type === 'f-c') res = (val - 32) * 5/9;
+            document.getElementById('unit-result').innerText = isNaN(res) ? "0.00" : res.toFixed(2);
+        }
+
+        function downloadNotes() {
+            const blob = new Blob([document.getElementById('note').value], {type: 'text/plain'});
+            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'hub-notes.txt'; a.click();
+        }
+
+        function genPass() {
+            const p = Math.random().toString(36).slice(-8) + Math.random().toString(36).toUpperCase().slice(-4) + "!@#";
+            document.getElementById('tool-out').innerText = "Generated: " + p;
+        }
+
+        function copySystemInfo() {
+            const info = `Platform: ${navigator.platform} | Resolution: ${screen.width}x${screen.height} | Hub Version: 8.0`;
+            navigator.clipboard.writeText(info);
+            document.getElementById('tool-out').innerText = "System info copied!";
+        }
+
+        function pMusic(src, name) {
+            const p = document.getElementById('player'); p.src = src; p.play();
+            const t = document.getElementById('toast'); t.innerText = "Playing: " + name;
+            t.style.bottom = "40px"; setTimeout(() => t.style.bottom = "-100px", 4000);
+        }
+
+        // 4. AUTH & FEEDBACK LOGIC
+        function handleAuthClick() {
+            if(currentUser) {
+                showSec('profile');
+            } else {
+                const userHandle = prompt("Enter your GitHub Username to 'simulate' login:");
+                if(userHandle) {
+                    currentUser = {
+                        username: userHandle,
+                        avatar: `https://github.com/${userHandle}.png`,
+                        bio: "Hub Contributor and Gamer",
+                        loginDate: new Date().toLocaleDateString()
+                    };
+                    localStorage.setItem('hubUser', JSON.stringify(currentUser));
+                    syncAuthUI();
+                    pMusic('', 'Login Success');
+                }
+            }
         }
 
         function syncAuthUI() {
@@ -825,10 +987,9 @@
                 document.getElementById('user-bio').innerText = currentUser.bio;
                 profileOut.style.display = 'none';
                 profileIn.style.display = 'block';
-                document.getElementById('greeting').innerText = `Hub OS v9.0 | User: ${currentUser.username}`;
+                document.getElementById('greeting').innerText = `Welcome back, ${currentUser.username}! Status: Synced`;
             } else {
-                text.innerText = "Sign in to Cloud";
-                badge.innerHTML = `<svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg> <span id="auth-text">Sign in to Cloud</span>`;
+                text.innerText = "Sign in with GitHub";
                 profileOut.style.display = 'block';
                 profileIn.style.display = 'none';
             }
@@ -838,201 +999,7 @@
             currentUser = null;
             localStorage.removeItem('hubUser');
             syncAuthUI();
-        }
-
-        // 4. TOOLS LOGIC (FIXED MISSING FUNCTIONS)
-        function genPass() {
-            const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
-            let pass = "";
-            for(let i=0; i<16; i++) pass += chars.charAt(Math.floor(Math.random() * chars.length));
-            document.getElementById('tool-out').innerText = "Generated: " + pass;
-            showToast("Password Generated");
-        }
-
-        function showUnitConverter() {
-            const val = prompt("Enter distance in Kilometers:");
-            if(val) {
-                const miles = (parseFloat(val) * 0.621371).toFixed(2);
-                document.getElementById('tool-out').innerText = `${val} KM = ${miles} Miles`;
-            }
-        }
-
-        function copySystemInfo() {
-            const info = `OS: Hub v9.0 | Browser: ${navigator.userAgent} | Screen: ${screen.width}x${screen.height}`;
-            navigator.clipboard.writeText(info);
-            showToast("System Info Copied");
-        }
-
-        // 5. APPS LOGIC (POMO & STOPWATCH)
-        function startPomo(mins) {
-            clearInterval(pomoInterval);
-            pomoTime = mins * 60;
-            pomoInterval = setInterval(() => {
-                pomoTime--;
-                const m = Math.floor(pomoTime/60), s = pomoTime%60;
-                document.getElementById('pomo-display').innerText = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-                if(pomoTime <= 0) { clearInterval(pomoInterval); showToast("Time is up!"); }
-            }, 1000);
-        }
-
-        function resetPomo() { clearInterval(pomoInterval); document.getElementById('pomo-display').innerText = "25:00"; }
-
-        function swStart() {
-            if(swRunning) {
-                clearInterval(swInterval);
-                document.getElementById('sw-start').innerText = "Start";
-            } else {
-                swInterval = setInterval(() => {
-                    swTime += 10;
-                    const date = new Date(swTime);
-                    const m = date.getUTCMinutes(), s = date.getUTCSeconds(), ms = Math.floor(date.getUTCMilliseconds()/10);
-                    document.getElementById('sw-display').innerText = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}.${ms.toString().padStart(2,'0')}`;
-                }, 10);
-                document.getElementById('sw-start').innerText = "Stop";
-            }
-            swRunning = !swRunning;
-        }
-
-        function swReset() { clearInterval(swInterval); swTime = 0; swRunning = false; document.getElementById('sw-display').innerText = "00:00.00"; document.getElementById('sw-start').innerText = "Start"; }
-
-        // 6. CALCULATOR
-        function cin(v) { document.getElementById('calc-out').value += v; }
-        function cclr() { document.getElementById('calc-out').value = ""; }
-        function cres() {
-            try { document.getElementById('calc-out').value = eval(document.getElementById('calc-out').value); }
-            catch(e) { document.getElementById('calc-out').value = "Error"; }
-        }
-
-        // 7. MUSIC PLAYER
-        function pMusic(src, name) {
-            const player = document.getElementById('player');
-            if(src) player.src = src;
-            player.play();
-            showToast("Playing: " + name);
-        }
-
-        // 8. SYSTEM REFRESH & UTILS
-        function showToast(m) {
-            const t = document.getElementById('toast');
-            t.innerText = m;
-            t.style.bottom = "40px";
-            setTimeout(() => t.style.bottom = "-100px", 3000);
-        }
-
-        const start = Date.now();
-        const cur = document.getElementById('cursor'), fol = document.getElementById('cursor-follower');
-        document.addEventListener('mousemove', (e) => {
-            if(isPerfMode) return;
-            cur.style.left = e.clientX + 'px'; cur.style.top = e.clientY + 'px';
-            fol.style.transform = `translate(${e.clientX - 20}px, ${e.clientY - 20}px)`;
-        });
-
-        // Universal Shortcut: / for search
-        document.addEventListener('keydown', (e) => {
-            if(e.key === '/') {
-                if(document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
-                    e.preventDefault();
-                    document.getElementById('universalSearch').focus();
-                }
-            }
-        });
-
-        function updatePerf() {
-            const upS = Math.floor((Date.now() - start) / 1000);
-            const formatted = `${Math.floor(upS/60).toString().padStart(2,'0')}:${(upS%60).toString().padStart(2,'0')}`;
-            document.getElementById('uptime').innerText = `UPTIME: ${formatted}`;
-            document.getElementById('session-timer').innerText = formatted;
-            
-            // Random-ish realistic memory usage
-            const mem = (Math.random() * 5 + 40).toFixed(1);
-            document.getElementById('mem-val').innerText = mem + " MB";
-            
-            requestAnimationFrame(updatePerf);
-        }
-        updatePerf();
-
-        setInterval(() => {
-            document.getElementById('clock').innerText = new Date().toLocaleTimeString();
-        }, 1000);
-
-        function mask(t, i) { document.getElementById('tab-title').innerText = t; document.getElementById('tab-icon').href = i; showToast("Tab Masked"); }
-        
-        function refresh() {
-            document.querySelectorAll('a, button, .card, input, textarea, select').forEach(el => {
-                el.onmouseenter = () => { if(!isPerfMode) document.body.classList.add('cursor-hover'); };
-                el.onmouseleave = () => { if(!isPerfMode) document.body.classList.remove('cursor-hover'); };
-            });
-        }
-
-        function addTask() {
-            const input = document.getElementById('new-task-input');
-            if(!input.value) return;
-            tasks.push({t: input.value, c: false});
-            input.value = ""; renderTasks();
-            localStorage.setItem('hubTasks', JSON.stringify(tasks));
-        }
-
-        let tasks = JSON.parse(localStorage.getItem('hubTasks')) || [];
-        function renderTasks() {
-            document.getElementById('task-list').innerHTML = tasks.map((t, i) => `
-                <div class="task-item">
-                    <input type="checkbox" ${t.c ? 'checked' : ''} onclick="tasks[${i}].c = !tasks[${i}].c; localStorage.setItem('hubTasks', JSON.stringify(tasks)); renderTasks();">
-                    <span style="${t.c ? 'text-decoration:line-through; opacity:0.5' : ''}">${t.t}</span>
-                </div>
-            `).join('');
-        }
-
-        function downloadNotes() {
-            const blob = new Blob([document.getElementById('note').value], {type: "text/plain"});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url; a.download = "hub-notes.txt"; a.click();
-        }
-
-        // Webhook Submission Logic
-        async function submitSilentFeedback() {
-            const title = document.getElementById('q-title').value;
-            const body = document.getElementById('q-body').value;
-            const prio = document.getElementById('q-priority').value;
-            const status = document.getElementById('git-status');
-            const btn = document.getElementById('webhook-submit-btn');
-
-            if(!title || !body) return alert("Report incomplete.");
-            
-            btn.classList.add('loading');
-            status.innerText = "Encrypting...";
-            
-            const payload = {
-                username: "Hub OS Feedback",
-                embeds: [{
-                    title: `[${activeIssueType}] ${title}`,
-                    description: body,
-                    color: activeIssueType === 'Bug' ? 16711680 : 52479,
-                    fields: [
-                        { name: "Priority", value: prio, inline: true },
-                        { name: "User", value: currentUser ? currentUser.username : "Guest", inline: true }
-                    ]
-                }]
-            };
-
-            try {
-                if(!webhookUrl) {
-                    await new Promise(r => setTimeout(r, 1500));
-                    alert("Please set a Webhook URL in 'The Lab' first!");
-                } else {
-                    await fetch(webhookUrl, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload) });
-                    status.innerText = "Sent Successfully!";
-                }
-            } catch(e) { status.innerText = "Bridge Error!"; }
-            
-            btn.classList.remove('loading');
-            setTimeout(() => status.innerText = "Link Active", 3000);
-        }
-
-        function testWebhook() {
-            webhookUrl = document.getElementById('webhook-url-input').value;
-            localStorage.setItem('hubWebhook', webhookUrl);
-            showToast("Webhook Saved");
+            showSec('home');
         }
 
         function selectIssue(el, type) {
@@ -1041,6 +1008,95 @@
             activeIssueType = type;
         }
 
+        async function gitSubmit() {
+            const t = document.getElementById('q-title').value;
+            const b = document.getElementById('q-body').value;
+            const p = document.getElementById('q-priority').value;
+            const status = document.getElementById('git-status');
+
+            if(!t || !b) return alert("Please provide both a title and description.");
+
+            status.innerText = "Formatting report...";
+            
+            let fullBody = `**Issue Type:** ${activeIssueType}\n**Priority:** ${p}\n\n**Description:**\n${b}\n\n---\n*Reported via Hub Engine v8.1*`;
+            if(currentUser) {
+                fullBody += `\n*User: @${currentUser.username}*`;
+            }
+
+            status.innerText = "Opening GitHub...";
+            setTimeout(() => {
+                window.open(`https://github.com/VRGamer262Real/Hub/issues/new?title=[${activeIssueType}] ${encodeURIComponent(t)}&body=${encodeURIComponent(fullBody)}`, '_blank');
+                status.innerText = "System Ready";
+            }, 1000);
+        }
+
+        // 5. SYSTEM UPDATES
+        const start = Date.now();
+        const cur = document.getElementById('cursor'), fol = document.getElementById('cursor-follower');
+        document.addEventListener('mousemove', (e) => {
+            if(isPerfMode) return;
+            cur.style.left = e.clientX + 'px'; cur.style.top = e.clientY + 'px';
+            fol.style.transform = `translate(${e.clientX - 20}px, ${e.clientY - 20}px)`;
+            const moveX = (e.clientX - window.innerWidth / 2) * 0.015;
+            const moveY = (e.clientY - window.innerHeight / 2) * 0.015;
+            document.getElementById('bg-canvas').style.transform = `translate(${moveX}px, ${moveY}px) scale(1.05)`;
+        });
+
+        let times = [];
+        let currentPing = 5;
+        setInterval(() => currentPing = Math.floor(Math.random()*12)+8, 2000);
+
+        function updatePerf() {
+            const now = performance.now();
+            while (times.length > 0 && times[0] <= now - 1000) times.shift();
+            times.push(now);
+            document.getElementById('perf').innerText = `FPS: ${times.length} | PING: ${currentPing}ms`;
+            const upS = Math.floor((Date.now() - start) / 1000);
+            const formatted = `${Math.floor(upS/60).toString().padStart(2,'0')}:${(upS%60).toString().padStart(2,'0')}`;
+            document.getElementById('uptime').innerText = `UPTIME: ${formatted}`;
+            document.getElementById('session-timer').innerText = formatted;
+            if(performance.memory) document.getElementById('mem-val').innerText = Math.round(performance.memory.usedJSHeapSize / 1048576) + " MB";
+            requestAnimationFrame(updatePerf);
+        }
+        updatePerf();
+
+        setInterval(() => {
+            document.getElementById('clock').innerText = new Date().toLocaleTimeString();
+            if(navigator.getBattery) navigator.getBattery().then(b => document.getElementById('battery').innerText = `${Math.floor(b.level*100)}%`);
+        }, 1000);
+
+        function mask(t, i) { document.getElementById('tab-title').innerText = t; document.getElementById('tab-icon').href = i; }
+        function updateBg(u) { 
+            const bg = document.getElementById('bg-canvas');
+            if(!u) bg.style.backgroundImage = "radial-gradient(circle at 50% 50%, #111 0%, #000 100%)";
+            else bg.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('${u}')`; 
+        }
+        
+        function cloak() {
+            let w = window.open('about:blank', '_blank');
+            w.document.write(`<html><head><title>Google</title><link rel="icon" href="https://google.com/favicon.ico"></head><body style="margin:0;"><iframe src="${window.location.href}" style="width:100%;height:100%;border:none;"></iframe></body></html>`);
+            window.location.replace("https://google.com");
+        }
+
+        function refresh() {
+            document.querySelectorAll('a, button, .card, input, textarea, select').forEach(el => {
+                el.onmouseenter = () => { if(!isPerfMode) document.body.classList.add('cursor-hover'); };
+                el.onmouseleave = () => { if(!isPerfMode) document.body.classList.remove('cursor-hover'); };
+            });
+        }
+        
+        document.getElementById('note').value = localStorage.getItem('hubNote') || "";
+        document.addEventListener('keydown', (e) => {
+            if(e.key === '`') window.location.href = "about:blank";
+            if(e.key === 'Escape') { closeGame(); document.getElementById('cmd-palette').classList.remove('active'); }
+            if(e.ctrlKey && e.key === 'k') { e.preventDefault(); document.getElementById('cmd-palette').classList.add('active'); document.getElementById('cmd-input').focus(); }
+            if(e.key === '/') { if(document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') { e.preventDefault(); document.getElementById('universalSearch').focus(); }}
+        });
+
+        const quotes = ["Innovate or die.", "Coding the future.", "Pixels are power.", "Hub is home.", "Efficiency is key.", "Stay modular."];
+        document.getElementById('quote-box').innerText = `"${quotes[Math.floor(Math.random()*quotes.length)]}"`;
+        
+        // Final Init
         refresh(); showSec('home');
     </script>
 </body>
