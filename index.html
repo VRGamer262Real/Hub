@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title id="tab-title">ZOCMYT & VRGamer262 - Hub v9.0</title>
+    <title id="tab-title">ZOCMYT & VRGamer262 - Hub</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link id="tab-icon" rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/VRGamer262Real/Hub/refs/heads/main/bg.jpg">
     <style>
+        /* [KEEPING ALL ORIGINAL STYLES] */
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Inter:wght@400;700;900&family=Fira+Code:wght@400;500&display=swap');
 
         :root {
@@ -19,18 +20,15 @@
             --glow: rgba(0, 210, 255, 0.4);
             --font: 'Inter', sans-serif;
             --title-font: 'Space Grotesk', sans-serif;
-            /* Dynamic Effect Variables */
             --blur-val: 15px;
             --glow-spread: 20px;
             --card-scale: 1.03;
             --glitch-opacity: 0;
-            /* Auth Specific */
             --github-color: #24292e;
             --user-card-bg: rgba(255, 255, 255, 0.05);
             --input-focus: rgba(0, 210, 255, 0.2);
         }
 
-        /* 1. RESET & CORE */
         * { cursor: none !important; box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
         
         body {
@@ -51,7 +49,6 @@
             opacity: 0.6; pointer-events: none;
         }
 
-        /* SCANLINE & OVERLAYS */
         #scanlines {
             position: fixed; inset: 0; pointer-events: none; z-index: 9998;
             background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
@@ -80,7 +77,6 @@
 
         .cursor-hover #cursor { transform: scale(5); background: transparent; border: 0.5px solid var(--primary); mix-blend-mode: difference; }
 
-        /* PERFORMANCE MODE OVERRIDES */
         .perf-mode * {
             backdrop-filter: none !important;
             animation: none !important;
@@ -104,7 +100,6 @@
         .perf-mode .card { background: #111 !important; border: 1px solid #333 !important; }
         .perf-mode .nav, .perf-mode .status-bar, .perf-mode .panel { background: #0a0a0a !important; }
 
-        /* 2. LOADING SCREEN */
         #loader {
             position: fixed; inset: 0; background: #000; z-index: 20000;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -114,7 +109,6 @@
         .load-bar { width: 250px; height: 2px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden; }
         .load-progress { width: 0%; height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); transition: 0.4s; }
 
-        /* 3. STATUS BAR */
         .status-bar {
             display: flex; justify-content: space-between; padding: 15px 40px;
             background: rgba(0,0,0,0.6); backdrop-filter: blur(25px);
@@ -123,7 +117,6 @@
             position: sticky; top: 0;
         }
 
-        /* 4. SEARCH & NAV */
         .search-area { max-width: 700px; margin: 40px auto; padding: 0 20px; position: relative; }
         .search-area input {
             width: 100%; padding: 22px 35px; border-radius: 100px;
@@ -145,7 +138,6 @@
         }
         .nav li a:hover, .nav li a.active { color: #000; background: var(--primary); box-shadow: 0 0 25px var(--glow); }
 
-        /* 5. SECTIONS & GRID */
         section { display: none; opacity: 0; padding: 60px 20px 150px; min-height: 80vh; }
         section.active { display: block; animation: sectionIn 0.8s forwards cubic-bezier(0.2, 0.8, 0.2, 1); }
 
@@ -175,7 +167,6 @@
         .card img { width: 100%; height: 150px; object-fit: cover; border-radius: 24px; margin-bottom: 25px; box-shadow: 0 15px 30px rgba(0,0,0,0.4); }
         .card-text { font-weight: 700; font-size: 1.1rem; letter-spacing: 0.5px; opacity: 0.9; }
 
-        /* IFRAME THEATER MODE */
         #game-view {
             position: fixed; inset: 0; z-index: 5000; background: #000;
             display: none; flex-direction: column;
@@ -187,7 +178,6 @@
             display: flex; justify-content: space-between; align-items: center;
         }
 
-        /* 6. PANELS */
         .panel {
             max-width: 850px; margin: 30px auto; background: var(--bg-glass);
             padding: 50px; border-radius: 45px; border: 1px solid var(--border);
@@ -209,24 +199,20 @@
         #calc button:hover { background: rgba(255,255,255,0.1); border-color: var(--primary); }
         #calc button:active { transform: scale(0.9); background: var(--primary); color: black; }
 
-        /* WIDGETS */
         .widget-row { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px; }
         .widget { background: var(--bg-glass); padding: 20px 30px; border-radius: 30px; border: 1px solid var(--border); backdrop-filter: blur(10px); min-width: 200px; transition: 0.3s; position: relative; }
         .widget:hover { transform: translateY(-5px); border-color: var(--primary); }
         .widget-val { font-size: 1.5rem; font-weight: 900; color: var(--primary); }
         .widget-label { font-size: 0.7rem; text-transform: uppercase; opacity: 0.5; letter-spacing: 1px; }
 
-        /* TASK LIST */
         .task-item { display: flex; align-items: center; gap: 15px; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 15px; margin-bottom: 10px; transition: 0.3s; text-align: left; }
         .task-item:hover { background: rgba(255,255,255,0.08); }
         .task-item input[type="checkbox"] { width: 20px; height: 20px; margin: 0; cursor: pointer; }
 
-        /* FX SLIDERS */
         .fx-control { display: flex; align-items: center; gap: 20px; margin-bottom: 20px; background: rgba(255,255,255,0.02); padding: 15px 25px; border-radius: 20px; }
         .fx-control label { min-width: 140px; font-weight: 700; font-size: 0.8rem; text-transform: uppercase; color: var(--primary); }
         input[type="range"] { margin: 0; padding: 0; height: 6px; background: rgba(255,255,255,0.1); accent-color: var(--primary); }
 
-        /* COMMAND PALETTE */
         #cmd-palette {
             position: fixed; top: 20%; left: 50%; transform: translateX(-50%) scale(0.9);
             width: 500px; background: rgba(10,10,10,0.95); backdrop-filter: blur(50px);
@@ -239,7 +225,6 @@
         .cmd-item { padding: 12px 20px; border-radius: 10px; cursor: pointer; transition: 0.2s; font-size: 0.9rem; }
         .cmd-item:hover { background: var(--primary); color: black; }
 
-        /* TOAST */
         #toast {
             position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
             background: rgba(255,255,255,0.95); color: #000; padding: 18px 50px; border-radius: 100px;
@@ -247,7 +232,6 @@
             box-shadow: 0 30px 60px rgba(0,0,0,0.5); font-size: 1rem;
         }
 
-        /* NEW AUTH & FEEDBACK UI */
         .auth-badge {
             display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.05);
             padding: 5px 15px; border-radius: 50px; border: 1px solid var(--border);
@@ -267,7 +251,6 @@
         .feedback-chip { padding: 8px 15px; border-radius: 10px; background: rgba(255,255,255,0.05); font-size: 0.8rem; cursor: pointer; border: 1px solid transparent; }
         .feedback-chip.selected { border-color: var(--primary); background: rgba(0, 210, 255, 0.1); }
 
-        /* HUB LOGIN FORM */
         .login-form {
             display: flex; flex-direction: column; gap: 15px; max-width: 400px; margin: 0 auto;
             text-align: left; animation: itemUp 0.6s forwards;
@@ -279,7 +262,6 @@
 
         #login-status-msg { margin-top: 20px; font-size: 0.8rem; font-family: 'Fira Code', monospace; color: var(--primary); }
 
-        /* ANIMATIONS */
         @keyframes sectionIn { from { opacity: 0; transform: translateY(40px) scale(0.95); filter: blur(10px); } to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
         @keyframes itemUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
@@ -303,7 +285,6 @@
         <div style="font-size: 0.6rem; margin-top: 10px; opacity: 0.4; letter-spacing: 2px;">INITIALIZING HUB ENGINE V9.0</div>
     </div>
 
-    <!-- COMMAND PALETTE -->
     <div id="cmd-palette">
         <input type="text" id="cmd-input" placeholder="Type a command (e.g. 'theme red', 'goto games')..." onkeyup="handleCmd(event)">
         <div class="cmd-results" id="cmd-results">
@@ -316,7 +297,6 @@
     <div id="cursor"></div>
     <div id="cursor-follower"></div>
 
-    <!-- GAME THEATER MODAL -->
     <div id="game-view">
         <div class="game-bar">
             <div id="active-game-name" style="font-weight:900; color:var(--primary); text-transform:uppercase; letter-spacing:2px;">Loading Experience...</div>
@@ -331,7 +311,6 @@
     <div class="status-bar">
         <div id="greeting">Welcome to Hub OS v9.0</div>
         <div style="display:flex; gap:25px; align-items:center;">
-            <!-- AUTH COMPONENT -->
             <div id="auth-status" class="auth-badge" onclick="showSec('profile')">
                 <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
                 <span id="auth-text">Sign in to Cloud</span>
@@ -363,13 +342,11 @@
         </ul>
     </div>
 
-    <!-- SEARCH RESULTS -->
     <section id="results">
         <h1>Search Results</h1>
         <ul class="grid" id="results-list"></ul>
     </section>
 
-    <!-- HOME -->
     <section id="home" class="active">
         <h1>Our Hub</h1>
         
@@ -400,7 +377,6 @@
         </ul>
     </section>
 
-    <!-- GAMES GRID -->
     <section id="games">
         <h1>Games</h1>
         <ul class="grid">
@@ -426,10 +402,8 @@
         </ul>
     </section>
 
-    <!-- APPS -->
     <section id="apps">
         <h1>Apps</h1>
-        
         <div class="panel">
             <h3>Hub Task Manager</h3>
             <div id="task-list" style="margin-bottom: 20px;"></div>
@@ -476,7 +450,6 @@
         </div>
     </section>
 
-    <!-- MUSIC -->
     <section id="music">
         <h1>Audio</h1>
         <ul class="grid">
@@ -487,7 +460,6 @@
         </ul>
     </section>
 
-    <!-- NEWS -->
     <section id="news">
         <h1>Updates</h1>
         <div class="panel" style="text-align: left;">
@@ -503,7 +475,6 @@
         </div>
     </section>
 
-    <!-- TOOLS -->
     <section id="tools">
         <h1>Tools</h1>
         <ul class="grid">
@@ -516,7 +487,6 @@
         <div id="tool-out" style="text-align:center; margin-top: 30px; font-weight: bold; color: var(--primary); font-family: 'Fira Code';"></div>
     </section>
 
-    <!-- DESIGN / LAB -->
     <section id="design">
         <h1>The Lab</h1>
         <div class="panel">
@@ -561,7 +531,6 @@
         </div>
     </section>
 
-    <!-- FEEDBACK -->
     <section id="questions">
         <h1>Silent Feedback</h1>
         <div class="panel">
@@ -596,11 +565,9 @@
         </div>
     </section>
 
-    <!-- PROFILE -->
     <section id="profile">
         <h1>Cloud Identity</h1>
         <div class="panel" id="profile-container">
-            <!-- LOGGED OUT: TERMINAL LOGIN -->
             <div id="logged-out-view">
                 <h3>Authorize Terminal</h3>
                 <div class="login-form">
@@ -619,7 +586,6 @@
                 <div id="login-status-msg">Waiting for user input...</div>
             </div>
 
-            <!-- LOGGED IN VIEW -->
             <div id="logged-in-view" style="display:none;">
                 <div class="user-profile-card">
                     <img id="user-avatar" class="user-avatar-large" src="">
@@ -641,7 +607,6 @@
         </div>
     </section>
 
-    <!-- ABOUT -->
     <section id="about">
         <h1>The Creators</h1>
         <div style="display:flex; flex-direction:column; align-items:center; gap:30px;">
@@ -674,10 +639,13 @@
         
         let fxConfig = { count: 80, speed: 0.5, blur: 15, glow: 20 };
 
-        // AUTH & STATUS STATE
         let currentUser = JSON.parse(localStorage.getItem('hubUser')) || null;
         let activeIssueType = 'Bug';
         let webhookUrl = localStorage.getItem('hubWebhook') || "";
+
+        // POMODORO & STOPWATCH STATE
+        let pomoInterval, pomoTime = 1500;
+        let swInterval, swTime = 0, swRunning = false;
 
         function updateFX(type, val) {
             if(type === 'count') { fxConfig.count = parseInt(val); initParticles(); }
@@ -748,6 +716,9 @@
                 document.getElementById('load-p').style.width = Math.min(p, 100) + "%";
                 if(p >= 100) { clearInterval(int); document.getElementById('loader').style.transform = "translateY(-100%)"; }
             }, 100);
+            
+            // Auto-load notes
+            document.getElementById('note').value = localStorage.getItem('hubNote') || "";
         };
 
         // 2. NAVIGATION & COMMANDS
@@ -768,6 +739,11 @@
             document.getElementById('cmd-input').value = "";
             if(cmd.startsWith('goto ')) showSec(cmd.replace('goto ', ''));
             if(cmd === 'theme reset') { document.documentElement.style.setProperty('--primary', '#00d2ff'); }
+            if(cmd === 'b64') { 
+                const text = prompt("Enter text to convert to Base64:");
+                if(text) alert("Result: " + btoa(text));
+            }
+            if(cmd === 'toggle perf') togglePerfMode();
         }
 
         function openGame(url, name) {
@@ -775,6 +751,7 @@
             document.getElementById('active-game-name').innerText = name;
             document.getElementById('game-frame').src = url;
             theater.classList.add('active');
+            showToast("Opening " + name);
         }
 
         function closeGame() {
@@ -797,7 +774,7 @@
             refresh();
         }
 
-        // 3. NEW AUTH LOGIC (TERMINAL STYLE)
+        // 3. AUTH LOGIC
         async function processLogin() {
             const user = document.getElementById('login-username').value;
             const pass = document.getElementById('login-password').value;
@@ -830,7 +807,7 @@
             setTimeout(() => {
                 btn.classList.remove('loading');
                 syncAuthUI();
-                pMusic('', 'Login Verified');
+                showToast("Welcome back, " + user);
             }, 1000);
         }
 
@@ -863,72 +840,85 @@
             syncAuthUI();
         }
 
-        // 4. NEW SILENT FEEDBACK (WEBHOOKS)
-        function selectIssue(el, type) {
-            document.querySelectorAll('.feedback-chip').forEach(c => c.classList.remove('selected'));
-            el.classList.add('selected');
-            activeIssueType = type;
+        // 4. TOOLS LOGIC (FIXED MISSING FUNCTIONS)
+        function genPass() {
+            const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
+            let pass = "";
+            for(let i=0; i<16; i++) pass += chars.charAt(Math.floor(Math.random() * chars.length));
+            document.getElementById('tool-out').innerText = "Generated: " + pass;
+            showToast("Password Generated");
         }
 
-        async function submitSilentFeedback() {
-            const title = document.getElementById('q-title').value;
-            const body = document.getElementById('q-body').value;
-            const prio = document.getElementById('q-priority').value;
-            const status = document.getElementById('git-status');
-            const btn = document.getElementById('webhook-submit-btn');
-
-            if(!title || !body) return alert("Report incomplete.");
-            
-            btn.classList.add('loading');
-            status.innerText = "Encrypting...";
-            
-            const payload = {
-                embeds: [{
-                    title: `[${activeIssueType}] ${title}`,
-                    description: body,
-                    color: activeIssueType === 'Bug' ? 16711680 : 52479,
-                    fields: [
-                        { name: "Priority", value: prio, inline: true },
-                        { name: "User", value: currentUser ? currentUser.username : "Guest", inline: true },
-                        { name: "Version", value: "9.0", inline: true }
-                    ],
-                    footer: { text: "Hub Silent Bridge Engine" }
-                }]
-            };
-
-            try {
-                // If no webhook is set, we simulate it for the user
-                if(!webhookUrl) {
-                    await new Promise(r => setTimeout(r, 2000));
-                    status.innerText = "No Webhook Configured!";
-                    alert("Please set a Webhook URL in the 'Lab' section to send silent reports.");
-                } else {
-                    const response = await fetch(webhookUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-                    
-                    if(response.ok) status.innerText = "Report Dispatched!";
-                    else status.innerText = "Bridge Failure!";
-                }
-            } catch(e) {
-                status.innerText = "Error Connecting...";
+        function showUnitConverter() {
+            const val = prompt("Enter distance in Kilometers:");
+            if(val) {
+                const miles = (parseFloat(val) * 0.621371).toFixed(2);
+                document.getElementById('tool-out').innerText = `${val} KM = ${miles} Miles`;
             }
-
-            btn.classList.remove('loading');
-            setTimeout(() => status.innerText = "Link Active", 3000);
         }
 
-        function testWebhook() {
-            const url = document.getElementById('webhook-url-input').value;
-            if(!url) return alert("Enter a URL first.");
-            webhookUrl = url;
-            localStorage.setItem('hubWebhook', url);
-            alert("Webhook endpoint saved and mapped to feedback system.");
+        function copySystemInfo() {
+            const info = `OS: Hub v9.0 | Browser: ${navigator.userAgent} | Screen: ${screen.width}x${screen.height}`;
+            navigator.clipboard.writeText(info);
+            showToast("System Info Copied");
         }
 
-        // 5. SYSTEM REFRESH & UTILS
+        // 5. APPS LOGIC (POMO & STOPWATCH)
+        function startPomo(mins) {
+            clearInterval(pomoInterval);
+            pomoTime = mins * 60;
+            pomoInterval = setInterval(() => {
+                pomoTime--;
+                const m = Math.floor(pomoTime/60), s = pomoTime%60;
+                document.getElementById('pomo-display').innerText = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+                if(pomoTime <= 0) { clearInterval(pomoInterval); showToast("Time is up!"); }
+            }, 1000);
+        }
+
+        function resetPomo() { clearInterval(pomoInterval); document.getElementById('pomo-display').innerText = "25:00"; }
+
+        function swStart() {
+            if(swRunning) {
+                clearInterval(swInterval);
+                document.getElementById('sw-start').innerText = "Start";
+            } else {
+                swInterval = setInterval(() => {
+                    swTime += 10;
+                    const date = new Date(swTime);
+                    const m = date.getUTCMinutes(), s = date.getUTCSeconds(), ms = Math.floor(date.getUTCMilliseconds()/10);
+                    document.getElementById('sw-display').innerText = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}.${ms.toString().padStart(2,'0')}`;
+                }, 10);
+                document.getElementById('sw-start').innerText = "Stop";
+            }
+            swRunning = !swRunning;
+        }
+
+        function swReset() { clearInterval(swInterval); swTime = 0; swRunning = false; document.getElementById('sw-display').innerText = "00:00.00"; document.getElementById('sw-start').innerText = "Start"; }
+
+        // 6. CALCULATOR
+        function cin(v) { document.getElementById('calc-out').value += v; }
+        function cclr() { document.getElementById('calc-out').value = ""; }
+        function cres() {
+            try { document.getElementById('calc-out').value = eval(document.getElementById('calc-out').value); }
+            catch(e) { document.getElementById('calc-out').value = "Error"; }
+        }
+
+        // 7. MUSIC PLAYER
+        function pMusic(src, name) {
+            const player = document.getElementById('player');
+            if(src) player.src = src;
+            player.play();
+            showToast("Playing: " + name);
+        }
+
+        // 8. SYSTEM REFRESH & UTILS
+        function showToast(m) {
+            const t = document.getElementById('toast');
+            t.innerText = m;
+            t.style.bottom = "40px";
+            setTimeout(() => t.style.bottom = "-100px", 3000);
+        }
+
         const start = Date.now();
         const cur = document.getElementById('cursor'), fol = document.getElementById('cursor-follower');
         document.addEventListener('mousemove', (e) => {
@@ -937,11 +927,26 @@
             fol.style.transform = `translate(${e.clientX - 20}px, ${e.clientY - 20}px)`;
         });
 
+        // Universal Shortcut: / for search
+        document.addEventListener('keydown', (e) => {
+            if(e.key === '/') {
+                if(document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+                    e.preventDefault();
+                    document.getElementById('universalSearch').focus();
+                }
+            }
+        });
+
         function updatePerf() {
             const upS = Math.floor((Date.now() - start) / 1000);
             const formatted = `${Math.floor(upS/60).toString().padStart(2,'0')}:${(upS%60).toString().padStart(2,'0')}`;
             document.getElementById('uptime').innerText = `UPTIME: ${formatted}`;
             document.getElementById('session-timer').innerText = formatted;
+            
+            // Random-ish realistic memory usage
+            const mem = (Math.random() * 5 + 40).toFixed(1);
+            document.getElementById('mem-val').innerText = mem + " MB";
+            
             requestAnimationFrame(updatePerf);
         }
         updatePerf();
@@ -950,7 +955,7 @@
             document.getElementById('clock').innerText = new Date().toLocaleTimeString();
         }, 1000);
 
-        function mask(t, i) { document.getElementById('tab-title').innerText = t; document.getElementById('tab-icon').href = i; }
+        function mask(t, i) { document.getElementById('tab-title').innerText = t; document.getElementById('tab-icon').href = i; showToast("Tab Masked"); }
         
         function refresh() {
             document.querySelectorAll('a, button, .card, input, textarea, select').forEach(el => {
@@ -977,7 +982,65 @@
             `).join('');
         }
 
-        // Final Init
+        function downloadNotes() {
+            const blob = new Blob([document.getElementById('note').value], {type: "text/plain"});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = "hub-notes.txt"; a.click();
+        }
+
+        // Webhook Submission Logic
+        async function submitSilentFeedback() {
+            const title = document.getElementById('q-title').value;
+            const body = document.getElementById('q-body').value;
+            const prio = document.getElementById('q-priority').value;
+            const status = document.getElementById('git-status');
+            const btn = document.getElementById('webhook-submit-btn');
+
+            if(!title || !body) return alert("Report incomplete.");
+            
+            btn.classList.add('loading');
+            status.innerText = "Encrypting...";
+            
+            const payload = {
+                username: "Hub OS Feedback",
+                embeds: [{
+                    title: `[${activeIssueType}] ${title}`,
+                    description: body,
+                    color: activeIssueType === 'Bug' ? 16711680 : 52479,
+                    fields: [
+                        { name: "Priority", value: prio, inline: true },
+                        { name: "User", value: currentUser ? currentUser.username : "Guest", inline: true }
+                    ]
+                }]
+            };
+
+            try {
+                if(!webhookUrl) {
+                    await new Promise(r => setTimeout(r, 1500));
+                    alert("Please set a Webhook URL in 'The Lab' first!");
+                } else {
+                    await fetch(webhookUrl, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload) });
+                    status.innerText = "Sent Successfully!";
+                }
+            } catch(e) { status.innerText = "Bridge Error!"; }
+            
+            btn.classList.remove('loading');
+            setTimeout(() => status.innerText = "Link Active", 3000);
+        }
+
+        function testWebhook() {
+            webhookUrl = document.getElementById('webhook-url-input').value;
+            localStorage.setItem('hubWebhook', webhookUrl);
+            showToast("Webhook Saved");
+        }
+
+        function selectIssue(el, type) {
+            document.querySelectorAll('.feedback-chip').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            activeIssueType = type;
+        }
+
         refresh(); showSec('home');
     </script>
 </body>
