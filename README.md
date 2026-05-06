@@ -1,6 +1,6 @@
 # zOcM and VRGamer262
 
->New music tab! Also the ui might change a lot so idk deal with it
+>We need to add to this release notes lol
 
 <h2>Super tuff website</h2>
 
