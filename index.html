@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title id="tab-title">ZOCMYT & VRGamer262 - Hub</title>
+    <!-- Website Name Changed to Launchpad -->
+    <title id="tab-title">ZOCMYT & VRGamer262 - Launchpad</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link id="tab-icon" rel="icon" type="image/x-icon" href="https://upload.wikimedia.org/wikipedia/commons/c/cc/Digital_rain_animation_medium_letters_shine.gif?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=original">
@@ -19,17 +20,17 @@
             --glow: rgba(0, 210, 255, 0.4);
             --font: 'Inter', sans-serif;
             --title-font: 'Space Grotesk', sans-serif;
-            /* Dynamic Effect Variables */
             --blur-val: 15px;
             --glow-spread: 20px;
             --card-scale: 1.03;
             --glitch-opacity: 0;
-            /* Auth Specific */
             --github-color: #24292e;
             --user-card-bg: rgba(255, 255, 255, 0.05);
-            /* New Variables */
             --terminal-bg: rgba(0, 0, 0, 0.9);
             --neon-shadow: 0 0 10px var(--primary);
+            /* New Aesthetic Variables */
+            --glass-deep: rgba(0, 0, 0, 0.85);
+            --panel-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
         /* 1. RESET & CORE */
@@ -66,7 +67,6 @@
             opacity: var(--glitch-opacity); mix-blend-mode: overlay;
         }
 
-        /* MATRIX OVERLAY */
         #matrix-canvas {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
             opacity: 0; pointer-events: none; transition: opacity 1s;
@@ -288,7 +288,7 @@
         .feedback-chip { padding: 8px 15px; border-radius: 10px; background: rgba(255,255,255,0.05); font-size: 0.8rem; cursor: pointer; border: 1px solid transparent; }
         .feedback-chip.selected { border-color: var(--primary); background: rgba(0, 210, 255, 0.1); }
 
-        /* --- NEW EXTENDED STYLES --- */
+        /* --- NEW EXTENDED STYLES & DECORATIONS --- */
         .terminal-box {
             background: var(--terminal-bg); color: var(--success); font-family: 'Fira Code', monospace;
             padding: 20px; border-radius: 15px; border: 1px solid var(--success);
@@ -309,6 +309,31 @@
 
         .neon-border { border: 1px solid var(--primary); box-shadow: 0 0 15px var(--glow); }
         .rainbow-text { background: linear-gradient(to right, red, orange, yellow, green, cyan, blue, violet); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        /* Home Decoration Styles */
+        .hero-title {
+            font-size: 8rem !important;
+            line-height: 1;
+            margin: 20px 0 !important;
+            position: relative;
+            z-index: 1;
+        }
+        .hero-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.5;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+        }
+        .home-accent-bar {
+            width: 100px; height: 4px; background: var(--primary); margin: 0 auto 50px;
+            border-radius: 10px; box-shadow: 0 0 20px var(--glow);
+        }
+        .featured-badge {
+            position: absolute; top: 15px; right: 15px; background: var(--accent);
+            color: white; padding: 4px 10px; border-radius: 8px; font-size: 0.6rem;
+            font-weight: 900; text-transform: uppercase; letter-spacing: 1px;
+        }
 
         /* ANIMATIONS */
         @keyframes sectionIn { from { opacity: 0; transform: translateY(40px) scale(0.95); filter: blur(10px); } to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
@@ -335,9 +360,9 @@
     <audio id="sfx-hover" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
 
     <div id="loader">
-        <div class="loader-logo">VRGamer262 and Z0cM</div>
+        <div class="loader-logo">LAUNCHPAD</div>
         <div class="load-bar"><div class="load-progress" id="load-p"></div></div>
-        <div style="font-size: 0.6rem; margin-top: 10px; opacity: 0.4; letter-spacing: 2px;">Loading...</div>
+        <div style="font-size: 0.6rem; margin-top: 10px; opacity: 0.4; letter-spacing: 2px;">SYSTEM INITIALIZING...</div>
     </div>
 
     <!-- COMMAND PALETTE -->
@@ -380,9 +405,8 @@
     </div>
     
     <div class="status-bar">
-        <div id="greeting">Welcome to awesomness!</div>
+        <div id="greeting">Welcome to Launchpad!</div>
         <div style="display:flex; gap:25px; align-items:center;">
-            <!-- AUTH COMPONENT -->
             <div id="auth-status" class="auth-badge" onclick="handleAuthClick()">
                 <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
                 <span id="auth-text">Sign in with GitHub</span>
@@ -421,14 +445,20 @@
         <ul class="grid" id="results-list"></ul>
     </section>
 
-    <!-- HOME -->
+    <!-- HOME (Decorated) -->
     <section id="home" class="active">
-        <h1 class="rainbow-text">Our Hub</h1>
+        <div class="hero-subtitle">WELCOME TO</div>
+        <h1 class="rainbow-text hero-title">LAUNCHPAD</h1>
+        <div class="home-accent-bar"></div>
         
         <div class="widget-row">
             <div class="widget neon-border">
                 <div class="widget-label">Daily Quote</div>
                 <div class="widget-val" id="quote-box" style="font-size: 0.9rem; font-weight: 500;">"Having fun all day lol"</div>
+            </div>
+            <div class="widget">
+                <div class="widget-label">Weather Mock</div>
+                <div class="widget-val" id="weather-val">72°F / Clear</div>
             </div>
             <div class="widget">
                 <div class="widget-label">Memory Usage</div>
@@ -438,12 +468,12 @@
                 <div class="widget-label">Session Time</div>
                 <div class="widget-val" id="session-timer">00:00</div>
             </div>
-            
         </div>
 
+        <h2 style="text-align: center; font-family: var(--title-font); font-size: 1.5rem; letter-spacing: 5px; opacity: 0.3; margin-top: 50px;">FEATURED CHANNELS</h2>
         <ul class="grid">
-            <li><a class="card" href="https://www.youtube.com/@zOcM" target="_blank"><span class="card-text">YouTube (zOcM)</span></a></li>
-            <li><a class="card" href="https://www.youtube.com/@VRGamer262" target="_blank"><span class="card-text">YouTube (VRGamer262)</span></a></li>
+            <li><a class="card" href="https://www.youtube.com/@zOcM" target="_blank"><span class="featured-badge">Creator</span><span class="card-text">YouTube (zOcM)</span></a></li>
+            <li><a class="card" href="https://www.youtube.com/@VRGamer262" target="_blank"><span class="featured-badge">Creator</span><span class="card-text">YouTube (VRGamer262)</span></a></li>
             <li><a class="card" href="https://github.com/VRGamer262Real" target="_blank"><span class="card-text">GitHub (VRGamer262)</span></a></li>
             <li><a class="card" href="https://github.com/zOcMYT/" target="_blank"><span class="card-text">GitHub (zOcM)</span></a></li>
         </ul>
@@ -451,7 +481,7 @@
 
     <!-- GAMES GRID -->
     <section id="games">
-        <h1>Games</h1>
+        <h1>Games Library</h1>
         <ul class="grid">
             <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/polytrack/', 'Polytrack')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSq4z0oIn1dnrq__vTuC1IthPoyEBUIpJx2tw&s"><span class="card-text">Polytrack</span></div></li>
             <li><div class="card" onclick="openGame('https://supaclicker.vrgamer262.workers.dev/', 'Supa Clicker')"><img src="https://raw.githubusercontent.com/VRGamer262Real/supaclicker.github.io/refs/heads/main/ButtonIcon.png"><span class="card-text">Supa Clicker</span></div></li>
@@ -469,7 +499,7 @@
             <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/slopegithub.io/', 'Slope')"><img src="https://slopeonlinegame.github.io/data/image/options/slope-game-unblocked-76-banner.jpg"><span class="card-text">Slope</span></div></li>
             <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/tube-jumpers/', 'Tube Jumpers')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrRUxFpC2DxuSdDpblsfSVLjduLqvzH5jVdg&s"><span class="card-text">Tube Jumpers</span></div></li>
             <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/pac-man-2/', 'PanMan 2')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNLZvtt71RKK-qtH3aOkGdy4mq2eF874psqQ&s"><span class="card-text">PacMan 2</span></div></li>
-            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/google-snake/', 'Snake')"><img src="https://imgs.search.brave.com/1IyfbUXm7HXvdd1aU3M7J0KZK1yG4bytZv-D19AL-lc/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/c3BlZWRydW4uY29t/L3N0YXRpYy9nYW1l/L28xeTlweWs2L2Nv/dmVyLnBuZz92PWY0/NTYyZmY"><span class="card-text">Snake</span></div></li>
+            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/google-snake/', 'Snake')"><img src="https://imgs.search.brave.com/1IyfbUXm7HXvdd1aU3M7J0KZK1yG4bytZv-D19AL-lc/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/c3BlZWRydW4u/Y29t/L3N0YXRpYy9nYW1l/L28xeTlweWs2L2Nv/dmVyLnBuZz92PWY0/NTYyZmY"><span class="card-text">Snake</span></div></li>
             <li><div class="card" onclick="openGame('https://cyberpunk-tank.vercel.app/', 'CyberPunk Tank')"><img src="https://imgs.search.brave.com/dUlfvnyVDET4V50tRhqCGarxvAXdcRUICLWP2HHVO1U/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly93d3cu/dHJ1ZWFjaGlldmVt/ZW50cy5jb20vZ2Ft/ZWltYWdlLzI2MDE2/NF8wLmpwZw"><span class="card-text">CyberPunk Tank</span></div></li>
             <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/ragdoll-hit/', 'Ragdoll Hit')"><img src="https://imgs.search.brave.com/jt0gBA2AiD_HUlzVd0pj5z4uY2yCsyQ2SHBK5OWSIbk/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9yYWdk/b2xsaGl0LWdhbWUu/aW8vZGF0YS9pbWFn/ZS9nYW1lL3JhZ2Rv/bGwtaGl0LW9ubGlu/ZS5wbmc"><span class="card-text">Ragdoll Hit</span></div></li>
             <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/territorial.io/', 'Territorial.io')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpaJ_2vBueQc_fMJhCXx3JFuBf-pALbA3m_A&s"><span class="card-text">Territorial.io</span></div></li>
@@ -494,7 +524,7 @@
 
     <!-- APPS -->
     <section id="apps">
-        <h1>Apps</h1>
+        <h1>Productivity Apps</h1>
         
         <div class="panel">
             <h3>Hub Task Manager</h3>
@@ -544,7 +574,7 @@
 
     <!-- MUSIC -->
     <section id="music">
-        <h1>Audio</h1>
+        <h1>Audio Systems</h1>
         <ul class="grid">
             <li><div class="card" onclick="pMusic('bg.mp3', 'Default Theme')"><span class="card-text">Default Theme</span></div></li>
             <li><div class="card" onclick="pMusic('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', 'Chill Vibes')"><span class="card-text">Chill Vibes</span></div></li>
@@ -556,7 +586,14 @@
 
     <!-- NEWS -->
     <section id="news">
-        <h1>Updates</h1>
+        <h1>Updates & Changelog</h1>
+        <div class="panel" style="text-align: left;">
+            <h2 style="color:var(--primary); margin-top:0;">V10.0 - The Launchpad Transformation</h2>
+            <p>• <strong>Site Rebranded</strong>: Welcome to Launchpad, the ultimate productivity hub.</p>
+            <p>• <strong>Decorated Home</strong>: New high-impact hero section and visual accents.</p>
+            <p>• <strong>Fixed Terminal</strong>: Added memory tracking and system identification commands.</p>
+            <p>• <strong>Weather Widget</strong>: Integrated a mock environment sensor for the home page.</p>
+        </div>
         <div class="panel" style="text-align: left;">
             <h2 style="color:var(--primary); margin-top:0;">V9.0 - The Terminal Expansion</h2>
             <p>• <strong>System Terminal</strong>: New interactive console for power users.</p>
@@ -564,17 +601,11 @@
             <p>• <strong>Morse & Currency Tools</strong>: Added deeper utility tools.</p>
             <p>• <strong>Matrix Mode</strong>: Added visual rain effects for a deeper vibe.</p>
         </div>
-        <div class="panel" style="text-align: left;">
-            <h2 style="color:var(--primary); margin-top:0;">V8.1 - The Identity Patch</h2>
-            <p>• <strong>GitHub Integration</strong>: Sign in to sync your tasks and notes across sessions.</p>
-            <p>• <strong>Enhanced Feedback</strong>: Improved reporting system with categorized issue tracking.</p>
-            <p>• <strong>User Profile</strong>: New dedicated section to manage your Hub account.</p>
-        </div>
     </section>
 
     <!-- TOOLS -->
     <section id="tools">
-        <h1>Tools</h1>
+        <h1>System Tools</h1>
         <ul class="grid">
             <li><a class="card" href="https://dc.vrgamer262.workers.dev/"><span class="card-text">Decode Counter</span></a></li>
             <li><div class="card" onclick="genPass()"><span class="card-text">Password Generator</span></div></li>
@@ -608,17 +639,17 @@
         </div>
     </section>
 
-    <!-- TERMINAL (NEW) -->
+    <!-- TERMINAL (UPDATED) -->
     <section id="terminal">
-        <h1>System Terminal</h1>
+        <h1>Launchpad Terminal</h1>
         <div class="panel">
             <div class="terminal-box" id="terminal-display">
-                <div class="terminal-line">Hub OS v9.0.0 Loading...</div>
-                <div class="terminal-line">Copyright (c) 2026 VRGamer262 & zOcM.</div>
+                <div class="terminal-line">Launchpad OS v10.0.0 Loading...</div>
+                <div class="terminal-line">Copyright (c) 2026 Launchpad Systems.</div>
                 <div class="terminal-line">Type 'help' for available commands.</div>
             </div>
             <div class="terminal-input-row" style="margin-top: 15px;">
-                <span style="color: var(--success); font-weight: 900;">guest@hub:~$</span>
+                <span style="color: var(--success); font-weight: 900;">guest@launchpad:~$</span>
                 <input type="text" id="term-input" autofocus onkeyup="handleTerminal(event)">
             </div>
         </div>
@@ -636,7 +667,7 @@
 
     <!-- DESIGN -->
     <section id="design">
-        <h1>The Lab</h1>
+        <h1>The Customizer</h1>
         <div class="panel">
             <h3>Effect Intensity</h3>
             <div class="fx-control">
@@ -673,7 +704,7 @@
             <div style="display:flex; gap:10px; justify-content:center; flex-wrap: wrap;">
                 <button class="btn" onclick="mask('My Drive - Google Drive', 'https://upload.wikimedia.org/wikipedia/commons/1/12/Google_Drive_icon_%282020%29.svg')">Mask: Drive</button>
                 <button class="btn" onclick="mask('Google Classroom', 'https://upload.wikimedia.org/wikipedia/commons/d/d5/Google_Classroom_icon.png')">Mask: Classroom</button>
-                <button class="btn" onclick="mask('ZOCMYT & VRGamer262 - Hub', 'https://raw.githubusercontent.com/VRGamer262Real/Hub/refs/heads/main/bg.jpg')">Reset Mask</button>
+                <button class="btn" onclick="mask('Launchpad - Hub', 'https://raw.githubusercontent.com/VRGamer262Real/Hub/refs/heads/main/bg.jpg')">Reset Mask</button>
             </div>
         </div>
 
@@ -760,26 +791,28 @@
 
     <!-- ABOUT -->
     <section id="about">
-        <h1>The Creators</h1>
+        <h1>The Visionaries</h1>
         <div style="display:flex; flex-direction:column; align-items:center; gap:30px;">
             <div class="panel">
-                <p>Me and zOcM created this website originally to add our games, like Supa Clicker and Tower Defense, but added even more features to make this website a fun and seamless experience for everyone!</p>
+                <p>Launchpad was founded by VRGamer262 and zOcM to create a unified ecosystem for games, tools, and creativity. We've built this to be fast, beautiful, and completely customizable.</p>
             </div>
             <div style="display:flex; gap:30px; flex-wrap:wrap; justify-content:center;">
                 <div style="text-align:center;">
                     <img src="https://raw.githubusercontent.com/VRGamer262Real/Hub/refs/heads/main/VRGamer262.jpg" style="width:260px; border-radius:40px; border:3px solid var(--primary); box-shadow: 0 0 30px var(--glow);">
                     <p style="font-weight:900; margin-top:15px;">VRGamer262</p>
+                    <p style="font-size: 0.6rem; opacity: 0.5;">FOUNDER / DEV</p>
                 </div>
                 <div style="text-align:center;">
                     <img src="https://raw.githubusercontent.com/VRGamer262Real/Hub/refs/heads/main/900-900.jpeg" style="width:260px; border-radius:40px; border:3px solid var(--primary); box-shadow: 0 0 30px var(--glow);">
                     <p style="font-weight:900; margin-top:15px;">zOcM</p>
+                    <p style="font-size: 0.6rem; opacity: 0.5;">FOUNDER / DEV</p>
                 </div>
             </div>
         </div>
     </section>
 
     <audio id="player" src="bg.mp3" loop></audio>
-    <div id="toast">Ready to play?</div>
+    <div id="toast">Ready to launch?</div>
 
     <script>
         // 1. ENGINE & MODES
@@ -796,7 +829,7 @@
         let currentUser = JSON.parse(localStorage.getItem('hubUser')) || null;
         let activeIssueType = 'Bug';
 
-        // --- NEW MATRIX RAIN LOGIC ---
+        // MATRIX RAIN LOGIC
         const mCanvas = document.getElementById('matrix-canvas');
         const mCtx = mCanvas.getContext('2d');
         let mLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$@#%";
@@ -835,10 +868,10 @@
             if(isMatrix) { initMatrix(); drawMatrix(); }
         }
 
-        // --- ANTI-CLOSE PROTECTION ---
+        // ANTI-CLOSE PROTECTION
         window.addEventListener('beforeunload', (e) => {
             e.preventDefault();
-            e.returnValue = 'Hub Protection: Unsaved progress may be lost. Are you sure?';
+            e.returnValue = 'Launchpad Protection: Unsaved progress may be lost. Are you sure?';
         });
 
         function updateFX(type, val) {
@@ -977,7 +1010,7 @@
             if(cmd === 'help') alert("Commands: goto [sec], theme [color], theme reset, toggle perf, toggle matrix, b64, panic, login");
         }
 
-        // --- NEW TERMINAL LOGIC ---
+        // TERMINAL LOGIC (Fixed & Improved)
         function handleTerminal(e) {
             if(e.key === 'Enter') {
                 const input = document.getElementById('term-input');
@@ -990,12 +1023,14 @@
                 display.appendChild(line);
 
                 let output = "";
-                if(val === 'help') output = "Available: clear, date, whoami, version, status, echo [text]";
+                if(val === 'help') output = "Available: clear, date, whoami, version, status, echo [text], system, neofetch";
                 else if(val === 'clear') { display.innerHTML = ""; output = "Terminal cleared."; }
                 else if(val === 'date') output = new Date().toString();
                 else if(val === 'whoami') output = currentUser ? currentUser.username : "guest_user_8492";
-                else if(val === 'version') output = "Hub Engine v9.0.0-pro-stable";
+                else if(val === 'version') output = "Launchpad Engine v10.0.0-pro-stable";
                 else if(val === 'status') output = "All systems operational. Particles: Stable. Glitch: Idle.";
+                else if(val === 'system') output = `Platform: ${navigator.platform} | RAM: ${performance.memory ? Math.round(performance.memory.usedJSHeapSize / 1048576) + "MB" : "N/A"}`;
+                else if(val === 'neofetch') output = "LAUNCHPAD OS | Build: 2026.01 | Kernel: JS-Engine-v8 | Shell: Custom-Terminal";
                 else if(val.startsWith('echo ')) output = input.value.substring(5);
                 else output = "Command not recognized. Type 'help'.";
 
@@ -1009,7 +1044,7 @@
             }
         }
 
-        // --- UPDATED GAME LOGIC ---
+        // GAME LOGIC
         function openGame(url, name) {
             const theater = document.getElementById('game-view');
             const frame = document.getElementById('game-frame');
@@ -1025,7 +1060,7 @@
             
             frame.onload = () => {
                 loader.style.display = 'none';
-                document.getElementById('game-status-text').innerText = "HUB ENGINE: STABLE (PROXY BYPASS ACTIVE)";
+                document.getElementById('game-status-text').innerText = "LAUNCHPAD ENGINE: STABLE (PROXY BYPASS ACTIVE)";
             };
 
             document.body.style.overflow = "hidden";
@@ -1046,7 +1081,6 @@
         }
 
         function openInNewTab() {
-            // This bypasses X-Frame-Options: Refused to connect issues
             window.open(currentGameUrl, '_blank');
         }
 
@@ -1073,7 +1107,7 @@
             document.querySelectorAll('section:not(#results) .card').forEach(i => {
                 if(i.innerText.toLowerCase().includes(q)) {
                     let li = i.parentElement.cloneNode(true);
-                    li.onclick = i.parentElement.onclick; // Preserve click
+                    li.onclick = i.parentElement.onclick;
                     res.appendChild(li);
                 }
             });
@@ -1081,7 +1115,7 @@
         }
 
         // 3. TASKS & TOOLS
-        let tasks = JSON.parse(localStorage.getItem('hubTasks')) || [{t: "Explore our new Hub", c: false}];
+        let tasks = JSON.parse(localStorage.getItem('hubTasks')) || [{t: "Explore Launchpad V10", c: false}];
         function addTask() {
             const input = document.getElementById('new-task-input');
             if(!input.value) return;
@@ -1151,7 +1185,7 @@
             document.getElementById('unit-result').innerText = isNaN(res) ? "0.00" : res.toFixed(2);
         }
 
-        // --- NEW MORSE LOGIC ---
+        // MORSE LOGIC
         function showMorse() { document.getElementById('morse-panel').style.display = 'block'; window.scrollTo(0, document.body.scrollHeight); }
         function translateMorse() {
             const charMap = {'a': '.-', 'b': '-...', 'c': '-.-.', 'd': '-..', 'e': '.', 'f': '..-.', 'g': '--.', 'h': '....', 'i': '..', 'j': '.---', 'k': '-.-', 'l': '.-..', 'm': '--', 'n': '-.', 'o': '---', 'p': '.--.', 'q': '--.-', 'r': '.-.', 's': '...', 't': '-', 'u': '..-', 'v': '...-', 'w': '.--', 'x': '-..-', 'y': '-.--', 'z': '--..', '1': '.----', '2': '..---', '3': '...--', '4': '....-', '5': '.....', '6': '-....', '7': '--...', '8': '---..', '9': '----.', '0': '-----', ' ': '/'};
@@ -1162,7 +1196,7 @@
 
         function downloadNotes() {
             const blob = new Blob([document.getElementById('note').value], {type: 'text/plain'});
-            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'hub-notes.txt'; a.click();
+            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'launchpad-notes.txt'; a.click();
         }
 
         function genPass() {
@@ -1171,7 +1205,7 @@
         }
 
         function copySystemInfo() {
-            const info = `Platform: ${navigator.platform} | Resolution: ${screen.width}x${screen.height} | Hub Version: 9.0`;
+            const info = `Platform: ${navigator.platform} | Resolution: ${screen.width}x${screen.height} | Launchpad Version: 10.0`;
             navigator.clipboard.writeText(info);
             document.getElementById('tool-out').innerText = "System info copied!";
         }
@@ -1198,7 +1232,7 @@
                     currentUser = {
                         username: userHandle,
                         avatar: `https://github.com/${userHandle}.png`,
-                        bio: "Hub Contributor and Gamer",
+                        bio: "Launchpad Contributor and Gamer",
                         loginDate: new Date().toLocaleDateString()
                     };
                     localStorage.setItem('hubUser', JSON.stringify(currentUser));
@@ -1222,7 +1256,7 @@
                 document.getElementById('user-bio').innerText = currentUser.bio;
                 profileOut.style.display = 'none';
                 profileIn.style.display = 'block';
-                document.getElementById('greeting').innerText = `Welcome back, ${currentUser.username}! Status: Synced`;
+                document.getElementById('greeting').innerText = `Welcome back, ${currentUser.username}!`;
             } else {
                 text.innerText = "Sign in with GitHub";
                 profileOut.style.display = 'block';
@@ -1253,7 +1287,7 @@
 
             status.innerText = "Formatting report...";
             
-            let fullBody = `**Issue Type:** ${activeIssueType}\n**Priority:** ${p}\n\n**Description:**\n${b}\n\n---\n*Reported via Hub Engine v8.1*`;
+            let fullBody = `**Issue Type:** ${activeIssueType}\n**Priority:** ${p}\n\n**Description:**\n${b}\n\n---\n*Reported via Launchpad Engine v10.0*`;
             if(currentUser) {
                 fullBody += `\n*User: @${currentUser.username}*`;
             }
@@ -1309,7 +1343,7 @@
 
         function updateGreeting() {
             const h = new Date().getHours();
-            let g = "Welcome back!";
+            let g = "Welcome to Launchpad!";
             if(h < 12) g = "Good morning, explorer.";
             else if(h < 18) g = "Good afternoon, developer.";
             else g = "Good evening, gamer.";
@@ -1343,13 +1377,13 @@
         document.getElementById('note').value = localStorage.getItem('hubNote') || "";
         document.addEventListener('keydown', (e) => {
             if(e.key === '`') window.location.href = "about:blank";
-            if(e.key === 'b' || e.key === 'B') panicMode(); // PANIC KEY
+            if(e.key === 'b' || e.key === 'B') panicMode();
             if(e.key === 'Escape') { closeGame(); document.getElementById('cmd-palette').classList.remove('active'); }
             if(e.ctrlKey && e.key === 'k') { e.preventDefault(); document.getElementById('cmd-palette').classList.add('active'); document.getElementById('cmd-input').focus(); }
             if(e.key === '/') { if(document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') { e.preventDefault(); document.getElementById('universalSearch').focus(); }}
         });
 
-        const quotes = ["Innovate or die.", "Coding the future.", "Pixels are power.", "Hub is home.", "Efficiency is key.", "Stay modular.", "Break the simulation."];
+        const quotes = ["Innovate or die.", "Coding the future.", "Pixels are power.", "Launchpad is home.", "Efficiency is key.", "Stay modular.", "Break the simulation."];
         document.getElementById('quote-box').innerText = `"${quotes[Math.floor(Math.random()*quotes.length)]}"`;
         
         // Final Init
