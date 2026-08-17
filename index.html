@@ -9,17 +9,21 @@
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Inter:wght@400;600;700;900&family=Fira+Code:wght@400;500&display=swap');
 
         :root {
+            /* Apple Liquid Glass core variables */
             --primary: #ffffff;
             --secondary: #8e8e93;
             --accent: #0a84ff;
             --success: #32d74b;
             --warning: #ffd60a;
+            
             --bg-glass: rgba(255, 255, 255, 0.08);
             --border: rgba(255, 255, 255, 0.2);
             --border-highlight: rgba(255, 255, 255, 0.4);
             --glow: rgba(255, 255, 255, 0.15);
+            
             --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             --title-font: 'Space Grotesk', -apple-system, sans-serif;
+            
             --blur-val: 35px;
             --glow-spread: 20px;
             --card-scale: 1.02;
@@ -27,54 +31,130 @@
             --github-color: #24292e;
             --user-card-bg: rgba(255, 255, 255, 0.1);
             --terminal-bg: rgba(0, 0, 0, 0.3);
+            
+            /* Shadows for 3D depth */
             --panel-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
             --inner-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.4);
         }
 
+        /* 1. RESET & CORE */
         * { cursor: none !important; box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
         
-        body { background: #000; color: #fff; font-family: var(--font); margin: 0; overflow-x: hidden; min-height: 100vh; scroll-behavior: smooth; }
+        body {
+            background: #000;
+            color: #fff; 
+            font-family: var(--font);
+            margin: 0; 
+            overflow-x: hidden; 
+            min-height: 100vh; 
+            scroll-behavior: smooth;
+        }
 
-        #bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background: linear-gradient(45deg, #0f0c29, #302b63, #24243e, #0a84ff, #8e2de2); background-size: 400% 400%; animation: gradientShift 20s ease infinite; transition: transform 0.2s ease-out; }
-        @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        /* Vibrant animated mesh gradient for glass to blur */
+        #bg-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
+            background: linear-gradient(45deg, #0f0c29, #302b63, #24243e, #0a84ff, #8e2de2);
+            background-size: 400% 400%;
+            animation: gradientShift 20s ease infinite;
+            transition: transform 0.2s ease-out;
+        }
+        @keyframes gradientShift { 
+            0% { background-position: 0% 50%; } 
+            50% { background-position: 100% 50%; } 
+            100% { background-position: 0% 50%; } 
+        }
 
-        #particle-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.8; pointer-events: none; }
+        #particle-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            opacity: 0.8; pointer-events: none;
+        }
 
-        #scanlines { position: fixed; inset: 0; pointer-events: none; z-index: 9998; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03)); background-size: 100% 4px, 3px 100%; display: none; }
+        /* SCANLINE & OVERLAYS */
+        #scanlines {
+            position: fixed; inset: 0; pointer-events: none; z-index: 9998;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background-size: 100% 4px, 3px 100%; display: none;
+        }
 
-        #glitch-overlay { position: fixed; inset: 0; pointer-events: none; z-index: 9997; background: url('https://media.giphy.com/media/oEI9uWUic9VKM/giphy.gif'); opacity: var(--glitch-opacity); mix-blend-mode: overlay; }
+        #glitch-overlay {
+            position: fixed; inset: 0; pointer-events: none; z-index: 9997;
+            background: url('https://media.giphy.com/media/oEI9uWUic9VKM/giphy.gif');
+            opacity: var(--glitch-opacity); mix-blend-mode: overlay;
+        }
 
-        #matrix-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0; pointer-events: none; transition: opacity 1s; }
+        #matrix-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            opacity: 0; pointer-events: none; transition: opacity 1s;
+        }
 
-        #cursor { width: 8px; height: 8px; background: #fff; border-radius: 50%; position: fixed; pointer-events: none; z-index: 10000; transition: transform 0.1s ease, background 0.3s; box-shadow: 0 0 10px #fff; }
+        #cursor {
+            width: 8px; height: 8px; background: #fff;
+            border-radius: 50%; position: fixed; pointer-events: none;
+            z-index: 10000; transition: transform 0.1s ease, background 0.3s;
+            box-shadow: 0 0 10px #fff;
+        }
 
-        #cursor-follower { width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.5); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transition: transform 0.15s cubic-bezier(0.23, 1, 0.32, 1); opacity: 0.6; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%); }
+        #cursor-follower {
+            width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.5);
+            border-radius: 50%; position: fixed; pointer-events: none;
+            z-index: 9999; transition: transform 0.15s cubic-bezier(0.23, 1, 0.32, 1);
+            opacity: 0.6; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        }
 
         .cursor-hover #cursor { transform: scale(5); background: transparent; border: 0.5px solid #fff; mix-blend-mode: difference; }
 
+        /* PERFORMANCE MODE OVERRIDES */
         .perf-mode * { backdrop-filter: none !important; animation: none !important; transition: none !important; box-shadow: none !important; cursor: auto !important; }
         .perf-mode section.active, .perf-mode .grid li { opacity: 1 !important; transform: none !important; }
         .perf-mode #particle-canvas, .perf-mode #cursor, .perf-mode #cursor-follower, .perf-mode #scanlines, .perf-mode #glitch-overlay { display: none !important; }
         .perf-mode .card, .perf-mode .panel, .perf-mode .nav { background: #111 !important; border: 1px solid #333 !important; }
 
-        #loader { position: fixed; inset: 0; background: #000; z-index: 20000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 1s cubic-bezier(0.8, 0, 0.2, 1); }
+        /* 2. LOADING SCREEN */
+        #loader {
+            position: fixed; inset: 0; background: #000; z-index: 20000;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: 1s cubic-bezier(0.8, 0, 0.2, 1);
+        }
         .loader-logo { font-family: var(--title-font); font-size: 3rem; font-weight: 700; letter-spacing: -2px; margin-bottom: 20px; text-shadow: 0 0 30px var(--glow); animation: pulse 2s infinite; }
         .load-bar { width: 250px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; }
         .load-progress { width: 0%; height: 100%; background: #fff; transition: 0.4s; box-shadow: 0 0 10px #fff; }
 
-        .status-bar, .nav, .card, .panel, .widget, .game-bar, #cmd-palette { background: var(--bg-glass); backdrop-filter: blur(var(--blur-val)) saturate(150%); -webkit-backdrop-filter: blur(var(--blur-val)) saturate(150%); border: 1px solid var(--border); box-shadow: var(--panel-shadow), var(--inner-shadow); }
+        /* GLASSMORPHISM CORE COMPONENTS */
+        .status-bar, .nav, .card, .panel, .widget, .game-bar, #cmd-palette {
+            background: var(--bg-glass);
+            backdrop-filter: blur(var(--blur-val)) saturate(150%);
+            -webkit-backdrop-filter: blur(var(--blur-val)) saturate(150%);
+            border: 1px solid var(--border);
+            box-shadow: var(--panel-shadow), var(--inner-shadow);
+        }
 
-        .status-bar { display: flex; justify-content: space-between; padding: 15px 40px; font-size: 0.8rem; font-weight: 600; color: #fff; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); z-index: 1001; position: sticky; top: 0; border-radius: 0 0 20px 20px; }
+        /* 3. STATUS BAR */
+        .status-bar {
+            display: flex; justify-content: space-between; padding: 15px 40px;
+            font-size: 0.8rem; font-weight: 600; color: #fff;
+            letter-spacing: 0.5px; border-bottom: 1px solid var(--border); z-index: 1001;
+            position: sticky; top: 0; border-radius: 0 0 20px 20px;
+        }
 
+        /* 4. SEARCH & NAV */
         .search-area { max-width: 700px; margin: 40px auto; padding: 0 20px; position: relative; }
-        .search-area input { width: 100%; padding: 22px 35px; border-radius: 100px; background: rgba(0,0,0,0.2); border: 1px solid var(--border); color: white; font-size: 1.1rem; transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); backdrop-filter: blur(20px); box-shadow: inset 0 2px 10px rgba(0,0,0,0.3); }
+        .search-area input {
+            width: 100%; padding: 22px 35px; border-radius: 100px;
+            background: rgba(0,0,0,0.2); border: 1px solid var(--border);
+            color: white; font-size: 1.1rem; transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(20px); box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+        }
         .search-area input:focus { border-color: var(--border-highlight); box-shadow: 0 0 30px rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); transform: scale(1.02); }
 
         .nav-wrapper { position: sticky; top: 80px; z-index: 1000; display: flex; justify-content: center; padding: 0 20px; }
         .nav { list-style: none; margin: 0; padding: 8px; display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; border-radius: 100px; }
-        .nav li a { color: rgba(255,255,255,0.7); text-decoration: none; padding: 12px 22px; font-weight: 600; font-size: 0.8rem; transition: all 0.3s ease; border-radius: 100px; display: inline-block; }
+        .nav li a {
+            color: rgba(255,255,255,0.7); text-decoration: none; padding: 12px 22px; font-weight: 600; font-size: 0.8rem;
+            transition: all 0.3s ease; border-radius: 100px; display: inline-block;
+        }
         .nav li a:hover, .nav li a.active { color: #000; background: #fff; box-shadow: 0 0 20px rgba(255,255,255,0.4); transform: translateY(-2px); }
 
+        /* 5. SECTIONS & GRID */
         section { display: none; opacity: 0; padding: 60px 20px 150px; min-height: 80vh; }
         section.active { display: block; animation: sectionIn 0.8s forwards cubic-bezier(0.2, 0.8, 0.2, 1); }
 
@@ -84,11 +164,16 @@
         .grid li { opacity: 0; transform: translateY(30px); }
         section.active li { animation: itemUp 0.6s forwards; }
 
-        .card { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: white; padding: 25px; border-radius: 28px; transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1); height: 100%; text-align: center; position: relative; overflow: hidden; }
+        .card {
+            display: flex; flex-direction: column; align-items: center; text-decoration: none;
+            color: white; padding: 25px; border-radius: 28px;
+            transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1); height: 100%; text-align: center; position: relative; overflow: hidden;
+        }
         .card:hover { transform: translateY(-8px) scale(var(--card-scale)); border-color: var(--border-highlight); box-shadow: 0 20px 40px rgba(0,0,0,0.5), var(--inner-shadow); background: rgba(255,255,255,0.15); z-index: 2; }
         .card img { width: 100%; height: 150px; object-fit: cover; border-radius: 20px; margin-bottom: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
         .card-text { font-weight: 600; font-size: 1.05rem; letter-spacing: 0.2px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
 
+        /* THEATER MODE */
         #game-view { position: fixed; inset: 0; z-index: 5000; background: rgba(0,0,0,0.8); backdrop-filter: blur(30px); display: none; flex-direction: column; opacity: 0; transition: 0.5s; }
         #game-view.active { display: flex; opacity: 1; }
         #game-frame { border: none; width: 100%; height: 100%; flex-grow: 1; transition: 0.3s ease; }
@@ -99,6 +184,7 @@
         .spinner { width: 50px; height: 50px; border: 3px solid rgba(255,255,255,0.1); border-top-color: #fff; border-radius: 50%; animation: spin 1s infinite linear; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
+        /* 6. PANELS */
         .panel { max-width: 850px; margin: 30px auto; padding: 50px; border-radius: 35px; text-align: center; position: relative; transition: 0.3s; }
         .panel:hover { border-color: var(--border-highlight); background: rgba(255,255,255,0.12); }
         .panel h3 { margin-top: 0; font-family: var(--title-font); font-size: 1.8rem; color: #fff; }
@@ -106,7 +192,12 @@
         input, textarea, select { width: 100%; padding: 18px 24px; border-radius: 18px; background: rgba(0,0,0,0.2); border: 1px solid var(--border); color: white; margin-bottom: 20px; font-family: var(--font); font-size: 1rem; transition: 0.3s; box-shadow: inset 0 2px 6px rgba(0,0,0,0.2); }
         input:focus, textarea:focus { background: rgba(0,0,0,0.4); border-color: var(--border-highlight); box-shadow: inset 0 2px 10px rgba(0,0,0,0.4), 0 0 15px rgba(255,255,255,0.1); }
         
-        .btn, .game-btn { background: rgba(255,255,255,0.15); border: 1px solid var(--border); color: #fff; padding: 16px 32px; border-radius: 100px; font-weight: 600; font-family: var(--font); transition: 0.3s cubic-bezier(0.25, 1, 0.5, 1); cursor: pointer; backdrop-filter: blur(10px); box-shadow: var(--inner-shadow); }
+        .btn, .game-btn { 
+            background: rgba(255,255,255,0.15); border: 1px solid var(--border); color: #fff; 
+            padding: 16px 32px; border-radius: 100px; font-weight: 600; font-family: var(--font);
+            transition: 0.3s cubic-bezier(0.25, 1, 0.5, 1); cursor: pointer; backdrop-filter: blur(10px);
+            box-shadow: var(--inner-shadow);
+        }
         .btn:hover, .game-btn:hover { background: rgba(255,255,255,0.25); border-color: #fff; transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.2), var(--inner-shadow); }
         .btn:active, .game-btn:active { transform: scale(0.97); }
         .game-btn { padding: 10px 20px; font-size: 0.8rem; }
@@ -116,30 +207,44 @@
         #calc button:hover { background: rgba(255,255,255,0.2); border-color: #fff; transform: translateY(-2px); }
         #calc button:active { transform: scale(0.9); background: #fff; color: black; }
 
+        /* WIDGETS */
         .widget-row { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px; }
         .widget { padding: 20px 30px; border-radius: 24px; min-width: 200px; transition: 0.3s; position: relative; }
         .widget:hover { transform: translateY(-5px); border-color: var(--border-highlight); box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
         .widget-val { font-size: 1.5rem; font-weight: 700; color: #fff; }
         .widget-label { font-size: 0.75rem; text-transform: uppercase; opacity: 0.7; letter-spacing: 1px; margin-bottom: 5px; }
 
+        /* TASK LIST */
         .task-item { display: flex; align-items: center; gap: 15px; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 15px; margin-bottom: 10px; transition: 0.3s; text-align: left; border: 1px solid transparent; }
         .task-item:hover { background: rgba(0,0,0,0.3); border-color: var(--border-highlight); }
         .task-item input[type="checkbox"] { width: 20px; height: 20px; margin: 0; cursor: pointer; accent-color: var(--accent); }
 
+        /* FX SLIDERS */
         .fx-control { display: flex; align-items: center; gap: 20px; margin-bottom: 20px; background: rgba(0,0,0,0.15); padding: 15px 25px; border-radius: 20px; transition: 0.3s; border: 1px solid transparent; }
         .fx-control:hover { background: rgba(0,0,0,0.25); border-color: var(--border); }
         .fx-control label { min-width: 140px; font-weight: 600; font-size: 0.9rem; color: #fff; }
         input[type="range"] { margin: 0; padding: 0; height: 6px; background: rgba(255,255,255,0.2); accent-color: #fff; border-radius: 10px; }
 
-        #cmd-palette { position: fixed; top: 20%; left: 50%; transform: translateX(-50%) scale(0.9); width: 500px; border-radius: 28px; z-index: 10005; display: none; flex-direction: column; padding: 25px; }
+        /* COMMAND PALETTE */
+        #cmd-palette {
+            position: fixed; top: 20%; left: 50%; transform: translateX(-50%) scale(0.9);
+            width: 500px; border-radius: 28px; z-index: 10005; display: none; flex-direction: column; padding: 25px;
+        }
         #cmd-palette.active { display: flex; animation: sectionIn 0.3s forwards; }
         #cmd-palette input { margin-bottom: 15px; }
         .cmd-results { max-height: 300px; overflow-y: auto; text-align: left; }
         .cmd-item { padding: 12px 20px; border-radius: 12px; cursor: pointer; transition: 0.2s; font-size: 0.95rem; font-weight: 500; }
         .cmd-item:hover { background: rgba(255,255,255,0.2); color: #fff; }
 
-        #toast { position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%); background: rgba(255,255,255,0.2); backdrop-filter: blur(25px) saturate(150%); border: 1px solid var(--border); color: #fff; padding: 18px 50px; border-radius: 100px; font-weight: 600; z-index: 10001; transition: 0.8s cubic-bezier(0.2, 1, 0.2, 1); box-shadow: var(--panel-shadow), var(--inner-shadow); }
+        /* TOAST */
+        #toast {
+            position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
+            background: rgba(255,255,255,0.2); backdrop-filter: blur(25px) saturate(150%); border: 1px solid var(--border);
+            color: #fff; padding: 18px 50px; border-radius: 100px; font-weight: 600; z-index: 10001; 
+            transition: 0.8s cubic-bezier(0.2, 1, 0.2, 1); box-shadow: var(--panel-shadow), var(--inner-shadow);
+        }
 
+        /* AUTH UI */
         .auth-badge { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.15); padding: 8px 20px; border-radius: 50px; border: 1px solid var(--border); transition: 0.3s; cursor: pointer; box-shadow: var(--inner-shadow); }
         .auth-badge:hover { background: rgba(255,255,255,0.25); border-color: #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.2), var(--inner-shadow); }
         .auth-badge img { width: 24px; height: 24px; border-radius: 50%; }
@@ -152,13 +257,24 @@
         .feedback-chip:hover { background: rgba(255,255,255,0.1); }
         .feedback-chip.selected { border-color: #fff; background: rgba(255,255,255,0.2); color: #fff; }
 
-        .terminal-box { background: var(--terminal-bg); color: #fff; font-family: 'Fira Code', monospace; padding: 25px; border-radius: 20px; border: 1px solid var(--border); text-align: left; max-height: 400px; overflow-y: auto; font-size: 0.9rem; box-shadow: inset 0 5px 15px rgba(0,0,0,0.4); }
+        /* EXTENDED STYLES */
+        .terminal-box {
+            background: var(--terminal-bg); color: #fff; font-family: 'Fira Code', monospace;
+            padding: 25px; border-radius: 20px; border: 1px solid var(--border);
+            text-align: left; max-height: 400px; overflow-y: auto; font-size: 0.9rem;
+            box-shadow: inset 0 5px 15px rgba(0,0,0,0.4);
+        }
         .terminal-line { margin-bottom: 8px; word-wrap: break-word; }
         .terminal-input-row { display: flex; gap: 10px; align-items: center; }
         .terminal-input-row input { background: transparent !important; border: none !important; padding: 0 !important; margin: 0 !important; color: white !important; width: 100% !important; box-shadow: none !important;}
         .terminal-input-row input:focus { background: transparent !important; border: none !important; box-shadow: none !important; transform: none !important;}
 
-        .floating-action { position: fixed; bottom: 30px; right: 30px; z-index: 1000; width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; border: 1px solid var(--border); font-size: 1.5rem; backdrop-filter: blur(20px); box-shadow: var(--panel-shadow), var(--inner-shadow); transition: 0.3s; }
+        .floating-action {
+            position: fixed; bottom: 30px; right: 30px; z-index: 1000;
+            width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; color: #fff; border: 1px solid var(--border);
+            font-size: 1.5rem; backdrop-filter: blur(20px); box-shadow: var(--panel-shadow), var(--inner-shadow); transition: 0.3s;
+        }
         .floating-action:hover { transform: scale(1.1) rotate(90deg); background: rgba(255,255,255,0.3); border-color: #fff; }
 
         .hero-title { font-size: 8rem !important; line-height: 1; margin: 20px 0 !important; position: relative; z-index: 1; }
@@ -166,6 +282,7 @@
         .home-accent-bar { width: 100px; height: 4px; background: #fff; margin: 0 auto 50px; border-radius: 10px; box-shadow: 0 0 15px rgba(255,255,255,0.5); }
         .featured-badge { position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); color: white; padding: 6px 12px; border-radius: 10px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; z-index: 3; border: 1px solid var(--border); }
 
+        /* Iridescent text for VisionOS style */
         .rainbow-text { background: linear-gradient(135deg, #fff 0%, #e0e0e0 40%, rgba(255,255,255,0.5) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3)); }
 
         @keyframes sectionIn { from { opacity: 0; transform: translateY(40px) scale(0.97); filter: blur(10px); } to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
@@ -178,15 +295,6 @@
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 10px; border: 2px solid #000; }
         ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.5); }
-
-        @media (max-width: 768px) {
-            h1 { font-size: 2.5rem; }
-            .hero-title { font-size: 3rem !important; }
-            .grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; }
-            .panel { padding: 30px 20px; }
-            .status-bar { flex-direction: column; gap: 10px; padding: 15px; }
-            .nav { flex-direction: column; gap: 10px; }
-        }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -313,6 +421,7 @@
         </ul>
     </section>
 
+    <!-- KEEPING ALL GAME & APP SECTIONS EXACTLY AS PROVIDED -->
     <section id="games">
         <h1>Games Library</h1>
         <ul class="grid">
@@ -332,13 +441,13 @@
             <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/slopegithub.io/', 'Slope')"><img src="https://slopeonlinegame.github.io/data/image/options/slope-game-unblocked-76-banner.jpg"><span class="card-text">Slope</span></div></li>
             <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/tube-jumpers/', 'Tube Jumpers')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrRUxFpC2DxuSdDpblsfSVLjduLqvzH5jVdg&s"><span class="card-text">Tube Jumpers</span></div></li>
             <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/pac-man-2/', 'PanMan 2')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNLZvtt71RKK-qtH3aOkGdy4mq2eF874psqQ&s"><span class="card-text">PacMan 2</span></div></li>
-            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/google-snake/', 'Snake')"><img src="https://imgs.search.brave.com/1IyfbUXm7HXvdd1aU3M7J0KZK1yG4bytZv-D19AL-lc/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/c3BlZWRydW4u/Y29tL3N0YXRpYy9n/YW1lL28xeTlweWs2/L2NvdmVyLnBuZz92/PWY0NTYyZmY"><span class="card-text">Snake</span></div></li>
-            <li><div class="card" onclick="openGame('https://cyberpunk-tank.vercel.app/', 'CyberPunk Tank')"><img src="https://imgs.search.brave.com/dUlfvnyVDET4V50tRhqCGarxvAXdcRUICLWP2HHVO1U/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly93d3cu/dHJ1ZWFjaGlldmVt/ZW50cy5jb20vZ2Ft/ZWltYWdlLzI2MDE2/NF8wLmpwZz"><span class="card-text">CyberPunk Tank</span></div></li>
+            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/google-snake/', 'Snake')"><img src="https://imgs.search.brave.com/1IyfbUXm7HXvdd1aU3M7J0KZK1yG4bytZv-D19AL-lc/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/c3BlZWRydW4u/Y29t/L3N0YXRpYy9nYW1l/L28xeTlweWs2L2Nv/dmVyLnBuZz92PWY0/NTYyZmY"><span class="card-text">Snake</span></div></li>
+            <li><div class="card" onclick="openGame('https://cyberpunk-tank.vercel.app/', 'CyberPunk Tank')"><img src="https://imgs.search.brave.com/dUlfvnyVDET4V50tRhqCGarxvAXdcRUICLWP2HHVO1U/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly93d3cu/dHJ1ZWFjaGlldmVt/ZW50cy5jb20vZ2Ft/ZWltYWdlLzI2MDE2/NF8wLmpwZw"><span class="card-text">CyberPunk Tank</span></div></li>
             <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/ragdoll-hit/', 'Ragdoll Hit')"><img src="https://imgs.search.brave.com/jt0gBA2AiD_HUlzVd0pj5z4uY2yCsyQ2SHBK5OWSIbk/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9yYWdk/b2xsaGl0LWdhbWUu/aW8vZGF0YS9pbWFn/ZS9nYW1lL3JhZ2Rv/bGwtaGl0LW9ubGlu/ZS5wbmc"><span class="card-text">Ragdoll Hit</span></div></li>
             <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/territorial.io/', 'Territorial.io')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpaJ_2vBueQc_fMJhCXx3JFuBf-pALbA3m_A&s"><span class="card-text">Territorial.io</span></div></li>
             <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/FNAF2/', 'FNAF 2')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQENAseWNj0BP2F45sfFwyz1DsfAUbf4U7YNg&s"><span class="card-text">FNAF 2</span></div></li>
             <li><div class="card" onclick="openGame('https://zj05409.github.io/2048/', '2048')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpL4kc3V_JiaWLsBHCzjpdN2ynBPikWajeHA&s"><span class="card-text">2048</span></div></li>
-            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/wordle/', 'Wordle')"><img src="https://imgs.search.brave.com/xx3Ekde3r8AC54sK3pKVFK04s-9bLOQMI_NXrcroNOQ/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy90/aHVtYi84LzhlL1dv/cmRsZV9Mb2NrdXAu/c3ZnLzI1MHB4LVdv/cmRsZV9Mb2NrdXAu/c3ZnLnBuZz"><span class="card-text">Wordle</span></div></li>
+            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/wordle/', 'Wordle')"><img src="https://imgs.search.brave.com/xx3Ekde3r8AC54sK3pKVFK04s-9bLOQMI_NXrcroNOQ/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy90/aHVtYi84LzhlL1dv/cmRsZV9Mb2NrdXAu/c3ZnLzI1MHB4LVdv/cmRsZV9Mb2NrdXAu/c3ZnLnBuZw"><span class="card-text">Wordle</span></div></li>
             <li><div class="card" onclick="openGame('https://freak-games-studio.github.io/talking-ben/', 'Talking Ben')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXloBJC5TzcQY2NevbZMOPYrFPx9xCv7EEng&s"><span class="card-text">Talking Ben</span></div></li>
             <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/rb2/', 'Retro Bowl 2')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQngUW5djcn25H2roJW8IbGgsQ7qYHmmUOVug&s"><span class="card-text">Retro Bowl 2</span></div></li>
             <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/FnF-Psych-Engine-0.5.1-HTML/', 'Friday Night Funkin')"><img src="https://upload.wikimedia.org/wikipedia/en/thumb/d/d2/Friday_Night_Funkin%27_logo.svg/250px-Friday_Night_Funkin%27_logo.svg.png"><span class="card-text">Friday Night Funkin</span></div></li>
@@ -435,7 +544,7 @@
         <h1>Updates & Changelog</h1>
         <div class="panel" style="text-align: left;">
             <h2 style="margin-top:0;">V11.0 - The Glass Transformation</h2>
-            <p>• <strong>Visual Overhaul</strong>: Replaced the dark cyberpunk aesthetic with a sleek, visionOS inspired Liquid Glass interface.</p>
+            <p>• <strong>Visual Overhaul</strong>: Replaced the dark cyberpunk aesthetic with a sleek, visionOS-inspired Liquid Glass interface.</p>
             <p>• <strong>Optimized Rendering</strong>: Particle system updated to use soft ambient orbs to maintain high FPS behind heavy glass blurs.</p>
             <p>• <strong>New Effects</strong>: Vibrant mesh background gradients added.</p>
         </div>
@@ -641,142 +750,580 @@
     <div id="toast">Ready to launch?</div>
 
     <script>
-        const canvas = document.getElementById('particle-canvas'), ctx = canvas.getContext('2d');
-        let particles = [], isPerfMode = localStorage.getItem('hubPerfMode') === 'true', isGlitch = false, currentGameUrl = "";
+        // 1. ENGINE & MODES
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let isPerfMode = localStorage.getItem('hubPerfMode') === 'true';
+        let isGlitch = false;
+        let currentGameUrl = "";
+        
         let fxConfig = { count: 25, speed: 0.5, blur: 35 };
+
+        // AUTH & STATUS STATE
         let currentUser = JSON.parse(localStorage.getItem('hubUser')) || null;
         let activeIssueType = 'Bug';
+
+        // MATRIX RAIN LOGIC
+        const mCanvas = document.getElementById('matrix-canvas');
+        const mCtx = mCanvas.getContext('2d');
+        let mLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$@#%";
+        mLetters = mLetters.split("");
+        let mFontSize = 14;
+        let mColumns;
+        let mDrops = [];
+        let isMatrix = false;
+
+        function initMatrix() {
+            mCanvas.width = window.innerWidth;
+            mCanvas.height = window.innerHeight;
+            mColumns = mCanvas.width / mFontSize;
+            mDrops = [];
+            for (let i = 0; i < mColumns; i++) mDrops[i] = 1;
+        }
+
+        function drawMatrix() {
+            if(!isMatrix) return;
+            mCtx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            mCtx.fillRect(0, 0, mCanvas.width, mCanvas.height);
+            mCtx.fillStyle = "#fff"; // Changed to white for glass look
+            mCtx.font = mFontSize + "px Fira Code";
+            for (let i = 0; i < mDrops.length; i++) {
+                let text = mLetters[Math.floor(Math.random() * mLetters.length)];
+                mCtx.fillText(text, i * mFontSize, mDrops[i] * mFontSize);
+                if (mDrops[i] * mFontSize > mCanvas.height && Math.random() > 0.975) mDrops[i] = 0;
+                mDrops[i]++;
+            }
+            requestAnimationFrame(drawMatrix);
+        }
+
+        function toggleMatrix() {
+            isMatrix = !isMatrix;
+            mCanvas.style.opacity = isMatrix ? "1" : "0";
+            if(isMatrix) { initMatrix(); drawMatrix(); }
+        }
+
+        window.addEventListener('beforeunload', (e) => {
+            e.preventDefault();
+            e.returnValue = 'Launchpad Protection: Unsaved progress may be lost. Are you sure?';
+        });
+
+        function updateFX(type, val) {
+            if(type === 'count') { fxConfig.count = parseInt(val); initParticles(); }
+            if(type === 'speed') fxConfig.speed = val / 20;
+            if(type === 'blur') document.documentElement.style.setProperty('--blur-val', val + 'px');
+        }
+
+        function toggleScanlines() {
+            const s = document.getElementById('scanlines');
+            s.style.display = s.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function toggleGlitch() {
+            isGlitch = !isGlitch;
+            document.documentElement.style.setProperty('--glitch-opacity', isGlitch ? '0.15' : '0');
+        }
+
+        function togglePerfMode() {
+            isPerfMode = !isPerfMode;
+            document.body.classList.toggle('perf-mode', isPerfMode);
+            localStorage.setItem('hubPerfMode', isPerfMode);
+            document.getElementById('perf-toggle-btn').innerText = isPerfMode ? "Performance: ON" : "Performance: OFF";
+            if(isPerfMode) ctx.clearRect(0,0,canvas.width, canvas.height);
+            else { initParticles(); drawParticles(); }
+        }
+
+        if(isPerfMode) {
+            document.body.classList.add('perf-mode');
+            document.getElementById('perf-toggle-btn').innerText = "Performance: ON";
+        }
         
-        const mCanvas = document.getElementById('matrix-canvas'), mCtx = mCanvas.getContext('2d');
-        let mLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$@#%".split(""), mFontSize = 14, mColumns, mDrops = [], isMatrix = false;
-        
-        function initMatrix() { mCanvas.width = window.innerWidth; mCanvas.height = window.innerHeight; mColumns = mCanvas.width / mFontSize; mDrops = []; for (let i = 0; i < mColumns; i++) mDrops[i] = 1; }
-        
-        function drawMatrix() { if(!isMatrix) return; mCtx.fillStyle = "rgba(0, 0, 0, 0.05)"; mCtx.fillRect(0, 0, mCanvas.width, mCanvas.height); mCtx.fillStyle = "#fff"; mCtx.font = mFontSize + "px Fira Code"; for (let i = 0; i < mDrops.length; i<u>) { let text = mLetters[Math.floor(Math.random() * mLetters.length)]; mCtx.fillText(text, i * mFontSize, mDrops[i] * mFontSize); if (mDrops[i] * mFontSize > mCanvas.height && Math.random() > 0.975) mDrops[i] = 0; mDrops[i]</u>; } requestAnimationFrame(drawMatrix); }
-        
-        function toggleMatrix() { isMatrix = !isMatrix; mCanvas.style.opacity = isMatrix ? "1" : "0"; if(isMatrix) { initMatrix(); drawMatrix(); } }
-        
-        window.addEventListener('beforeunload', (e) => { e.preventDefault(); e.returnValue = 'Launchpad Protection: Unsaved progress may be lost. Are you sure?'; });
-        
-        function updateFX(type, val) { if(type <mark>= 'count') { fxConfig.count = parseInt(val); initParticles(); } if(type </mark>= 'speed') fxConfig.speed = val / 20; if(type === 'blur') document.documentElement.style.setProperty('--blur-val', val + 'px'); }
-        
-        function toggleScanlines() { const s = document.getElementById('scanlines'); s.style.display = s.style.display === 'block' ? 'none' : 'block'; }
-        
-        function toggleGlitch() { isGlitch = !isGlitch; document.documentElement.style.setProperty('--glitch-opacity', isGlitch ? '0.15' : '0'); }
-        
-        function togglePerfMode() { isPerfMode = !isPerfMode; document.body.classList.toggle('perf-mode', isPerfMode); localStorage.setItem('hubPerfMode', isPerfMode); document.getElementById('perf-toggle-btn').innerText = isPerfMode ? "Performance: ON" : "Performance: OFF"; if(isPerfMode) ctx.clearRect(0,0,canvas.width, canvas.height); else { initParticles(); drawParticles(); } }
-        
-        if(isPerfMode) { document.body.classList.add('perf-mode'); document.getElementById('perf-toggle-btn').innerText = "Performance: ON"; }
-        
-        function initParticles() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; particles = []; for(let i=0; i < fxConfig.count; i++) { particles.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, vx: (Math.random() - 0.5) * fxConfig.speed, vy: (Math.random() - 0.5) * fxConfig.speed, size: Math.random() * 150 + 50, color: `hsla(${Math.random()*360}, 80%, 70%, 0.3)` }); } }
-        
-        function drawParticles() { if(isPerfMode) return; ctx.clearRect(0,0,canvas.width, canvas.height); particles.forEach((p) => { p.x += p.vx * fxConfig.speed * 2; p.y += p.vy * fxConfig.speed * 2; if(p.x < -p.size) p.x = canvas.width + p.size; if(p.x > canvas.width + p.size) p.x = -p.size; if(p.y < -p.size) p.y = canvas.height + p.size; if(p.y > canvas.height + p.size) p.y = -p.size; const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size); grad.addColorStop(0, p.color); grad.addColorStop(1, 'transparent'); ctx.fillStyle = grad; ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fill(); }); requestAnimationFrame(drawParticles); }
-        
-        window.onload = () => { initParticles(); drawParticles(); renderTasks(); syncAuthUI(); updateGreeting(); let p = 0; const int = setInterval(() => { p += Math.random() * 40; document.getElementById('load-p').style.width = Math.min(p, 100) + "%"; if(p >= 100) { clearInterval(int); document.getElementById('loader').style.transform = "translateY(-100%)"; } }, 100); };
-        
-        function showSec(id) { playSfx('click'); document.querySelectorAll('section').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active')); const n = document.getElementById('nav-'+id); if(n) n.classList.add('active'); document.querySelectorAll('section.active .grid li').forEach((li, i) => li.style.setProperty('--i', i)); window.scrollTo(0,0); refresh(); }
-        
-        function handleCmd(e) { if(e.key === 'Enter') execCmd(document.getElementById('cmd-input').value); }
-        
-        function execCmd(raw) { const cmd = raw.toLowerCase().trim(); document.getElementById('cmd-palette').classList.remove('active'); document.getElementById('cmd-input').value = ""; if(cmd.startsWith('goto ')) showSec(cmd.replace('goto ', '')); if(cmd <mark>= 'toggle perf') togglePerfMode(); if(cmd </mark>= 'toggle matrix') toggleMatrix(); if(cmd <mark>= 'login') handleAuthClick(); if(cmd </mark>= 'panic') panicMode(); if(cmd <mark>= 'b64') { const text = prompt("Enter text to Base64 encode:"); if(text) alert("Encoded: " + btoa(text)); } if(cmd </mark>= 'help') alert("Commands: goto [sec], toggle perf, toggle matrix, b64, panic, login"); }
-        
-        function handleTerminal(e) { if(e.key <mark>= 'Enter') { const input = document.getElementById('term-input'); const val = input.value.trim().toLowerCase(); const display = document.getElementById('terminal-display'); const safeInput = input.value.replace(/</g, "&lt;").replace(/>/g, "&gt;"); const line = document.createElement('div'); line.className = 'terminal-line'; line.innerHTML = `<span style="font-weight:700;">> ${safeInput}</span>`; display.appendChild(line); let output = ""; if(val </mark>= 'help') output = "Available: clear, date, whoami, version, status, echo [text], system, neofetch"; else if(val <mark>= 'clear') { display.innerHTML = ""; output = "Terminal cleared."; } else if(val </mark>= 'date') output = new Date().toString(); else if(val <mark>= 'whoami') output = currentUser ? currentUser.username : "guest_user_8492"; else if(val </mark>= 'version') output = "Launchpad Engine v11.0.0-glass"; else if(val <mark>= 'status') output = "All systems operational. Environment: Glassmorphism."; else if(val </mark>= 'system') output = `Platform: ${navigator.platform} | RAM: ${performance.memory ? Math.round(performance.memory.usedJSHeapSize / 1048576) + "MB" : "N/A"}`; else if(val === 'neofetch') output = "LAUNCHPAD OS | Build: 2026.08 | Engine: Liquid Glass"; else if(val.startsWith('echo ')) output = input.value.substring(5).replace(/</g, "&lt;").replace(/>/g, "&gt;"); else output = "Command not recognized. Type 'help'."; const res = document.createElement('div'); res.className = 'terminal-line'; res.innerText = output; display.appendChild(res); input.value = ""; display.scrollTop = display.scrollHeight; } }
-        
-        function openGame(url, name) { const theater = document.getElementById('game-view'); const frame = document.getElementById('game-frame'); const loader = document.getElementById('game-loader'); currentGameUrl = url; document.getElementById('active-game-name').innerText = name; document.getElementById('game-status-text').innerText = "ESTABLISHING SECURE HANDSHAKE..."; theater.classList.add('active'); loader.style.display = 'flex'; frame.src = url; frame.onload = () => { loader.style.display = 'none'; document.getElementById('game-status-text').innerText = "LAUNCHPAD ENGINE: STABLE (PROXY BYPASS ACTIVE)"; }; document.body.style.overflow = "hidden"; }
-        
-        function reloadGame() { const frame = document.getElementById('game-frame'); const loader = document.getElementById('game-loader'); loader.style.display = 'flex'; frame.src = frame.src; }
-        
-        function toggleFullscreen() { const frame = document.getElementById('game-frame'); if (frame.requestFullscreen) frame.requestFullscreen(); else if (frame.webkitRequestFullscreen) frame.webkitRequestFullscreen(); else if (frame.msRequestFullscreen) frame.msRequestFullscreen(); }
-        
+        /* Updated Particle Logic for Glassmorphism (Soft Orbs instead of lines) */
+        function initParticles() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles = [];
+            for(let i=0; i < fxConfig.count; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width, 
+                    y: Math.random() * canvas.height,
+                    vx: (Math.random() - 0.5) * fxConfig.speed, 
+                    vy: (Math.random() - 0.5) * fxConfig.speed, 
+                    size: Math.random() * 150 + 50, // Large soft blobs
+                    color: `hsla(${Math.random()*360}, 80%, 70%, 0.3)`
+                });
+            }
+        }
+
+        function drawParticles() {
+            if(isPerfMode) return;
+            ctx.clearRect(0,0,canvas.width, canvas.height);
+            particles.forEach((p) => {
+                p.x += p.vx * fxConfig.speed * 2; 
+                p.y += p.vy * fxConfig.speed * 2;
+                
+                // Wrap around edges
+                if(p.x < -p.size) p.x = canvas.width + p.size;
+                if(p.x > canvas.width + p.size) p.x = -p.size;
+                if(p.y < -p.size) p.y = canvas.height + p.size;
+                if(p.y > canvas.height + p.size) p.y = -p.size;
+                
+                // Draw soft radial gradient for visionOS look
+                const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size);
+                grad.addColorStop(0, p.color);
+                grad.addColorStop(1, 'transparent');
+                ctx.fillStyle = grad;
+                
+                ctx.beginPath(); 
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); 
+                ctx.fill();
+            });
+            requestAnimationFrame(drawParticles);
+        }
+
+        window.onload = () => {
+            initParticles(); drawParticles();
+            renderTasks(); syncAuthUI(); updateGreeting();
+            let p = 0;
+            const int = setInterval(() => {
+                p += Math.random() * 40;
+                document.getElementById('load-p').style.width = Math.min(p, 100) + "%";
+                if(p >= 100) {
+                    clearInterval(int);
+                    document.getElementById('loader').style.transform = "translateY(-100%)";
+                }
+            }, 100);
+        };
+
+        // 2. NAVIGATION & COMMANDS
+        function showSec(id) {
+            playSfx('click');
+            document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
+            const n = document.getElementById('nav-'+id);
+            if(n) n.classList.add('active');
+            document.querySelectorAll('section.active .grid li').forEach((li, i) => li.style.setProperty('--i', i));
+            window.scrollTo(0,0); refresh();
+        }
+
+        function handleCmd(e) {
+            if(e.key === 'Enter') execCmd(document.getElementById('cmd-input').value);
+        }
+
+        function execCmd(raw) {
+            const cmd = raw.toLowerCase().trim();
+            document.getElementById('cmd-palette').classList.remove('active');
+            document.getElementById('cmd-input').value = "";
+            
+            if(cmd.startsWith('goto ')) showSec(cmd.replace('goto ', ''));
+            if(cmd === 'toggle perf') togglePerfMode();
+            if(cmd === 'toggle matrix') toggleMatrix();
+            if(cmd === 'login') handleAuthClick();
+            if(cmd === 'panic') panicMode();
+            if(cmd === 'b64') {
+                const text = prompt("Enter text to Base64 encode:");
+                if(text) alert("Encoded: " + btoa(text));
+            }
+            if(cmd === 'help') alert("Commands: goto [sec], toggle perf, toggle matrix, b64, panic, login");
+        }
+
+        // TERMINAL LOGIC
+        function handleTerminal(e) {
+            if(e.key === 'Enter') {
+                const input = document.getElementById('term-input');
+                const val = input.value.trim().toLowerCase();
+                const display = document.getElementById('terminal-display');
+                
+                const safeInput = input.value.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                
+                const line = document.createElement('div');
+                line.className = 'terminal-line';
+                line.innerHTML = `<span style="font-weight:700;">> ${safeInput}</span>`;
+                display.appendChild(line);
+
+                let output = "";
+                if(val === 'help') output = "Available: clear, date, whoami, version, status, echo [text], system, neofetch";
+                else if(val === 'clear') { display.innerHTML = ""; output = "Terminal cleared."; }
+                else if(val === 'date') output = new Date().toString();
+                else if(val === 'whoami') output = currentUser ? currentUser.username : "guest_user_8492";
+                else if(val === 'version') output = "Launchpad Engine v11.0.0-glass";
+                else if(val === 'status') output = "All systems operational. Environment: Glassmorphism.";
+                else if(val === 'system') output = `Platform: ${navigator.platform} | RAM: ${performance.memory ? Math.round(performance.memory.usedJSHeapSize / 1048576) + "MB" : "N/A"}`;
+                else if(val === 'neofetch') output = "LAUNCHPAD OS | Build: 2026.08 | Engine: Liquid Glass";
+                else if(val.startsWith('echo ')) output = input.value.substring(5).replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                else output = "Command not recognized. Type 'help'.";
+
+                const res = document.createElement('div');
+                res.className = 'terminal-line';
+                res.innerText = output;
+                display.appendChild(res);
+                
+                input.value = "";
+                display.scrollTop = display.scrollHeight;
+            }
+        }
+
+        // GAME LOGIC
+        function openGame(url, name) {
+            const theater = document.getElementById('game-view');
+            const frame = document.getElementById('game-frame');
+            const loader = document.getElementById('game-loader');
+            
+            currentGameUrl = url;
+            document.getElementById('active-game-name').innerText = name;
+            document.getElementById('game-status-text').innerText = "ESTABLISHING SECURE HANDSHAKE...";
+            
+            theater.classList.add('active');
+            loader.style.display = 'flex';
+            frame.src = url;
+            
+            frame.onload = () => {
+                loader.style.display = 'none';
+                document.getElementById('game-status-text').innerText = "LAUNCHPAD ENGINE: STABLE (PROXY BYPASS ACTIVE)";
+            };
+
+            document.body.style.overflow = "hidden";
+        }
+
+        function reloadGame() {
+            const frame = document.getElementById('game-frame');
+            const loader = document.getElementById('game-loader');
+            loader.style.display = 'flex';
+            frame.src = frame.src;
+        }
+
+        function toggleFullscreen() {
+            const frame = document.getElementById('game-frame');
+            if (frame.requestFullscreen) frame.requestFullscreen();
+            else if (frame.webkitRequestFullscreen) frame.webkitRequestFullscreen();
+            else if (frame.msRequestFullscreen) frame.msRequestFullscreen();
+        }
+
         function openInNewTab() { window.open(currentGameUrl, '_blank'); }
-        
-        function toggleTheaterSize() { const frame = document.getElementById('game-frame'); frame.style.width = frame.style.width <mark>= '85%' ? '100%' : '85%'; frame.style.margin = '0 auto'; frame.style.borderRadius = frame.style.width </mark>= '85%' ? '20px' : '0'; }
-        
-        function closeGame() { const theater = document.getElementById('game-view'); const frame = document.getElementById('game-frame'); theater.classList.remove('active'); frame.src = "about:blank"; document.body.style.overflow = "auto"; }
-        
-        function universalSearch() { const q = document.getElementById('universalSearch').value.toLowerCase(); const res = document.getElementById('results-list'); if(q === "") { showSec('home'); return; } showSec('results'); res.innerHTML = ""; document.querySelectorAll('section:not(#results) .card').forEach(i => { if(i.innerText.toLowerCase().includes(q)) { let li = i.parentElement.cloneNode(true); li.onclick = i.parentElement.onclick; res.appendChild(li); } }); refresh(); }
-        
+
+        function toggleTheaterSize() {
+            const frame = document.getElementById('game-frame');
+            frame.style.width = frame.style.width === '85%' ? '100%' : '85%';
+            frame.style.margin = '0 auto';
+            frame.style.borderRadius = frame.style.width === '85%' ? '20px' : '0';
+        }
+
+        function closeGame() {
+            const theater = document.getElementById('game-view');
+            const frame = document.getElementById('game-frame');
+            theater.classList.remove('active');
+            frame.src = "about:blank";
+            document.body.style.overflow = "auto";
+        }
+
+        function universalSearch() {
+            const q = document.getElementById('universalSearch').value.toLowerCase();
+            const res = document.getElementById('results-list');
+            if(q === "") { showSec('home'); return; }
+            showSec('results'); res.innerHTML = "";
+            document.querySelectorAll('section:not(#results) .card').forEach(i => {
+                if(i.innerText.toLowerCase().includes(q)) {
+                    let li = i.parentElement.cloneNode(true);
+                    li.onclick = i.parentElement.onclick;
+                    res.appendChild(li);
+                }
+            });
+            refresh();
+        }
+
+        // 3. TASKS & TOOLS
         let tasks = JSON.parse(localStorage.getItem('hubTasks')) || [{t: "Explore Launchpad V11 Glass", c: false}];
-        function addTask() { const input = document.getElementById('new-task-input'); if(!input.value) return; tasks.push({t: input.value, c: false}); input.value = ""; saveTasks(); renderTasks(); }
+        function addTask() {
+            const input = document.getElementById('new-task-input');
+            if(!input.value) return;
+            tasks.push({t: input.value, c: false});
+            input.value = ""; saveTasks(); renderTasks();
+        }
         function toggleTask(i) { tasks[i].c = !tasks[i].c; saveTasks(); renderTasks(); }
-        function saveTasks() { localStorage.setItem('hubTasks', JSON.stringify(tasks)); if(currentUser) { document.getElementById('git-status').innerText = "Syncing with cloud..."; setTimeout(() => document.getElementById('git-status').innerText = "Synced!", 1000); } }
-        function renderTasks() { const list = document.getElementById('task-list'); list.innerHTML = tasks.map((t, i) => `<div class="task-item"><input type="checkbox" ${t.c ? 'checked' : ''} onclick="toggleTask(${i})"><span style="font-weight:500; ${t.c ? 'text-decoration:line-through; opacity:0.5' : ''}">${t.t}</span></div>`).join(''); }
-        
+        function saveTasks() { 
+            localStorage.setItem('hubTasks', JSON.stringify(tasks));
+            if(currentUser) {
+                document.getElementById('git-status').innerText = "Syncing with cloud...";
+                setTimeout(() => document.getElementById('git-status').innerText = "Synced!", 1000);
+            }
+        }
+        function renderTasks() {
+            const list = document.getElementById('task-list');
+            list.innerHTML = tasks.map((t, i) => `
+                <div class="task-item">
+                    <input type="checkbox" ${t.c ? 'checked' : ''} onclick="toggleTask(${i})">
+                    <span style="font-weight:500; ${t.c ? 'text-decoration:line-through; opacity:0.5' : ''}">${t.t}</span>
+                </div>
+            `).join('');
+        }
+
         function cin(v) { document.getElementById('calc-out').value += v; }
         function cclr() { document.getElementById('calc-out').value = ""; }
-        function cres() { try { const output = eval(document.getElementById('calc-out').value); if (output === undefined || isNaN(output) || !isFinite(output)) throw new Error("Invalid Equation"); document.getElementById('calc-out').value = output; } catch { document.getElementById('calc-out').value = "Error"; setTimeout(cclr, 1500); } }
+        function cres() { 
+            try { 
+                const output = eval(document.getElementById('calc-out').value);
+                if (output === undefined || isNaN(output) || !isFinite(output)) throw new Error("Invalid Equation");
+                document.getElementById('calc-out').value = output; 
+            } catch { 
+                document.getElementById('calc-out').value = "Error"; 
+                setTimeout(cclr, 1500);
+            } 
+        }
         
         let swT = 0, swI;
-        function swStart() { const b = document.getElementById('sw-start'); if(b.innerText === "Start") { swI = setInterval(() => { swT += 10; let ms = Math.floor((swT % 1000) / 10), s = Math.floor((swT / 1000) % 60), m = Math.floor(swT / 60000); document.getElementById('sw-display').innerText = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}.${ms.toString().padStart(2,'0')}`; }, 10); b.innerText = "Stop"; } else { clearInterval(swI); b.innerText = "Start"; } }
+        function swStart() {
+            const b = document.getElementById('sw-start');
+            if(b.innerText === "Start") {
+                swI = setInterval(() => {
+                    swT += 10;
+                    let ms = Math.floor((swT % 1000) / 10), s = Math.floor((swT / 1000) % 60), m = Math.floor(swT / 60000);
+                    document.getElementById('sw-display').innerText = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}.${ms.toString().padStart(2,'0')}`;
+                }, 10);
+                b.innerText = "Stop";
+            } else { clearInterval(swI); b.innerText = "Start"; }
+        }
         function swReset() { clearInterval(swI); swT = 0; document.getElementById('sw-display').innerText = "00:00.00"; document.getElementById('sw-start').innerText = "Start"; }
-        
+
         let pomoI;
-        function startPomo(mins) { clearInterval(pomoI); let time = mins * 60; pomoI = setInterval(() => { let m = Math.floor(time / 60), s = time % 60; document.getElementById('pomo-display').innerText = `${m}:${s < 10 ? '0' : ''}${s}`; if(time <= 0) { clearInterval(pomoI); alert("Focus period complete!"); } time--; }, 1000); }
+        function startPomo(mins) {
+            clearInterval(pomoI);
+            let time = mins * 60;
+            pomoI = setInterval(() => {
+                let m = Math.floor(time / 60), s = time % 60;
+                document.getElementById('pomo-display').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
+                if(time <= 0) { clearInterval(pomoI); alert("Focus period complete!"); }
+                time--;
+            }, 1000);
+        }
         function resetPomo() { clearInterval(pomoI); document.getElementById('pomo-display').innerText = "25:00"; }
-        
+
         function showUnitConverter() { document.getElementById('unit-panel').style.display = 'block'; window.scrollTo(0, document.body.scrollHeight); }
-        function convertUnit() { const val = parseFloat(document.getElementById('unit-input').value); const type = document.getElementById('unit-type').value; let res = 0; if(type <mark>= 'cm-in') res = val / 2.54; if(type </mark>= 'in-cm') res = val * 2.54; if(type <mark>= 'kg-lb') res = val * 2.20462; if(type </mark>= 'lb-kg') res = val / 2.20462; if(type <mark>= 'c-f') res = (val * 9/5) + 32; if(type </mark>= 'f-c') res = (val - 32) * 5/9; document.getElementById('unit-result').innerText = isNaN(res) ? "0.00" : res.toFixed(2); }
-        
+        function convertUnit() {
+            const val = parseFloat(document.getElementById('unit-input').value);
+            const type = document.getElementById('unit-type').value;
+            let res = 0;
+            if(type === 'cm-in') res = val / 2.54;
+            if(type === 'in-cm') res = val * 2.54;
+            if(type === 'kg-lb') res = val * 2.20462;
+            if(type === 'lb-kg') res = val / 2.20462;
+            if(type === 'c-f') res = (val * 9/5) + 32;
+            if(type === 'f-c') res = (val - 32) * 5/9;
+            document.getElementById('unit-result').innerText = isNaN(res) ? "0.00" : res.toFixed(2);
+        }
+
         function rollDice() { document.getElementById('rng-result').innerText = "Dice: " + (Math.floor(Math.random() * 6) + 1); }
         function flipCoin() { document.getElementById('rng-result').innerText = "Coin: " + (Math.random() > 0.5 ? "Heads" : "Tails"); }
-        
-        const sketchCanvas = document.getElementById('sketchpad'), sketchCtx = sketchCanvas.getContext('2d');
+
+        // SKETCHPAD LOGIC
+        const sketchCanvas = document.getElementById('sketchpad');
+        const sketchCtx = sketchCanvas.getContext('2d');
         let isDrawing = false;
         sketchCanvas.addEventListener('mousedown', (e) => { isDrawing = true; drawSketch(e); });
         sketchCanvas.addEventListener('mousemove', drawSketch);
         window.addEventListener('mouseup', () => isDrawing = false);
         
-        function drawSketch(e) { if(!isDrawing) return; const rect = sketchCanvas.getBoundingClientRect(); const scaleX = sketchCanvas.width / rect.width; const scaleY = sketchCanvas.height / rect.height; const x = (e.clientX - rect.left) * scaleX; const y = (e.clientY - rect.top) * scaleY; sketchCtx.fillStyle = document.getElementById('sketch-color').value; sketchCtx.beginPath(); sketchCtx.arc(x, y, 5, 0, Math.PI * 2); sketchCtx.fill(); }
+        function drawSketch(e) {
+            if(!isDrawing) return;
+            const rect = sketchCanvas.getBoundingClientRect();
+            const scaleX = sketchCanvas.width / rect.width;
+            const scaleY = sketchCanvas.height / rect.height;
+            const x = (e.clientX - rect.left) * scaleX;
+            const y = (e.clientY - rect.top) * scaleY;
+            
+            sketchCtx.fillStyle = document.getElementById('sketch-color').value;
+            sketchCtx.beginPath();
+            sketchCtx.arc(x, y, 5, 0, Math.PI * 2);
+            sketchCtx.fill();
+        }
         function clearSketch() { sketchCtx.clearRect(0,0,sketchCanvas.width, sketchCanvas.height); }
-        
+
         function showMorse() { document.getElementById('morse-panel').style.display = 'block'; window.scrollTo(0, document.body.scrollHeight); }
-        function translateMorse() { const charMap = {'a': '.-', 'b': '-...', 'c': '-.-.', 'd': '-..', 'e': '.', 'f': '..-.', 'g': '--.', 'h': '....', 'i': '..', 'j': '.---', 'k': '-.-', 'l': '.-..', 'm': '--', 'n': '-.', 'o': '---', 'p': '.--.', 'q': '--.-', 'r': '.-.', 's': '...', 't': '-', 'u': '..-', 'v': '...-', 'w': '.--', 'x': '-..-', 'y': '-.--', 'z': '--..', '1': '.----', '2': '..---', '3': '...--', '4': '....-', '5': '.....', '6': '-....', '7': '--...', '8': '---..', '9': '----.', '0': '-----', ' ': '/'}; const input = document.getElementById('morse-input').value.toLowerCase(); const res = input.split('').map(c => charMap[c] || '').join(' '); document.getElementById('morse-result').innerText = res || '.... ..'; }
-        
-        function downloadNotes() { const blob = new Blob([document.getElementById('note').value], {type: 'text/plain'}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'launchpad-notes.txt'; a.click(); }
-        
-        function genPass() { const p = Math.random().toString(36).slice(-8) + Math.random().toString(36).toUpperCase().slice(-4) + "!@#"; document.getElementById('tool-out').innerText = "Generated: " + p; }
-        
-        function copySystemInfo() { const info = `Platform: ${navigator.platform} | Resolution: ${screen.width}x${screen.height} | Launchpad Version: 11.0`; navigator.clipboard.writeText(info); document.getElementById('tool-out').innerText = "System info copied!"; }
-        
-        function pMusic(src, name) { const p = document.getElementById('player'); p.src = src; p.play(); const t = document.getElementById('toast'); t.innerText = "Playing: " + name; t.style.bottom = "40px"; setTimeout(() => t.style.bottom = "-100px", 4000); }
-        
-        function playSfx(id) { if(isPerfMode) return; const s = document.getElementById('sfx-' + id); if(s) { s.currentTime = 0; s.volume = 0.2; s.play(); } }
-        
-        function handleAuthClick() { if(currentUser) { showSec('profile'); } else { const userHandle = prompt("Enter your GitHub Username to 'simulate' login:"); if(userHandle) { currentUser = { username: userHandle, avatar: `https://github.com/${userHandle}.png`, bio: "Launchpad Contributor and Gamer", loginDate: new Date().toLocaleDateString() }; localStorage.setItem('hubUser', JSON.stringify(currentUser)); syncAuthUI(); pMusic('', 'Login Success'); } } }
-        
-        function syncAuthUI() { const badge = document.getElementById('auth-status'); const text = document.getElementById('auth-text'); const profileOut = document.getElementById('logged-out-view'); const profileIn = document.getElementById('logged-in-view'); if(currentUser) { text.innerText = currentUser.username; badge.innerHTML = `<img src="${currentUser.avatar}"> <span>${currentUser.username}</span>`; document.getElementById('user-avatar').src = currentUser.avatar; document.getElementById('user-name').innerText = currentUser.username; document.getElementById('user-bio').innerText = currentUser.bio; profileOut.style.display = 'none'; profileIn.style.display = 'block'; document.getElementById('greeting').innerText = `Welcome back, ${currentUser.username}!`; } else { text.innerText = "Sign in with GitHub"; profileOut.style.display = 'block'; profileIn.style.display = 'none'; } }
-        
-        function logout() { currentUser = null; localStorage.removeItem('hubUser'); syncAuthUI(); showSec('home'); }
-        
-        function selectIssue(el, type) { document.querySelectorAll('.feedback-chip').forEach(c => c.classList.remove('selected')); el.classList.add('selected'); activeIssueType = type; }
-        
-        async function gitSubmit() { const t = document.getElementById('q-title').value; const b = document.getElementById('q-body').value; const p = document.getElementById('q-priority').value; const status = document.getElementById('git-status'); if(!t || !b) return alert("Please provide both a title and description."); status.innerText = "Formatting report..."; let fullBody = `**Issue Type:** ${activeIssueType}\n**Priority:** ${p}\n\n**Description:**\n${b}\n\n---\n*Reported via Launchpad Engine v11.0*`; if(currentUser) { fullBody += `\n*User: @${currentUser.username}*`; } status.innerText = "Opening GitHub..."; setTimeout(() => { window.open(`https://github.com/VRGamer262Real/Hub/issues/new?title=[${activeIssueType}] ${encodeURIComponent(t)}&body=${encodeURIComponent(fullBody)}`, '_blank'); status.innerText = "System Ready"; }, 1000); }
-        
+        function translateMorse() {
+            const charMap = {'a': '.-', 'b': '-...', 'c': '-.-.', 'd': '-..', 'e': '.', 'f': '..-.', 'g': '--.', 'h': '....', 'i': '..', 'j': '.---', 'k': '-.-', 'l': '.-..', 'm': '--', 'n': '-.', 'o': '---', 'p': '.--.', 'q': '--.-', 'r': '.-.', 's': '...', 't': '-', 'u': '..-', 'v': '...-', 'w': '.--', 'x': '-..-', 'y': '-.--', 'z': '--..', '1': '.----', '2': '..---', '3': '...--', '4': '....-', '5': '.....', '6': '-....', '7': '--...', '8': '---..', '9': '----.', '0': '-----', ' ': '/'};
+            const input = document.getElementById('morse-input').value.toLowerCase();
+            const res = input.split('').map(c => charMap[c] || '').join(' ');
+            document.getElementById('morse-result').innerText = res || '.... ..';
+        }
+
+        function downloadNotes() {
+            const blob = new Blob([document.getElementById('note').value], {type: 'text/plain'});
+            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'launchpad-notes.txt'; a.click();
+        }
+
+        function genPass() {
+            const p = Math.random().toString(36).slice(-8) + Math.random().toString(36).toUpperCase().slice(-4) + "!@#";
+            document.getElementById('tool-out').innerText = "Generated: " + p;
+        }
+
+        function copySystemInfo() {
+            const info = `Platform: ${navigator.platform} | Resolution: ${screen.width}x${screen.height} | Launchpad Version: 11.0`;
+            navigator.clipboard.writeText(info);
+            document.getElementById('tool-out').innerText = "System info copied!";
+        }
+
+        function pMusic(src, name) {
+            const p = document.getElementById('player'); p.src = src; p.play();
+            const t = document.getElementById('toast'); t.innerText = "Playing: " + name;
+            t.style.bottom = "40px"; setTimeout(() => t.style.bottom = "-100px", 4000);
+        }
+
+        function playSfx(id) {
+            if(isPerfMode) return;
+            const s = document.getElementById('sfx-' + id);
+            if(s) { s.currentTime = 0; s.volume = 0.2; s.play(); }
+        }
+
+        // 4. AUTH & FEEDBACK LOGIC
+        function handleAuthClick() {
+            if(currentUser) {
+                showSec('profile');
+            } else {
+                const userHandle = prompt("Enter your GitHub Username to 'simulate' login:");
+                if(userHandle) {
+                    currentUser = {
+                        username: userHandle,
+                        avatar: `https://github.com/${userHandle}.png`,
+                        bio: "Launchpad Contributor and Gamer",
+                        loginDate: new Date().toLocaleDateString()
+                    };
+                    localStorage.setItem('hubUser', JSON.stringify(currentUser));
+                    syncAuthUI();
+                    pMusic('', 'Login Success');
+                }
+            }
+        }
+
+        function syncAuthUI() {
+            const badge = document.getElementById('auth-status');
+            const text = document.getElementById('auth-text');
+            const profileOut = document.getElementById('logged-out-view');
+            const profileIn = document.getElementById('logged-in-view');
+
+            if(currentUser) {
+                text.innerText = currentUser.username;
+                badge.innerHTML = `<img src="${currentUser.avatar}"> <span>${currentUser.username}</span>`;
+                document.getElementById('user-avatar').src = currentUser.avatar;
+                document.getElementById('user-name').innerText = currentUser.username;
+                document.getElementById('user-bio').innerText = currentUser.bio;
+                profileOut.style.display = 'none';
+                profileIn.style.display = 'block';
+                document.getElementById('greeting').innerText = `Welcome back, ${currentUser.username}!`;
+            } else {
+                text.innerText = "Sign in with GitHub";
+                profileOut.style.display = 'block';
+                profileIn.style.display = 'none';
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('hubUser');
+            syncAuthUI();
+            showSec('home');
+        }
+
+        function selectIssue(el, type) {
+            document.querySelectorAll('.feedback-chip').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            activeIssueType = type;
+        }
+
+        async function gitSubmit() {
+            const t = document.getElementById('q-title').value;
+            const b = document.getElementById('q-body').value;
+            const p = document.getElementById('q-priority').value;
+            const status = document.getElementById('git-status');
+
+            if(!t || !b) return alert("Please provide both a title and description.");
+
+            status.innerText = "Formatting report...";
+            
+            let fullBody = `**Issue Type:** ${activeIssueType}\n**Priority:** ${p}\n\n**Description:**\n${b}\n\n---\n*Reported via Launchpad Engine v11.0*`;
+            if(currentUser) {
+                fullBody += `\n*User: @${currentUser.username}*`;
+            }
+
+            status.innerText = "Opening GitHub...";
+            setTimeout(() => {
+                window.open(`https://github.com/VRGamer262Real/Hub/issues/new?title=[${activeIssueType}] ${encodeURIComponent(t)}&body=${encodeURIComponent(fullBody)}`, '_blank');
+                status.innerText = "System Ready";
+            }, 1000);
+        }
+
+        // 5. SYSTEM UPDATES
         const start = Date.now();
         const cur = document.getElementById('cursor'), fol = document.getElementById('cursor-follower');
-        document.addEventListener('mousemove', (e) => { if(isPerfMode) return; cur.style.left = e.clientX + 'px'; cur.style.top = e.clientY + 'px'; fol.style.transform = `translate(${e.clientX - 20}px, ${e.clientY - 20}px)`; const moveX = (e.clientX - window.innerWidth / 2) * 0.015; const moveY = (e.clientY - window.innerHeight / 2) * 0.015; document.getElementById('bg-canvas').style.transform = `translate(${moveX}px, ${moveY}px) scale(1.05)`; });
-        
-        let times = [], currentPing = 5;
+        document.addEventListener('mousemove', (e) => {
+            if(isPerfMode) return;
+            cur.style.left = e.clientX + 'px'; cur.style.top = e.clientY + 'px';
+            fol.style.transform = `translate(${e.clientX - 20}px, ${e.clientY - 20}px)`;
+            const moveX = (e.clientX - window.innerWidth / 2) * 0.015;
+            const moveY = (e.clientY - window.innerHeight / 2) * 0.015;
+            document.getElementById('bg-canvas').style.transform = `translate(${moveX}px, ${moveY}px) scale(1.05)`;
+        });
+
+        let times = [];
+        let currentPing = 5;
         setInterval(() => currentPing = Math.floor(Math.random()*12)+8, 2000);
-        
-        function updatePerf() { const now = performance.now(); while (times.length > 0 && times[0] <= now - 1000) times.shift(); times.push(now); document.getElementById('perf').innerText = `FPS: ${times.length} | PING: ${currentPing}ms`; const upS = Math.floor((Date.now() - start) / 1000); const formatted = `${Math.floor(upS/60).toString().padStart(2,'0')}:${(upS%60).toString().padStart(2,'0')}`; document.getElementById('uptime').innerText = `UPTIME: ${formatted}`; document.getElementById('session-timer').innerText = formatted; if(performance.memory) document.getElementById('mem-val').innerText = Math.round(performance.memory.usedJSHeapSize / 1048576) + " MB"; requestAnimationFrame(updatePerf); }
+
+        function updatePerf() {
+            const now = performance.now();
+            while (times.length > 0 && times[0] <= now - 1000) times.shift();
+            times.push(now);
+            document.getElementById('perf').innerText = `FPS: ${times.length} | PING: ${currentPing}ms`;
+            const upS = Math.floor((Date.now() - start) / 1000);
+            const formatted = `${Math.floor(upS/60).toString().padStart(2,'0')}:${(upS%60).toString().padStart(2,'0')}`;
+            document.getElementById('uptime').innerText = `UPTIME: ${formatted}`;
+            document.getElementById('session-timer').innerText = formatted;
+            if(performance.memory) document.getElementById('mem-val').innerText = Math.round(performance.memory.usedJSHeapSize / 1048576) + " MB";
+            requestAnimationFrame(updatePerf);
+        }
         updatePerf();
-        
-        setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }); if(navigator.getBattery) navigator.getBattery().then(b => document.getElementById('battery').innerText = `${Math.floor(b.level*100)}%`); }, 1000);
-        
+
+        setInterval(() => {
+            document.getElementById('clock').innerText = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            if(navigator.getBattery) navigator.getBattery().then(b => document.getElementById('battery').innerText = `${Math.floor(b.level*100)}%`);
+        }, 1000);
+
         function mask(t, i) { document.getElementById('tab-title').innerText = t; document.getElementById('tab-icon').href = i; }
+
+        function updateGreeting() {
+            const h = new Date().getHours();
+            let g = "Welcome to Launchpad!";
+            if(h < 12) g = "Good morning, explorer.";
+            else if(h < 18) g = "Good afternoon, developer.";
+            else g = "Good evening, gamer.";
+            document.getElementById('greeting').innerText = g;
+        }
+
+        function panicMode() {
+            mask('Google', 'https://google.com/favicon.ico');
+            window.location.href = "https://google.com";
+        }
+
+        function refresh() {
+            document.querySelectorAll('a, button, .card, input, textarea, select').forEach(el => {
+                el.onmouseenter = () => { playSfx('hover'); if(!isPerfMode) document.body.classList.add('cursor-hover'); };
+                el.onmouseleave = () => { if(!isPerfMode) document.body.classList.remove('cursor-hover'); };
+            });
+        }
         
-        function updateGreeting() { const h = new Date().getHours(); let g = "Welcome to Launchpad!"; if(h < 12) g = "Good morning, explorer."; else if(h < 18) g = "Good afternoon, developer."; else g = "Good evening, gamer."; document.getElementById('greeting').innerText = g; }
-        
-        function panicMode() { mask('Google', 'https://google.com/favicon.ico'); window.location.href = "https://google.com"; }
-        
-        function refresh() { document.querySelectorAll('a, button, .card, input, textarea, select').forEach(el => { el.onmouseenter = () => { playSfx('hover'); if(!isPerfMode) document.body.classList.add('cursor-hover'); }; el.onmouseleave = () => { if(!isPerfMode) document.body.classList.remove('cursor-hover'); }; }); }
-        
-        function toggleQuickMenu() { const p = document.getElementById('cmd-palette'); p.classList.toggle('active'); if(p.classList.contains('active')) document.getElementById('cmd-input').focus(); }
-        
+        function toggleQuickMenu() {
+            const p = document.getElementById('cmd-palette');
+            p.classList.toggle('active');
+            if(p.classList.contains('active')) document.getElementById('cmd-input').focus();
+        }
+
         document.getElementById('note').value = localStorage.getItem('hubNote') || "";
-        document.addEventListener('keydown', (e) => { if(e.key <mark>= '`') window.location.href = "about:blank"; if(e.key </mark>= 'b' || e.key <mark>= 'B') panicMode(); if(e.key </mark>= 'Escape') { closeGame(); document.getElementById('cmd-palette').classList.remove('active'); } if(e.ctrlKey && e.key <mark>= 'k') { e.preventDefault(); document.getElementById('cmd-palette').classList.add('active'); document.getElementById('cmd-input').focus(); } if(e.key </mark>= '/') { if(document.activeElement.tagName !<mark> 'INPUT' && document.activeElement.tagName !</mark> 'TEXTAREA') { e.preventDefault(); document.getElementById('universalSearch').focus(); }} });
-        
+        document.addEventListener('keydown', (e) => {
+            if(e.key === '`') window.location.href = "about:blank";
+            if(e.key === 'b' || e.key === 'B') panicMode();
+            if(e.key === 'Escape') { closeGame(); document.getElementById('cmd-palette').classList.remove('active'); }
+            if(e.ctrlKey && e.key === 'k') { e.preventDefault(); document.getElementById('cmd-palette').classList.add('active'); document.getElementById('cmd-input').focus(); }
+            if(e.key === '/') { if(document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') { e.preventDefault(); document.getElementById('universalSearch').focus(); }}
+        });
+
         const quotes = ["Vision without execution is hallucination.", "The future is glass.", "Simplicity is the ultimate sophistication.", "Stay modular.", "Design is how it works."];
         document.getElementById('quote-box').innerText = `"${quotes[Math.floor(Math.random()*quotes.length)]}"`;
         
