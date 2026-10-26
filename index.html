@@ -253,7 +253,7 @@ input[type="color"] { width: 42px; height: 42px; min-height: 42px; padding: 3px;
     <audio id="sfx-hover" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
 
     <div id="loader">
-        <div class="loader-logo">LAUNCHPAD V12</div>
+        <div class="loader-logo">LAUNCHPAD V13.0</div>
         <div class="load-bar"><div class="load-progress" id="load-p"></div></div>
         <div style="font-size: 0.72rem; margin-top: 15px; opacity: 0.7; letter-spacing: 2px; font-weight: 600">INITIALIZING HIGH PERFORMANCE ENGINE...</div>
     </div>
@@ -493,13 +493,13 @@ input[type="color"] { width: 42px; height: 42px; min-height: 42px; padding: 3px;
     <section id="news">
         <h1>Updates & Changelog</h1>
         <div class="panel" style="text-align: left">
-            <h2 style="margin-top: 0">V12.0 - The Meme & Engine Overhaul</h2>
+            <h2 style="margin-top: 0">V13.0 - The Meme & Engine Overhaul</h2>
             <p>• <strong>Meme Flying Mode Added</strong>: Built-in flying floating meme overlay system (off by default) bouncing dynamically across the screen!</p>
             <p>• <strong>Performance Optimization</strong>: Refactored animation frames with hardware-accelerated canvas loops, debounced search, and zero lag.</p>
             <p>• <strong>UI Refresh</strong>: A clean, flat interface, reduced visual effects, responsive navigation, and lighter controls.</p>
         </div>
         <div class="panel" style="text-align: left">
-            <h2 style="margin-top: 0">V11.0 - The Visual Refresh</h2>
+            <h2 style="margin-top: 0">V12.0 - The Visual Refresh</h2>
             <p>• <strong>Visual Overhaul</strong>: Introduced an experimental translucent interface in the previous release.</p>
             <p>• <strong>Optimized Rendering</strong>: Particle system updated to use soft ambient orbs for a smoother visual background.</p>
         </div>
@@ -553,7 +553,7 @@ input[type="color"] { width: 42px; height: 42px; min-height: 42px; padding: 3px;
         <h1>Launchpad Terminal</h1>
         <div class="panel">
             <div class="terminal-box" id="terminal-display">
-                <div class="terminal-line">Launchpad OS v12.0.0 (High Performance Engine)</div>
+                <div class="terminal-line">Launchpad OS v13.0.0 (High Performance Engine)</div>
                 <div class="terminal-line">Type 'help' for available commands. Try 'meme' to toggle meme mode!</div>
             </div>
             <div class="terminal-input-row" style="margin-top: 15px">
@@ -1545,10 +1545,10 @@ input[type="color"] { width: 42px; height: 42px; min-height: 42px; padding: 3px;
         else if (value === 'clear') { display.replaceChildren(); output = 'Terminal cleared.'; }
         else if (value === 'date') output = new Date().toString();
         else if (value === 'whoami') output = currentUser ? currentUser.username : 'guest_user';
-        else if (value === 'version') output = 'Launchpad Engine v12.0.0 · streamlined build';
+        else if (value === 'version') output = 'Launchpad Engine v13.0.0 · streamlined build';
         else if (value === 'status') output = 'Launchpad is running. Canvas effects are throttled to reduce CPU use.';
         else if (value === 'system') output = `Platform: ${navigator.platform} | RAM: ${performance.memory ? `${Math.round(performance.memory.usedJSHeapSize / 1048576)} MB` : 'N/A'}`;
-        else if (value === 'neofetch') output = 'LAUNCHPAD OS V12 · Lightweight UI';
+        else if (value === 'neofetch') output = 'LAUNCHPAD OS V13 · Lightweight UI';
         else if (value.startsWith('echo ')) output = original.slice(5);
         else if (value) output = "Command not recognized. Type 'help'.";
         if (output) {
