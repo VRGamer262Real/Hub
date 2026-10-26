@@ -6,291 +6,242 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link id="tab-icon" rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/VRGamer262Real/Hub/refs/heads/main/900-900.jpeg">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Inter:wght@400;600;700;900&family=Fira+Code:wght@400;500&display=swap');
+:root {
+    color-scheme: dark;
+    --bg: #0b1020;
+    --bg-deep: #080c16;
+    --surface: hsl(225 25% var(--surface-tone, 12%));
+    --surface-raised: #182139;
+    --surface-soft: #121a2d;
+    --border: #293650;
+    --border-strong: #3a4b6b;
+    --text: #eef3ff;
+    --muted: #9aa8c2;
+    --accent: #86a4ff;
+    --accent-strong: #6d8df4;
+    --accent-soft: rgb(109 141 244 / 14%);
+    --success: #67d9ae;
+    --warning: #f5c66c;
+    --danger: #ff7889;
+    --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --content-width: 1380px;
+    --radius: 14px;
+    --radius-small: 10px;
+    --surface-shadow: 0 8px 24px rgb(0 0 0 / 18%);
+}
 
-        :root {
-            --primary: #ffffff;
-            --secondary: #a1a1aa;
-            --accent: #00f2fe;
-            --accent-glow: rgba(0, 242, 254, 0.4);
-            --pink-glow: rgba(255, 0, 128, 0.35);
-            --success: #34c759;
-            --warning: #ffcc00;
-            
-            --bg-glass: rgba(18, 18, 28, 0.45);
-            --bg-card: rgba(255, 255, 255, 0.05);
-            --border: rgba(255, 255, 255, 0.12);
-            --border-highlight: rgba(0, 242, 254, 0.5);
-            
-            --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            --title-font: 'Space Grotesk', -apple-system, sans-serif;
-            
-            --blur-val: 30px;
-            --card-scale: 1.03;
-            --panel-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-            --inner-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2);
-            --glow-filter: drop-shadow(0 0 12px var(--accent-glow));
-        }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { min-width: 320px; scroll-behavior: smooth; }
+body {
+    min-height: 100vh;
+    margin: 0;
+    overflow-x: hidden;
+    background: var(--bg);
+    color: var(--text);
+    font: 400 15px/1.55 var(--font);
+}
+button, input, textarea, select { font: inherit; }
+button, a, .card, .auth-badge, .feedback-chip, .floating-action { cursor: pointer; }
+a { color: inherit; }
+button { color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+::selection { color: #fff; background: #405fb4; }
 
-        * { cursor: none !important; box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
-        
-        body {
-            background: #050508;
-            color: #fff; 
-            font-family: var(--font);
-            margin: 0; 
-            overflow-x: hidden; 
-            min-height: 100vh; 
-            scroll-behavior: smooth;
-        }
+#bg-canvas { position: fixed; inset: 0; z-index: -3; pointer-events: none; background: radial-gradient(ellipse at 10% 0%, #172442 0, transparent 42%), radial-gradient(ellipse at 100% 100%, #151c34 0, transparent 40%), var(--bg-deep); }
+#particle-canvas { position: fixed; inset: 0; z-index: -2; width: 100%; height: 100%; pointer-events: none; opacity: .48; }
+#matrix-canvas { position: fixed; inset: 0; z-index: 5; width: 100%; height: 100%; opacity: 0; pointer-events: none; }
+#meme-canvas { position: fixed; inset: 0; z-index: 9990; width: 100%; height: 100%; pointer-events: none; display: none; }
+#scanlines, #glitch-overlay { position: fixed; inset: 0; pointer-events: none; display: none; }
+#scanlines { z-index: 9998; background: repeating-linear-gradient(to bottom, transparent 0 3px, rgb(0 0 0 / 16%) 3px 4px); }
+#glitch-overlay { z-index: 9997; background: url('https://media.giphy.com/media/oEI9uWUic9VKM/giphy.gif') center/cover; opacity: 0; }
+#cursor, #cursor-follower { display: none !important; }
 
-        /* BACKGROUND & ANIMATED MESH */
-        #bg-canvas {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -3;
-            background: radial-gradient(circle at 20% 20%, #0d0b26 0%, #050508 50%),
-                        radial-gradient(circle at 80% 80%, #1a0033 0%, #050508 50%);
-            will-change: transform;
-        }
+.status-bar {
+    position: sticky;
+    top: 0;
+    z-index: 1001;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    min-height: 54px;
+    padding: 9px clamp(14px, 3vw, 32px);
+    border-bottom: 1px solid var(--border);
+    background: #0d1424;
+    color: var(--muted);
+    font-size: .78rem;
+    font-weight: 600;
+}
+.status-bar > div:last-child { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 12px; }
+.status-tag { display: inline-flex; align-items: center; gap: 8px; min-height: 29px; padding: 5px 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface-soft); color: var(--text); }
+.status-dot { width: 7px; height: 7px; flex: 0 0 auto; border-radius: 50%; background: var(--success); }
+#perf, #uptime, #clock, #battery { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.auth-badge { display: inline-flex; align-items: center; gap: 7px; min-height: 31px; padding: 4px 10px; border: 1px solid var(--border); border-radius: 8px; color: var(--text); background: var(--surface-soft); }
+.auth-badge:hover, .status-tag:hover { border-color: var(--border-strong); }
+.auth-badge img { width: 21px; height: 21px; border-radius: 50%; object-fit: cover; }
 
-        #particle-canvas {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
-            opacity: 0.85; pointer-events: none;
-        }
+.search-area { position: relative; width: min(720px, calc(100% - 32px)); margin: 30px auto 20px; }
+.search-area input { width: 100%; min-height: 52px; padding: 14px 18px 14px 48px; margin: 0; border: 1px solid var(--border); border-radius: 12px; background: #111a2d; color: var(--text); font-size: .97rem; box-shadow: none; }
+.search-area::before { content: "⌕"; position: absolute; top: 50%; left: 17px; z-index: 1; color: var(--muted); font-size: 1.55rem; line-height: 1; transform: translateY(-55%); pointer-events: none; }
+.search-area input:focus { border-color: var(--accent); background: #131e34; outline: 2px solid rgb(134 164 255 / 12%); }
 
-        /* MEME MODE CANVAS OVERLAY */
-        #meme-canvas {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9990;
-            pointer-events: none; display: none;
-        }
+.nav-wrapper { position: sticky; top: 54px; z-index: 1000; display: flex; justify-content: center; padding: 8px 14px; border-bottom: 1px solid rgb(41 54 80 / 70%); background: rgb(11 16 32 / 96%); }
+.nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; width: min(1200px, 100%); margin: 0; padding: 0; list-style: none; border: 0; background: transparent; box-shadow: none; }
+.nav li { margin: 0; padding: 0; }
+.nav li a { display: block; padding: 9px 13px; border: 1px solid transparent; border-radius: 8px; color: var(--muted); font-size: .83rem; font-weight: 650; text-decoration: none; transition: background-color .16s ease, color .16s ease, border-color .16s ease; }
+.nav li a:hover { color: var(--text); background: var(--surface-soft); }
+.nav li a.active { color: #fff; border-color: #34466b; background: #1a2743; }
 
-        #scanlines {
-            position: fixed; inset: 0; pointer-events: none; z-index: 9998;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
-            background-size: 100% 4px; display: none;
-        }
+section { display: none; width: min(var(--content-width), 100%); min-height: 70vh; margin: 0 auto; padding: clamp(28px, 4vw, 54px) clamp(16px, 3vw, 30px) 100px; opacity: 1; }
+section.active { display: block; }
+section h1 { margin: 0 0 30px; color: var(--text); font-size: clamp(1.8rem, 4vw, 2.7rem); line-height: 1.12; font-weight: 780; letter-spacing: -.045em; text-align: center; }
+section h2, section h3 { line-height: 1.25; }
+section h2 { font-size: 1.25rem; }
+section h3 { font-size: 1.12rem; }
+.hero-title { margin: 10px 0 18px !important; font-size: clamp(3.2rem, 10vw, 6.2rem) !important; line-height: .98 !important; font-weight: 850 !important; letter-spacing: -.07em !important; }
+.hero-subtitle { margin: 0 auto 8px; color: var(--accent); font-size: .8rem; font-weight: 750; letter-spacing: .2em; text-align: center; text-transform: uppercase; }
+.rainbow-text { color: #f1f4ff; background: none; -webkit-text-fill-color: currentColor; filter: none; }
+.home-accent-bar { width: 54px; height: 4px; margin: 0 auto 32px; border-radius: 4px; background: var(--accent-strong); box-shadow: none; }
 
-        #glitch-overlay {
-            position: fixed; inset: 0; pointer-events: none; z-index: 9997;
-            background: url('https://media.giphy.com/media/oEI9uWUic9VKM/giphy.gif');
-            opacity: 0; mix-blend-mode: overlay; transition: opacity 0.3s;
-        }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 205px), 1fr)); gap: 14px; margin: 0; padding: 0; list-style: none; }
+.grid li { min-width: 0; opacity: 1; transform: none; }
+.card { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; min-height: 120px; height: 100%; overflow: hidden; padding: 16px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); color: var(--text); text-align: center; text-decoration: none; box-shadow: none; transition: border-color .16s ease, background-color .16s ease, transform .16s ease; }
+.card:hover { z-index: 2; border-color: #526a9e; background: var(--surface-raised); transform: translateY(-2px); box-shadow: none; }
+.card img { display: block; width: 100%; height: 126px; margin: 0 0 8px; border: 1px solid rgb(255 255 255 / 5%); border-radius: 9px; object-fit: cover; box-shadow: none; transition: none; }
+.card:hover img { transform: none; }
+.card-text { color: var(--text); font-size: .94rem; font-weight: 680; line-height: 1.35; letter-spacing: -.01em; text-shadow: none; overflow-wrap: anywhere; }
+.featured-badge { position: absolute; top: 11px; right: 11px; z-index: 3; padding: 4px 8px; border: 1px solid #3f5687; border-radius: 6px; background: #1b2c4b; color: #b7c9ff; font-size: .64rem; font-weight: 750; letter-spacing: .06em; text-transform: uppercase; }
 
-        #matrix-canvas {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
-            opacity: 0; pointer-events: none; transition: opacity 0.8s ease;
-        }
+.panel { position: relative; width: min(800px, 100%); margin: 20px auto; padding: clamp(20px, 4vw, 34px); border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); color: var(--text); text-align: center; box-shadow: var(--surface-shadow); }
+.panel h3 { margin: 0 0 20px; color: var(--text); font-size: 1.2rem; }
+.panel p { color: #b2bfd7; }
+input:not([type="checkbox"]):not([type="range"]):not([type="color"]), textarea, select { display: block; width: 100%; min-height: 45px; margin: 0 0 15px; padding: 12px 14px; border: 1px solid var(--border); border-radius: 9px; background: #0d1424; color: var(--text); box-shadow: none; font-family: var(--font); font-size: .92rem; transition: border-color .15s ease, background-color .15s ease; }
+input::placeholder, textarea::placeholder { color: #7787a5; opacity: 1; }
+input:not([type="checkbox"]):not([type="range"]):not([type="color"]):focus, textarea:focus, select:focus { border-color: var(--accent); background: #101a2e; outline: 2px solid rgb(134 164 255 / 10%); box-shadow: none; }
+textarea { min-height: 110px; resize: vertical; }
+select { color-scheme: dark; }
+input[type="checkbox"] { width: 18px; height: 18px; margin: 0; accent-color: var(--accent-strong); }
+input[type="range"] { width: 100%; min-width: 0; height: 7px; margin: 0; padding: 0; accent-color: var(--accent-strong); background: #26324a; }
+input[type="color"] { width: 42px; height: 42px; min-height: 42px; padding: 3px; border: 1px solid var(--border); border-radius: 9px; background: var(--surface-soft); }
 
-        /* CUSTOM HARDWARE CURSOR */
-        #cursor {
-            width: 10px; height: 10px; background: var(--accent);
-            border-radius: 50%; position: fixed; pointer-events: none;
-            z-index: 10000; transition: transform 0.08s ease-out;
-            box-shadow: 0 0 15px var(--accent);
-        }
+.btn, .game-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 42px; padding: 10px 17px; border: 1px solid var(--border-strong); border-radius: 9px; background: #202c45; color: var(--text); font-family: var(--font); font-size: .9rem; font-weight: 700; box-shadow: none; transition: background-color .15s ease, border-color .15s ease, transform .15s ease; }
+.btn:hover, .game-btn:hover { border-color: #6e86c2; background: #2a3b5e; color: #fff; box-shadow: none; transform: translateY(-1px); }
+.btn:active, .game-btn:active { transform: translateY(0); }
+.game-btn { min-height: 34px; padding: 7px 11px; font-size: .8rem; }
+.game-controls button:last-child { border-color: #7e3f50; background: #472432; color: #ffdce1; }
+.game-controls button:last-child:hover { background: #653042; }
 
-        #cursor-follower {
-            width: 38px; height: 38px; border: 1.5px solid rgba(0, 242, 254, 0.6);
-            border-radius: 50%; position: fixed; pointer-events: none;
-            z-index: 9999; transition: transform 0.18s cubic-bezier(0.215, 0.61, 0.355, 1);
-            background: radial-gradient(circle, rgba(0,242,254,0.08) 0%, transparent 70%);
-        }
+.widget-row { display: flex; align-items: stretch; justify-content: center; gap: 14px; flex-wrap: wrap; margin: 0 auto 30px; }
+.widget { flex: 1 1 190px; max-width: 330px; min-width: 0; padding: 18px 20px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); transition: border-color .15s ease; }
+.widget:hover { border-color: var(--border-strong); box-shadow: none; transform: none; }
+.widget-label { margin-bottom: 8px; color: var(--muted); font-size: .69rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+.widget-val { color: var(--text); font-size: 1.35rem; font-weight: 760; line-height: 1.35; overflow-wrap: anywhere; }
 
-        .cursor-hover #cursor { transform: scale(3.5); background: #ffffff; box-shadow: 0 0 20px #fff; }
-        .cursor-hover #cursor-follower { transform: scale(1.4); border-color: #ffffff; background: rgba(255,255,255,0.15); }
+#calc { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 9px; width: 100%; max-width: 390px; margin: 0 auto; }
+#calc button { min-height: 55px; padding: 10px; border: 1px solid var(--border); border-radius: 9px; background: #1b2740; color: var(--text); font-size: 1.08rem; font-weight: 700; transition: background-color .15s ease; }
+#calc button:hover { border-color: var(--border-strong); background: #2a3b5e; transform: none; }
+#calc button:last-child { grid-column: span 4; background: var(--accent-strong); color: #fff; border-color: transparent; font-size: 1.35rem; }
+#calc button:last-child:hover { background: #8099f4; }
+#calc-out, #pomo-display, #sw-display { font-family: var(--mono) !important; font-variant-numeric: tabular-nums; }
 
-        /* PERFORMANCE MODE */
-        .perf-mode * { backdrop-filter: none !important; animation: none !important; transition: none !important; box-shadow: none !important; cursor: auto !important; }
-        .perf-mode section.active, .perf-mode .grid li { opacity: 1 !important; transform: none !important; }
-        .perf-mode #particle-canvas, .perf-mode #cursor, .perf-mode #cursor-follower, .perf-mode #scanlines, .perf-mode #glitch-overlay, .perf-mode #meme-canvas { display: none !important; }
-        .perf-mode .card, .perf-mode .panel, .perf-mode .nav { background: #111116 !important; border: 1px solid #22222e !important; }
+.task-item { display: flex; align-items: center; gap: 12px; min-height: 48px; margin-bottom: 8px; padding: 12px 13px; border: 1px solid var(--border); border-radius: 9px; background: #10182a; text-align: left; }
+.task-item span { min-width: 0; flex: 1; overflow-wrap: anywhere; }
+.fx-control { display: flex; align-items: center; gap: 18px; margin: 0 0 12px; padding: 14px; border: 1px solid var(--border); border-radius: 10px; background: #10182a; text-align: left; }
+.fx-control label { flex: 0 0 145px; color: var(--text); font-size: .85rem; font-weight: 650; }
+.feedback-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 12px; text-align: left; }
+.feedback-chip { flex: 1; padding: 11px 12px; border: 1px solid var(--border); border-radius: 8px; background: #111a2d; color: var(--muted); font-size: .85rem; text-align: center; transition: background-color .15s ease, border-color .15s ease, color .15s ease; }
+.feedback-chip:hover, .feedback-chip.selected { border-color: #50679b; background: #1b2b4b; color: var(--text); font-weight: 700; }
 
-        /* LOADER */
-        #loader {
-            position: fixed; inset: 0; background: #050508; z-index: 20000;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
-        }
-        .loader-logo { font-family: var(--title-font); font-size: 3.5rem; font-weight: 700; letter-spacing: -1px; margin-bottom: 25px; background: linear-gradient(135deg, #fff 0%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: var(--glow-filter); }
-        .load-bar { width: 280px; height: 5px; background: rgba(255,255,255,0.08); border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
-        .load-progress { width: 0%; height: 100%; background: linear-gradient(90deg, var(--accent), #ff0080); transition: width 0.2s linear; box-shadow: 0 0 15px var(--accent); }
+.terminal-box { max-height: 380px; overflow: auto; padding: 18px; border: 1px solid var(--border); border-radius: 10px; background: #080d17; color: #a8baff; font: .83rem/1.65 var(--mono); text-align: left; }
+.terminal-line { margin-bottom: 6px; overflow-wrap: anywhere; white-space: pre-wrap; }
+.terminal-input-row { display: flex; align-items: center; gap: 10px; margin-top: 15px; text-align: left; }
+.terminal-input-row > span { flex: 0 0 auto; color: var(--accent); font: 700 .82rem var(--mono); }
+.terminal-input-row input:not([type="checkbox"]) { flex: 1; min-width: 0; margin: 0; padding: 10px 0; border: 0; background: transparent; box-shadow: none; font-family: var(--mono); }
 
-        /* GLASS CORE COMPONENTS */
-        .status-bar, .nav, .card, .panel, .widget, .game-bar, #cmd-palette {
-            background: var(--bg-glass);
-            backdrop-filter: blur(var(--blur-val)) saturate(160%);
-            -webkit-backdrop-filter: blur(var(--blur-val)) saturate(160%);
-            border: 1px solid var(--border);
-            box-shadow: var(--panel-shadow), var(--inner-shadow);
-        }
+#game-view { position: fixed; inset: 0; z-index: 5000; display: none; flex-direction: column; background: #080c15; opacity: 0; }
+#game-view.active { display: flex; opacity: 1; }
+#game-frame { flex: 1 1 auto; width: 100%; min-height: 0; border: 0; background: #000; }
+.game-bar { position: relative; z-index: 2; display: flex; align-items: center; justify-content: space-between; gap: 15px; min-height: 62px; padding: 10px 16px 10px 22px; border: 0; border-bottom: 1px solid var(--border); border-radius: 0; background: #10182a; box-shadow: none; }
+#active-game-name { color: var(--text); font-size: .95rem; font-weight: 800; letter-spacing: .02em; }
+#game-status-text { margin-top: 2px; color: var(--success); font-size: .68rem; letter-spacing: .06em; }
+.game-controls { display: flex; align-items: center; justify-content: flex-end; gap: 7px; flex-wrap: wrap; }
+#game-loader { position: absolute; top: 50%; left: 50%; z-index: 5001; display: none; flex-direction: column; align-items: center; gap: 12px; transform: translate(-50%, -50%); }
+.spinner { width: 34px; height: 34px; border: 3px solid #26334c; border-top-color: var(--accent); border-radius: 50%; animation: spin .85s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
 
-        /* STATUS BAR */
-        .status-bar {
-            display: flex; justify-content: space-between; align-items: center; padding: 12px 35px;
-            font-size: 0.82rem; font-weight: 600; color: #e4e4e7; letter-spacing: 0.5px;
-            border-bottom: 1px solid var(--border); z-index: 1001; position: sticky; top: 0;
-            border-radius: 0 0 24px 24px; background: rgba(10, 10, 16, 0.65);
-        }
+#cmd-palette { position: fixed; top: 13vh; left: 50%; z-index: 10005; display: none; flex-direction: column; width: min(520px, calc(100% - 28px)); max-height: 76vh; overflow: hidden; padding: 16px; border: 1px solid var(--border-strong); border-radius: 14px; background: #111a2c; box-shadow: 0 24px 70px rgb(0 0 0 / 55%); transform: translateX(-50%); }
+#cmd-palette.active { display: flex; }
+#cmd-input { margin-bottom: 10px; }
+.cmd-results { max-height: 280px; overflow-y: auto; text-align: left; }
+.cmd-item { padding: 11px 12px; border-radius: 8px; color: #c2cce0; cursor: pointer; font-size: .9rem; }
+.cmd-item:hover { background: #202e4b; color: #fff; font-weight: 650; }
+#toast { position: fixed; bottom: 18px; left: 50%; z-index: 10001; max-width: calc(100% - 30px); padding: 12px 18px; border: 1px solid var(--border-strong); border-radius: 10px; background: #1b2740; color: var(--text); font-size: .9rem; font-weight: 650; text-align: center; box-shadow: 0 12px 36px rgb(0 0 0 / 35%); transform: translate(-50%, 130px); transition: transform .2s ease; }
+#toast.visible { transform: translate(-50%, 0); }
+.floating-action { position: fixed; right: 22px; bottom: 22px; z-index: 1000; display: flex; align-items: center; justify-content: center; width: 50px; height: 50px; border: 1px solid #50679b; border-radius: 13px; background: #1a2743; color: #fff; font-size: 1.7rem; font-weight: 400; box-shadow: var(--surface-shadow); transition: background-color .15s ease, transform .15s ease; }
+.floating-action:hover { background: #2a3b5e; box-shadow: none; transform: translateY(-2px); }
 
-        .status-tag { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.06); padding: 6px 14px; border-radius: 20px; border: 1px solid var(--border); }
-        .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); box-shadow: 0 0 10px var(--success); }
+.load-bar { width: min(280px, calc(100vw - 56px)); height: 5px; overflow: hidden; border-radius: 10px; background: #202c45; }
+.load-progress { width: 0; height: 100%; background: var(--accent-strong); transition: width .2s ease; }
+#loader { position: fixed; inset: 0; z-index: 20000; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; background: var(--bg-deep); transition: transform .32s ease; }
+.loader-logo { margin-bottom: 15px; color: var(--text); font-size: clamp(2.25rem, 7vw, 3.3rem); font-weight: 850; letter-spacing: -.055em; }
 
-        /* SEARCH & NAVIGATION */
-        .search-area { max-width: 680px; margin: 30px auto 20px; padding: 0 20px; position: relative; }
-        .search-area input {
-            width: 100%; padding: 18px 30px; border-radius: 100px;
-            background: rgba(15, 15, 25, 0.6); border: 1px solid var(--border);
-            color: white; font-size: 1rem; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            backdrop-filter: blur(20px); box-shadow: inset 0 2px 8px rgba(0,0,0,0.5);
-        }
-        .search-area input:focus { border-color: var(--accent); box-shadow: 0 0 30px var(--accent-glow), inset 0 2px 8px rgba(0,0,0,0.5); transform: scale(1.01); }
+.user-profile-card { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 16px; padding: 22px; border: 1px solid var(--border); border-radius: var(--radius); background: #10182a; }
+.user-avatar-large { width: 88px; height: 88px; border: 2px solid var(--border-strong); border-radius: 50%; object-fit: cover; }
+#profile-container { max-width: 800px; }
+#about > div img { display: block; max-width: min(220px, 75vw); border: 1px solid var(--border); border-radius: 14px; box-shadow: none; }
 
-        .nav-wrapper { position: sticky; top: 65px; z-index: 1000; display: flex; justify-content: center; padding: 10px 20px; }
-        .nav { list-style: none; margin: 0; padding: 6px; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; border-radius: 100px; background: rgba(12, 12, 20, 0.7); }
-        .nav li a {
-            color: var(--secondary); text-decoration: none; padding: 10px 20px; font-weight: 600; font-size: 0.82rem;
-            transition: all 0.25s ease; border-radius: 100px; display: inline-block;
-        }
-        .nav li a:hover, .nav li a.active { color: #fff; background: linear-gradient(135deg, rgba(0, 242, 254, 0.25), rgba(255, 0, 128, 0.25)); border: 1px solid var(--border-highlight); box-shadow: 0 0 20px var(--accent-glow); transform: translateY(-2px); }
+#tool-out { min-height: 1.5em; margin-top: 22px; color: var(--accent); overflow-wrap: anywhere; }
+#unit-panel, #morse-panel { text-align: center; }
+#sketchpad { display: block; width: 100%; max-width: 600px; height: auto; margin: 0 auto; border: 1px solid var(--border); border-radius: 10px; background: #080d17; touch-action: none; cursor: crosshair; }
 
-        /* SECTIONS & GRID */
-        section { display: none; opacity: 0; padding: 40px 20px 120px; min-height: 80vh; max-width: 1450px; margin: 0 auto; }
-        section.active { display: block; animation: sectionIn 0.5s forwards cubic-bezier(0.16, 1, 0.3, 1); }
+.perf-mode #particle-canvas, .perf-mode #cursor, .perf-mode #cursor-follower, .perf-mode #scanlines, .perf-mode #glitch-overlay, .perf-mode #meme-canvas { display: none !important; }
+.perf-mode *, .perf-mode *::before, .perf-mode *::after { animation: none !important; transition: none !important; }
+.perf-mode .card, .perf-mode .panel, .perf-mode .nav, .perf-mode .widget { background: #111827 !important; border-color: #293246 !important; box-shadow: none !important; }
+.perf-mode section.active, .perf-mode .grid li { opacity: 1 !important; transform: none !important; }
 
-        h1 { text-align: center; font-size: 3.2rem; margin-bottom: 35px; font-family: var(--title-font); font-weight: 700; letter-spacing: -1px; }
+::-webkit-scrollbar { width: 9px; height: 9px; }
+::-webkit-scrollbar-track { background: #0b1020; }
+::-webkit-scrollbar-thumb { border: 2px solid #0b1020; border-radius: 8px; background: #34415b; }
+::-webkit-scrollbar-thumb:hover { background: #52658b; }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 22px; list-style: none; padding: 0; margin: 0; }
-        .grid li { opacity: 0; transform: translateY(20px); }
-        section.active li { animation: itemUp 0.4s forwards; }
+@media (max-width: 850px) {
+    .status-bar { align-items: flex-start; flex-direction: column; gap: 8px; }
+    .status-bar > div:last-child { justify-content: flex-start; gap: 7px 12px; }
+    .nav-wrapper { top: 98px; }
+    .game-bar { align-items: flex-start; flex-direction: column; padding: 12px; }
+    .game-controls { width: 100%; justify-content: flex-start; }
+    .game-btn { min-height: 38px; }
+}
+@media (max-width: 560px) {
+    body { font-size: 14px; }
+    .status-bar { position: relative; }
+    .nav-wrapper { position: sticky; top: 0; padding: 7px 8px; }
+    .nav { gap: 3px; }
+    .nav li a { padding: 8px 9px; font-size: .77rem; }
+    .search-area { margin: 20px auto 14px; }
+    section { padding: 30px 14px 80px; }
+    .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .card { min-height: 108px; padding: 12px; }
+    .card img { height: 100px; }
+    .card-text { font-size: .86rem; }
+    .widget-row { gap: 10px; }
+    .widget { flex-basis: 100%; max-width: none; }
+    .panel { margin: 14px auto; padding: 19px 15px; }
+    .fx-control { align-items: flex-start; flex-direction: column; gap: 9px; }
+    .fx-control label { flex-basis: auto; }
+    .feedback-grid { grid-template-columns: 1fr; gap: 5px; }
+    .terminal-input-row { align-items: flex-start; flex-direction: column; }
+    .terminal-input-row input:not([type="checkbox"]) { width: 100%; }
+    .floating-action { right: 14px; bottom: 14px; width: 46px; height: 46px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
 
-        .card {
-            display: flex; flex-direction: column; align-items: center; text-decoration: none;
-            color: white; padding: 20px; border-radius: 22px; background: var(--bg-card);
-            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1); height: 100%; text-align: center; position: relative; overflow: hidden; border: 1px solid var(--border);
-        }
-        .card:hover { transform: translateY(-7px) scale(var(--card-scale)); border-color: var(--border-highlight); box-shadow: 0 15px 35px rgba(0,0,0,0.6), 0 0 25px var(--accent-glow); background: rgba(255,255,255,0.08); z-index: 2; }
-        .card img { width: 100%; height: 135px; object-fit: cover; border-radius: 16px; margin-bottom: 16px; box-shadow: 0 8px 18px rgba(0,0,0,0.4); transition: transform 0.3s; }
-        .card:hover img { transform: scale(1.03); }
-        .card-text { font-weight: 600; font-size: 0.98rem; letter-spacing: 0.2px; text-shadow: 0 2px 4px rgba(0,0,0,0.6); }
-
-        /* THEATER / GAME VIEW */
-        #game-view { position: fixed; inset: 0; z-index: 5000; background: rgba(2,2,5,0.92); backdrop-filter: blur(25px); display: none; flex-direction: column; opacity: 0; transition: opacity 0.4s; }
-        #game-view.active { display: flex; opacity: 1; }
-        #game-frame { border: none; width: 100%; height: 100%; flex-grow: 1; transition: all 0.3s ease; }
-        .game-bar { padding: 12px 28px; display: flex; justify-content: space-between; align-items: center; border-radius: 0; border-top: none; border-left: none; border-right: none; background: rgba(10,10,18,0.9); }
-        .game-controls { display: flex; gap: 8px; align-items: center; }
-        
-        #game-loader { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: none; flex-direction: column; align-items: center; gap: 15px; z-index: 5001; }
-        .spinner { width: 45px; height: 45px; border: 3px solid rgba(255,255,255,0.1); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s infinite linear; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* PANELS & FORM CONTROLS */
-        .panel { max-width: 800px; margin: 25px auto; padding: 40px; border-radius: 28px; text-align: center; position: relative; transition: border-color 0.3s; }
-        .panel:hover { border-color: rgba(255,255,255,0.25); }
-        .panel h3 { margin-top: 0; font-family: var(--title-font); font-size: 1.6rem; color: #fff; }
-        
-        input, textarea, select { width: 100%; padding: 15px 20px; border-radius: 14px; background: rgba(0,0,0,0.3); border: 1px solid var(--border); color: white; margin-bottom: 18px; font-family: var(--font); font-size: 0.95rem; transition: 0.3s; }
-        input:focus, textarea:focus, select:focus { background: rgba(0,0,0,0.5); border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); }
-        
-        .btn, .game-btn { 
-            background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04)); border: 1px solid var(--border); color: #fff; 
-            padding: 14px 28px; border-radius: 100px; font-weight: 600; font-family: var(--font);
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1); cursor: pointer; backdrop-filter: blur(10px);
-            box-shadow: var(--inner-shadow); display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-        }
-        .btn:hover, .game-btn:hover { background: linear-gradient(135deg, var(--accent), #ff0080); border-color: transparent; color: #000; transform: translateY(-2px); box-shadow: 0 8px 25px var(--accent-glow); }
-        .btn:active, .game-btn:active { transform: scale(0.96); }
-        .game-btn { padding: 9px 16px; font-size: 0.8rem; }
-
-        /* CALCULATOR */
-        #calc { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; max-width: 380px; margin: 0 auto; }
-        #calc button { padding: 20px; border-radius: 16px; border: 1px solid var(--border); background: rgba(255,255,255,0.06); color: white; font-weight: 600; font-size: 1.2rem; transition: 0.2s; cursor: pointer; }
-        #calc button:hover { background: rgba(255,255,255,0.2); border-color: #fff; transform: translateY(-2px); }
-
-        /* WIDGETS */
-        .widget-row { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; margin-bottom: 35px; }
-        .widget { padding: 22px 28px; border-radius: 20px; min-width: 190px; transition: 0.3s; flex: 1; max-width: 280px; }
-        .widget:hover { transform: translateY(-4px); border-color: var(--border-highlight); box-shadow: 0 10px 25px rgba(0,0,0,0.4); }
-        .widget-val { font-size: 1.4rem; font-weight: 700; color: #fff; }
-        .widget-label { font-size: 0.72rem; text-transform: uppercase; opacity: 0.65; letter-spacing: 1px; margin-bottom: 6px; font-weight: 700; }
-
-        /* TASK LIST */
-        .task-item { display: flex; align-items: center; gap: 12px; background: rgba(0,0,0,0.25); padding: 14px; border-radius: 12px; margin-bottom: 8px; border: 1px solid var(--border); }
-        .task-item input[type="checkbox"] { width: 18px; height: 18px; margin: 0; accent-color: var(--accent); }
-
-        /* FX SLIDERS */
-        .fx-control { display: flex; align-items: center; gap: 20px; margin-bottom: 16px; background: rgba(0,0,0,0.2); padding: 14px 22px; border-radius: 16px; border: 1px solid var(--border); }
-        .fx-control label { min-width: 140px; font-weight: 600; font-size: 0.88rem; color: #fff; }
-        input[type="range"] { margin: 0; padding: 0; height: 6px; background: rgba(255,255,255,0.15); accent-color: var(--accent); border-radius: 10px; }
-
-        /* COMMAND PALETTE */
-        #cmd-palette {
-            position: fixed; top: 18%; left: 50%; transform: translateX(-50%) scale(0.95);
-            width: 520px; border-radius: 24px; z-index: 10005; display: none; flex-direction: column; padding: 22px;
-            box-shadow: 0 30px 80px rgba(0,0,0,0.8); border: 1px solid var(--border-highlight);
-        }
-        #cmd-palette.active { display: flex; animation: sectionIn 0.25s forwards; }
-        .cmd-results { max-height: 280px; overflow-y: auto; text-align: left; }
-        .cmd-item { padding: 12px 18px; border-radius: 10px; cursor: pointer; transition: 0.2s; font-size: 0.9rem; }
-        .cmd-item:hover { background: var(--accent); color: #000; font-weight: 600; }
-
-        /* TOAST */
-        #toast {
-            position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
-            background: rgba(10, 10, 18, 0.85); backdrop-filter: blur(25px); border: 1px solid var(--border-highlight);
-            color: #fff; padding: 15px 40px; border-radius: 100px; font-weight: 600; z-index: 10001; 
-            transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 15px 40px rgba(0,0,0,0.6), 0 0 20px var(--accent-glow);
-        }
-
-        /* AUTH & FEEDBACK UI */
-        .auth-badge { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.08); padding: 6px 16px; border-radius: 50px; border: 1px solid var(--border); transition: 0.25s; cursor: pointer; }
-        .auth-badge:hover { background: rgba(255,255,255,0.18); border-color: var(--accent); }
-        .auth-badge img { width: 22px; height: 22px; border-radius: 50%; }
-
-        .user-profile-card { background: rgba(0,0,0,0.2); border-radius: 22px; padding: 25px; margin-top: 15px; border: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; gap: 12px; }
-        .user-avatar-large { width: 90px; height: 90px; border-radius: 50%; border: 3px solid var(--accent); box-shadow: 0 0 20px var(--accent-glow); }
-
-        .feedback-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: left; }
-        .feedback-chip { padding: 12px 18px; border-radius: 12px; background: rgba(0,0,0,0.25); font-size: 0.88rem; cursor: pointer; border: 1px solid var(--border); transition: 0.25s; text-align: center; }
-        .feedback-chip:hover, .feedback-chip.selected { border-color: var(--accent); background: rgba(0,242,254,0.15); color: #fff; font-weight: 600; }
-
-        /* EXTENDED STYLES */
-        .terminal-box {
-            background: rgba(5, 5, 10, 0.7); color: #00f2fe; font-family: 'Fira Code', monospace;
-            padding: 22px; border-radius: 16px; border: 1px solid var(--border);
-            text-align: left; max-height: 380px; overflow-y: auto; font-size: 0.88rem;
-            box-shadow: inset 0 4px 15px rgba(0,0,0,0.6);
-        }
-        .terminal-line { margin-bottom: 6px; word-wrap: break-word; }
-        .terminal-input-row { display: flex; gap: 10px; align-items: center; }
-        .terminal-input-row input { background: transparent !important; border: none !important; padding: 0 !important; margin: 0 !important; color: #fff !important; width: 100% !important; box-shadow: none !important; font-family: 'Fira Code', monospace; }
-
-        .floating-action {
-            position: fixed; bottom: 30px; right: 30px; z-index: 1000;
-            width: 55px; height: 55px; background: rgba(10, 10, 20, 0.75); border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; color: #fff; border: 1px solid var(--border-highlight);
-            font-size: 1.4rem; backdrop-filter: blur(20px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: 0.3s;
-        }
-        .floating-action:hover { transform: scale(1.1) rotate(90deg); background: var(--accent); color: #000; box-shadow: 0 0 25px var(--accent-glow); }
-
-        .hero-title { font-size: 6rem !important; line-height: 1; margin: 15px 0 !important; font-family: var(--title-font); }
-        .hero-subtitle { font-size: 1.1rem; opacity: 0.75; letter-spacing: 6px; text-transform: uppercase; margin-bottom: 25px; font-weight: 700; }
-        .home-accent-bar { width: 90px; height: 4px; background: linear-gradient(90deg, var(--accent), #ff0080); margin: 0 auto 40px; border-radius: 10px; box-shadow: 0 0 15px var(--accent-glow); }
-        .featured-badge { position: absolute; top: 12px; right: 12px; background: rgba(0,242,254,0.15); backdrop-filter: blur(10px); color: var(--accent); padding: 4px 10px; border-radius: 8px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; z-index: 3; border: 1px solid var(--border-highlight); }
-
-        .rainbow-text { background: linear-gradient(135deg, #ffffff 0%, var(--accent) 50%, #ff0080 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 4px 15px rgba(0,0,0,0.5)); }
-
-        @keyframes sectionIn { from { opacity: 0; transform: translateY(20px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
-        @keyframes itemUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .grid li:nth-child(n) { animation-delay: calc(0.04s * var(--i, 0)); }
-
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
-    </style>
+</style>
 </head>
-<body oncontextmenu="return false;">
+<body>
     <div id="scanlines"></div>
     <div id="glitch-overlay"></div>
     <canvas id="particle-canvas"></canvas>
@@ -304,7 +255,7 @@
     <div id="loader">
         <div class="loader-logo">LAUNCHPAD V12</div>
         <div class="load-bar"><div class="load-progress" id="load-p"></div></div>
-        <div style="font-size: 0.72rem; margin-top: 15px; opacity: 0.7; letter-spacing: 2px; font-weight: 600;">INITIALIZING HIGH PERFORMANCE ENGINE...</div>
+        <div style="font-size: 0.72rem; margin-top: 15px; opacity: 0.7; letter-spacing: 2px; font-weight: 600">INITIALIZING HIGH PERFORMANCE ENGINE...</div>
     </div>
 
     <div id="cmd-palette">
@@ -326,19 +277,19 @@
     <div id="game-view">
         <div id="game-loader">
             <div class="spinner"></div>
-            <div style="font-size: 0.8rem; letter-spacing: 2px; font-weight: 600; color: var(--accent);">BOOTING ENGINE...</div>
+            <div style="font-size: 0.8rem; letter-spacing: 2px; font-weight: 600">BOOTING ENGINE...</div>
         </div>
         <div class="game-bar">
-            <div style="display:flex; flex-direction:column;">
-                <div id="active-game-name" style="font-weight:700; text-transform:uppercase; letter-spacing:1px; font-size: 1rem;">Experience</div>
-                <div id="game-status-text" style="font-size: 0.7rem; opacity: 0.7; color: var(--accent);">LAUNCHPAD PROXY: ACTIVE</div>
+            <div style="display: flex; flex-direction: column">
+                <div id="active-game-name" style="font-weight: 700; text-transform: uppercase; letter-spacing: 1px; font-size: 1rem">Experience</div>
+                <div id="game-status-text" style="font-size: 0.7rem; opacity: 0.7">LAUNCHPAD PROXY: ACTIVE</div>
             </div>
             <div class="game-controls">
                 <button class="game-btn" title="Reload" onclick="reloadGame()">⟳</button>
                 <button class="game-btn" title="Fullscreen" onclick="toggleFullscreen()">⛶</button>
                 <button class="game-btn" title="Wide Mode" onclick="toggleTheaterSize()">Wide</button>
                 <button class="game-btn" title="Open in New Tab" onclick="openInNewTab()">New Tab</button>
-                <button class="game-btn" style="background:rgba(255,59,48,0.8); border:none; color:#fff;" onclick="closeGame()">EXIT</button>
+                <button class="game-btn" onclick="closeGame()">EXIT</button>
             </div>
         </div>
         <iframe id="game-frame" src="about:blank"></iframe>
@@ -349,9 +300,9 @@
             <div class="status-dot"></div>
             <span id="greeting">Welcome to Launchpad!</span>
         </div>
-        <div style="display:flex; gap:18px; align-items:center;">
-            <div id="meme-status-badge" class="status-tag" style="cursor:pointer;" onclick="toggleMemeMode()">
-                <span>MEME MODE: <strong id="meme-toggle-text" style="color:#ff3b30;">OFF</strong></span>
+        <div style="display: flex; gap: 18px; align-items: center">
+            <div id="meme-status-badge" class="status-tag" style="cursor: pointer" onclick="toggleMemeMode()">
+                <span>MEME MODE: <strong id="meme-toggle-text">OFF</strong></span>
             </div>
             <div id="auth-status" class="auth-badge" onclick="handleAuthClick()">
                 <svg width="15" height="15" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
@@ -370,18 +321,18 @@
 
     <div class="nav-wrapper">
         <ul class="nav">
-            <li><a onclick="showSec('home')" id="nav-home">Home</a></li>
-            <li><a onclick="showSec('games')" id="nav-games">Games</a></li>
-            <li><a onclick="showSec('apps')" id="nav-apps">Apps</a></li>
-            <li><a onclick="showSec('music')" id="nav-music">Music</a></li>
-            <li><a onclick="showSec('news')" id="nav-news">Changelog</a></li>
-            <li><a onclick="showSec('tools')" id="nav-tools">Tools</a></li>
-            <li><a onclick="showSec('terminal')" id="nav-terminal">Terminal</a></li>
-            <li><a onclick="showSec('models')" id="nav-models">3D</a></li>
-            <li><a onclick="showSec('design')" id="nav-design">Settings</a></li>
-            <li><a onclick="showSec('questions')" id="nav-questions">Feedback</a></li>
-            <li><a onclick="showSec('profile')" id="nav-profile">Profile</a></li>
-            <li><a onclick="showSec('about')" id="nav-about">About</a></li>
+            <li><a id="nav-home">Home</a></li>
+            <li><a id="nav-games">Games</a></li>
+            <li><a id="nav-apps">Apps</a></li>
+            <li><a id="nav-music">Music</a></li>
+            <li><a id="nav-news">Changelog</a></li>
+            <li><a id="nav-tools">Tools</a></li>
+            <li><a id="nav-terminal">Terminal</a></li>
+            <li><a id="nav-models">3D</a></li>
+            <li><a id="nav-design">Settings</a></li>
+            <li><a id="nav-questions">Feedback</a></li>
+            <li><a id="nav-profile">Profile</a></li>
+            <li><a id="nav-about">About</a></li>
         </ul>
     </div>
 
@@ -398,8 +349,7 @@
         <div class="widget-row">
             <div class="widget">
                 <div class="widget-label">Daily Quote</div>
-                <div class="widget-val" id="quote-box" style="font-size: 0.95rem; font-weight: 500;">"Having fun all day lol"</div>
-            </div>
+                <div class="widget-val" id="quote-box" style="font-size: 0.95rem; font-weight: 500">"Having fun all day lol"</div>
             </div>
             <div class="widget">
                 <div class="widget-label">Memory Usage</div>
@@ -411,7 +361,7 @@
             </div>
         </div>
 
-        <h2 style="text-align: center; font-family: var(--title-font); font-size: 1.1rem; letter-spacing: 3px; opacity: 0.6; margin-top: 40px;">FEATURED CHANNELS</h2>
+        <h2 style="text-align: center; font-family: var(--title-font); font-size: 1.1rem; letter-spacing: 3px; opacity: 0.6; margin-top: 40px">FEATURED CHANNELS</h2>
         <ul class="grid">
             <li><a class="card" href="https://www.youtube.com/@zOcM" target="_blank"><span class="featured-badge">Creator</span><span class="card-text">YouTube (zOcM)</span></a></li>
             <li><a class="card" href="https://www.youtube.com/@VRGamer262" target="_blank"><span class="featured-badge">Creator</span><span class="card-text">YouTube (VRGamer262)</span></a></li>
@@ -424,49 +374,49 @@
     <section id="games">
         <h1>Games Library</h1>
         <ul class="grid">
-            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/polytrack/', 'Polytrack')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSq4z0oIn1dnrq__vTuC1IthPoyEBUIpJx2tw&s"><span class="card-text">Polytrack</span></div></li>
-            <li><div class="card" onclick="openGame('https://supaclicker.vrgamer262.workers.dev/', 'Supa Clicker')"><img src="https://raw.githubusercontent.com/VRGamer262Real/supaclicker.github.io/refs/heads/main/ButtonIcon.png"><span class="card-text">Supa Clicker</span></div></li>
-            <li><div class="card" onclick="openGame('https://supaclickerhacked.vrgamer262.workers.dev/', 'Supa Clicker (Hacked)')"><img src="https://raw.githubusercontent.com/VRGamer262Real/supaclicker.github.io/refs/heads/main/ButtonIcon.png"><span class="card-text">Clicker (Hacked)</span></div></li>
-            <li><div class="card" onclick="openGame('https://tower-defense.vrgamer262.workers.dev/', 'Tower Defense')"><img src="https://raw.githubusercontent.com/VRGamer262Real/Hub/refs/heads/main/TD-Image.png"><span class="card-text">Tower Defense</span></div></li>
-            <li><div class="card" onclick="openGame('https://towerdefensehacked.vrgamer262.workers.dev/', 'Tower Defense (Hacked)')"><img src="https://raw.githubusercontent.com/VRGamer262Real/Hub/refs/heads/main/TD-Image.png"><span class="card-text">TD (Hacked)</span></div></li>
-            <li><div class="card" onclick="openGame('https://bbcr.vrgamer262.workers.dev/', 'Baldi Remaster')"><img src="https://m.gjcdn.net/game-header/950/602328-enyxuxkk-v4.jpg"><span class="card-text">Baldi Remaster</span></div></li>
-            <li><div class="card" onclick="openGame('https://melodixxx.github.io/reunbozdo.github.io/', 'Block Blast')"><img src="https://i.ytimg.com/vi/tjbh3cNpI9g/maxresdefault.jpg"><span class="card-text">Block Blast</span></div></li>
-            <li><div class="card" onclick="openGame('https://simon.lc/tetr.js/', 'Tetris')"><img src="https://play-lh.googleusercontent.com/w-lUGr-eaAwxLUl7OW5v7jLG-CE8H2Z75D6lkkm8Tro21ZLCk7fvVIjVM7ZG0u0ZLBws=w240-h480-rw"><span class="card-text">Tetris</span></div></li>
-            <li><div class="card" onclick="openGame('https://web-dashers.github.io/', 'Geometry Dash')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCd8DHW4zOb9QqjJ59t9FpV8LnEeKwIttiaw&s"><span class="card-text">Geometry Dash</span></div></li>
-            <li><div class="card" onclick="openGame('https://8ballpool.vrgamer262.workers.dev/', '8Ball Pool')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkQDXxj4nWBG57shuWLgrAZalDrnAF-CINBQ&s"><span class="card-text">8Ball Pool</span></div></li>
-            <li><div class="card" onclick="openGame('https://snowrider3d.vrgamer262.workers.dev/', 'Snow Rider 3D')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7HUapu5amnY5nfYojuBTCRQBThbOGsPKl_Q&s"><span class="card-text">Snow Rider 3D</span></div></li>
-            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/paperio2/', 'Paper.io 2')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbOYDL-XogArpPn5yhnKk4E0pRDmWTIRXnxA&s"><span class="card-text">Paper.io 2</span></div></li>
-            <li><div class="card" onclick="openGame('https://30obriewhit.github.io/drive-mad/', 'Drive Mad')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS978Fp0DG45horfcROMLIbcBrNSrHrzpTEpw&s"><span class="card-text">Drive Mad</span></div></li>
-            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/slopegithub.io/', 'Slope')"><img src="https://slopeonlinegame.github.io/data/image/options/slope-game-unblocked-76-banner.jpg"><span class="card-text">Slope</span></div></li>
-            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/tube-jumpers/', 'Tube Jumpers')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrRUxFpC2DxuSdDpblsfSVLjduLqvzH5jVdg&s"><span class="card-text">Tube Jumpers</span></div></li>
-            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/pac-man-2/', 'PanMan 2')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNLZvtt71RKK-qtH3aOkGdy4mq2eF874psqQ&s"><span class="card-text">PacMan 2</span></div></li>
-            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/google-snake/', 'Snake')"><img src="https://imgs.search.brave.com/1IyfbUXm7HXvdd1aU3M7J0KZK1yG4bytZv-D19AL-lc/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/c3BlZWRydW4u/Y29t/L3N0YXRpYy9nYW1l/L28xeTlweWs2L2Nv/dmVyLnBuZz92PWY0/NTYyZmY"><span class="card-text">Snake</span></div></li>
-            <li><div class="card" onclick="openGame('https://cyberpunk-tank.vercel.app/', 'CyberPunk Tank')"><img src="https://imgs.search.brave.com/dUlfvnyVDET4V50tRhqCGarxvAXdcRUICLWP2HHVO1U/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly93d3cu/dHJ1ZWFjaGlldmVt/ZW50cy5jb20vZ2Ft/ZWltYWdlLzI2MDE2/NF8wLmpwZw"><span class="card-text">CyberPunk Tank</span></div></li>
-            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/ragdoll-hit/', 'Ragdoll Hit')"><img src="https://imgs.search.brave.com/jt0gBA2AiD_HUlzVd0pj5z4uY2yCsyQ2SHBK5OWSIbk/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9yYWdk/b2xsaGl0LWdhbWUu/aW8vZGF0YS9pbWFn/ZS9nYW1lL3JhZ2Rv/bGwtaGl0LW9ubGlu/ZS5wbmc"><span class="card-text">Ragdoll Hit</span></div></li>
-            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/territorial.io/', 'Territorial.io')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpaJ_2vBueQc_fMJhCXx3JFuBf-pALbA3m_A&s"><span class="card-text">Territorial.io</span></div></li>
-            <li><div class="card" onclick="openGame('https://anthonycoding262.github.io/hd_fnaf/', 'All FNAF Games')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQENAseWNj0BP2F45sfFwyz1DsfAUbf4U7YNg&s"><span class="card-text">All FNAF Games</span></div></li>
-            <li><div class="card" onclick="openGame('https://zj05409.github.io/2048/', '2048')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpL4kc3V_JiaWLsBHCzjpdN2ynBPikWajeHA&s"><span class="card-text">2048</span></div></li>
-            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/wordle/', 'Wordle')"><img src="https://imgs.search.brave.com/xx3Ekde3r8AC54sK3pKVFK04s-9bLOQMI_NXrcroNOQ/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy90/aHVtYi84LzhlL1dv/cmRsZV9Mb2NrdXAu/c3ZnLzI1MHB4LVdv/cmRsZV9Mb2NrdXAu/c3ZnLnBuZw"><span class="card-text">Wordle</span></div></li>
-            <li><div class="card" onclick="openGame('https://freak-games-studio.github.io/talking-ben/', 'Talking Ben')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXloBJC5TzcQY2NevbZMOPYrFPx9xCv7EEng&s"><span class="card-text">Talking Ben</span></div></li>
-            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/balatro-web/', 'Balatro')"><img src="https://thumb.wikimedia.org/wikipedia/en/thumb/8/89/Balatro_cover.jpg/250px-Balatro_cover.jpg?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail"><span class="card-text">Balatro</span></div></li>
-            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/rb2/', 'Retro Bowl 2')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQngUW5djcn25H2roJW8IbGgsQ7qYHmmUOVug&s"><span class="card-text">Retro Bowl 2</span></div></li>
-            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/FnF-Psych-Engine-0.5.1-HTML/', 'Friday Night Funkin')"><img src="https://upload.wikimedia.org/wikipedia/en/thumb/d/d2/Friday_Night_Funkin%27_logo.svg/250px-Friday_Night_Funkin%27_logo.svg.png"><span class="card-text">Friday Night Funkin</span></div></li>
-            <li><div class="card" onclick="openGame('https://www.google.com/logos/2019/july4th19/r6/july4th19.html?hl=en', 'Doodle Baseball')"><img src="https://www.google.com/logos/doodles/2019/fourth-of-july-2019-6225363087654912.2-2xa.gif"><span class="card-text">Doodle Baseball</span></div></li>
-            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/puzzle/', 'Puzzle')"><img src="https://raw.githubusercontent.com/VRGamer262Real/puzzle/main/gif/1.gif"><span class="card-text">Puzzle</span></div></li>
-            <li><div class="card" onclick="openGame('https://flight.tarmizi.id/', 'Flight Simulator')"><img src="https://i.ytimg.com/vi/duTeCHR363s/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLBh2zk5Dm56Rf3cVDMfWnvVIc06BA"><span class="card-text">Flight Simulator</span></div></li>
-            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/2d_farming_sim/', 'Farm Simulator 2D')"><img src="https://store-images.s-microsoft.com/image/apps.10230.14299110548313627.7e916051-145b-467d-9222-536b54bd914d.dc5e8877-ad6a-4363-a2c2-691cac6a8715"><span class="card-text">Farming Simulator 2D</span></div></li>
-            <li><div class="card" onclick="openGame('https://ellisonleao.github.io/clumsy-bird/', 'Flappy Bird')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOxYtqpL0TfXuH11QBByt0WKPGj0vzAEH7eA&s"><span class="card-text">Flappy Bird</span></div></li>
-            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/AngryBirds/', 'Angry Birds')"><img src="https://upload.wikimedia.org/wikipedia/en/2/2d/Angry_Birds_promo_art.png"><span class="card-text">Angry Birds</span></div></li>
-            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/hillClimbRacing/', 'Hill Climb Racing Modded')"><img src="https://repository-images.githubusercontent.com/189775144/6130cf00-f351-11e9-81dc-7425d9f5cdda"><span class="card-text">Hill Climb Racing Modded</span></div></li>
-            <li><div class="card" onclick="openGame('https://barbecuechickenroast.github.io/learntofly2/', 'Learn 2 Fly')"><img src="https://m.media-amazon.com/images/I/81ktLod+ElL.png"><span class="card-text">Learn 2 Fly</span></div></li>
-            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/a-REAL-copy-of-gunspin/', 'Gun Spin')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTei07pjTSWlXal0yIdqvTJLZpaoRVwblLSZA&s"><span class="card-text">Gun Spin</span></div></li>
-            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/Tanuki-Sunset/', 'Tanuki Sunset')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMVjR6jUeWRWZIwl86_qVugDgsYIje-fwW5w&s"><span class="card-text">Tanuki Sunset</span></div></li>
-            <li><div class="card" onclick="openGame('https://tunnelrush.github.io/', 'Tunnel Rush')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6s2c5R7rX5QO9qYv_N2-Vz6xQJtZzQ5TqXg&s"><span class="card-text">Tunnel Rush</span></div></li>
-            <li><div class="card" onclick="openGame('https://mathplay.github.io/moto-x3m/', 'Moto X3M')"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Motorsport_Icon.svg/1024px-Motorsport_Icon.svg.png"><span class="card-text">Moto X3M</span></div></li>
-            <li><div class="card" onclick="openGame('https://cookieclickernew.com/', 'Cookie Clicker')"><img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fassets.nintendo.com%2Fimage%2Fupload%2Fc_fill%2Cw_1200%2Fq_auto%3Abest%2Ff_auto%2Fdpr_2.0%2Fncom%2Fsoftware%2Fswitch%2F70010000066299%2F432bf350e866b2544f9a5cd80de83e0c24f4efddfd7811016c4aa33e48c5df7c&f=1&nofb=1&ipt=8db4881892c349612a7ada68dcad0e6a1efd39c2e48edd7ff7bd4693390c67c8"><span class="card-text">Cookie Clicker</span></div></li>
-            <li><div class="card" onclick="openGame('https://smashkarts.io/', 'Smash Karts')"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Go-Kart_Racer.jpg/500px-Go-Kart_Racer.jpg"><span class="card-text">Smash Karts</span></div></li>
-            <li><div class="card" onclick="openGame('https://pure-js.com/ovo/', 'OvO')"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Stickman_Icon.svg/200px-Stickman_Icon.svg.png"><span class="card-text">OvO</span></div></li>
-            <li><div class="card" onclick="openGame('https://coreball.io/', 'Core Ball')"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Circle_with_lines.svg/200px-Circle_with_lines.svg.png"><span class="card-text">Core Ball</span></div></li>
+            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/polytrack/', 'Polytrack')"><img loading="lazy" decoding="async" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSq4z0oIn1dnrq__vTuC1IthPoyEBUIpJx2tw&s"><span class="card-text">Polytrack</span></div></li>
+            <li><div class="card" onclick="openGame('https://supaclicker.vrgamer262.workers.dev/', 'Supa Clicker')"><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/VRGamer262Real/supaclicker.github.io/refs/heads/main/ButtonIcon.png"><span class="card-text">Supa Clicker</span></div></li>
+            <li><div class="card" onclick="openGame('https://supaclickerhacked.vrgamer262.workers.dev/', 'Supa Clicker (Hacked)')"><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/VRGamer262Real/supaclicker.github.io/refs/heads/main/ButtonIcon.png"><span class="card-text">Clicker (Hacked)</span></div></li>
+            <li><div class="card" onclick="openGame('https://tower-defense.vrgamer262.workers.dev/', 'Tower Defense')"><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/VRGamer262Real/Hub/refs/heads/main/TD-Image.png"><span class="card-text">Tower Defense</span></div></li>
+            <li><div class="card" onclick="openGame('https://towerdefensehacked.vrgamer262.workers.dev/', 'Tower Defense (Hacked)')"><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/VRGamer262Real/Hub/refs/heads/main/TD-Image.png"><span class="card-text">TD (Hacked)</span></div></li>
+            <li><div class="card" onclick="openGame('https://bbcr.vrgamer262.workers.dev/', 'Baldi Remaster')"><img loading="lazy" decoding="async" src="https://m.gjcdn.net/game-header/950/602328-enyxuxkk-v4.jpg"><span class="card-text">Baldi Remaster</span></div></li>
+            <li><div class="card" onclick="openGame('https://melodixxx.github.io/reunbozdo.github.io/', 'Block Blast')"><img loading="lazy" decoding="async" src="https://i.ytimg.com/vi/tjbh3cNpI9g/maxresdefault.jpg"><span class="card-text">Block Blast</span></div></li>
+            <li><div class="card" onclick="openGame('https://simon.lc/tetr.js/', 'Tetris')"><img loading="lazy" decoding="async" src="https://play-lh.googleusercontent.com/w-lUGr-eaAwxLUl7OW5v7jLG-CE8H2Z75D6lkkm8Tro21ZLCk7fvVIjVM7ZG0u0ZLBws=w240-h480-rw"><span class="card-text">Tetris</span></div></li>
+            <li><div class="card" onclick="openGame('https://web-dashers.github.io/', 'Geometry Dash')"><img loading="lazy" decoding="async" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCd8DHW4zOb9QqjJ59t9FpV8LnEeKwIttiaw&s"><span class="card-text">Geometry Dash</span></div></li>
+            <li><div class="card" onclick="openGame('https://8ballpool.vrgamer262.workers.dev/', '8Ball Pool')"><img loading="lazy" decoding="async" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkQDXxj4nWBG57shuWLgrAZalDrnAF-CINBQ&s"><span class="card-text">8Ball Pool</span></div></li>
+            <li><div class="card" onclick="openGame('https://snowrider3d.vrgamer262.workers.dev/', 'Snow Rider 3D')"><img loading="lazy" decoding="async" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7HUapu5amnY5nfYojuBTCRQBThbOGsPKl_Q&s"><span class="card-text">Snow Rider 3D</span></div></li>
+            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/paperio2/', 'Paper.io 2')"><img loading="lazy" decoding="async" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbOYDL-XogArpPn5yhnKk4E0pRDmWTIRXnxA&s"><span class="card-text">Paper.io 2</span></div></li>
+            <li><div class="card" onclick="openGame('https://30obriewhit.github.io/drive-mad/', 'Drive Mad')"><img loading="lazy" decoding="async" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS978Fp0DG45horfcROMLIbcBrNSrHrzpTEpw&s"><span class="card-text">Drive Mad</span></div></li>
+            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/slopegithub.io/', 'Slope')"><img loading="lazy" decoding="async" src="https://slopeonlinegame.github.io/data/image/options/slope-game-unblocked-76-banner.jpg"><span class="card-text">Slope</span></div></li>
+            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/tube-jumpers/', 'Tube Jumpers')"><img loading="lazy" decoding="async" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrRUxFpC2DxuSdDpblsfSVLjduLqvzH5jVdg&s"><span class="card-text">Tube Jumpers</span></div></li>
+            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/pac-man-2/', 'PanMan 2')"><img loading="lazy" decoding="async" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNLZvtt71RKK-qtH3aOkGdy4mq2eF874psqQ&s"><span class="card-text">PacMan 2</span></div></li>
+            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/google-snake/', 'Snake')"><img loading="lazy" decoding="async" src="https://imgs.search.brave.com/1IyfbUXm7HXvdd1aU3M7J0KZK1yG4bytZv-D19AL-lc/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/c3BlZWRydW4u/Y29t/L3N0YXRpYy9nYW1l/L28xeTlweWs2L2Nv/dmVyLnBuZz92PWY0/NTYyZmY"><span class="card-text">Snake</span></div></li>
+            <li><div class="card" onclick="openGame('https://cyberpunk-tank.vercel.app/', 'CyberPunk Tank')"><img loading="lazy" decoding="async" src="https://imgs.search.brave.com/dUlfvnyVDET4V50tRhqCGarxvAXdcRUICLWP2HHVO1U/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly93d3cu/dHJ1ZWFjaGlldmVt/ZW50cy5jb20vZ2Ft/ZWltYWdlLzI2MDE2/NF8wLmpwZw"><span class="card-text">CyberPunk Tank</span></div></li>
+            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/ragdoll-hit/', 'Ragdoll Hit')"><img loading="lazy" decoding="async" src="https://imgs.search.brave.com/jt0gBA2AiD_HUlzVd0pj5z4uY2yCsyQ2SHBK5OWSIbk/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9yYWdk/b2xsaGl0LWdhbWUu/aW8vZGF0YS9pbWFn/ZS9nYW1lL3JhZ2Rv/bGwtaGl0LW9ubGlu/ZS5wbmc"><span class="card-text">Ragdoll Hit</span></div></li>
+            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/territorial.io/', 'Territorial.io')"><img loading="lazy" decoding="async" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpaJ_2vBueQc_fMJhCXx3JFuBf-pALbA3m_A&s"><span class="card-text">Territorial.io</span></div></li>
+            <li><div class="card" onclick="openGame('https://anthonycoding262.github.io/hd_fnaf/', 'All FNAF Games')"><img loading="lazy" decoding="async" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQENAseWNj0BP2F45sfFwyz1DsfAUbf4U7YNg&s"><span class="card-text">All FNAF Games</span></div></li>
+            <li><div class="card" onclick="openGame('https://zj05409.github.io/2048/', '2048')"><img loading="lazy" decoding="async" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpL4kc3V_JiaWLsBHCzjpdN2ynBPikWajeHA&s"><span class="card-text">2048</span></div></li>
+            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/wordle/', 'Wordle')"><img loading="lazy" decoding="async" src="https://imgs.search.brave.com/xx3Ekde3r8AC54sK3pKVFK04s-9bLOQMI_NXrcroNOQ/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy90/aHVtYi84LzhlL1dv/cmRsZV9Mb2NrdXAu/c3ZnLzI1MHB4LVdv/cmRsZV9Mb2NrdXAu/c3ZnLnBuZw"><span class="card-text">Wordle</span></div></li>
+            <li><div class="card" onclick="openGame('https://freak-games-studio.github.io/talking-ben/', 'Talking Ben')"><img loading="lazy" decoding="async" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXloBJC5TzcQY2NevbZMOPYrFPx9xCv7EEng&s"><span class="card-text">Talking Ben</span></div></li>
+            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/balatro-web/', 'Balatro')"><img loading="lazy" decoding="async" src="https://thumb.wikimedia.org/wikipedia/en/thumb/8/89/Balatro_cover.jpg/250px-Balatro_cover.jpg?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail"><span class="card-text">Balatro</span></div></li>
+            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/rb2/', 'Retro Bowl 2')"><img loading="lazy" decoding="async" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQngUW5djcn25H2roJW8IbGgsQ7qYHmmUOVug&s"><span class="card-text">Retro Bowl 2</span></div></li>
+            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/FnF-Psych-Engine-0.5.1-HTML/', 'Friday Night Funkin')"><img loading="lazy" decoding="async" src="https://upload.wikimedia.org/wikipedia/en/thumb/d/d2/Friday_Night_Funkin%27_logo.svg/250px-Friday_Night_Funkin%27_logo.svg.png"><span class="card-text">Friday Night Funkin</span></div></li>
+            <li><div class="card" onclick="openGame('https://www.google.com/logos/2019/july4th19/r6/july4th19.html?hl=en', 'Doodle Baseball')"><img loading="lazy" decoding="async" src="https://www.google.com/logos/doodles/2019/fourth-of-july-2019-6225363087654912.2-2xa.gif"><span class="card-text">Doodle Baseball</span></div></li>
+            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/puzzle/', 'Puzzle')"><img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/VRGamer262Real/puzzle/main/gif/1.gif"><span class="card-text">Puzzle</span></div></li>
+            <li><div class="card" onclick="openGame('https://flight.tarmizi.id/', 'Flight Simulator')"><img loading="lazy" decoding="async" src="https://i.ytimg.com/vi/duTeCHR363s/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLBh2zk5Dm56Rf3cVDMfWnvVIc06BA"><span class="card-text">Flight Simulator</span></div></li>
+            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/2d_farming_sim/', 'Farm Simulator 2D')"><img loading="lazy" decoding="async" src="https://store-images.s-microsoft.com/image/apps.10230.14299110548313627.7e916051-145b-467d-9222-536b54bd914d.dc5e8877-ad6a-4363-a2c2-691cac6a8715"><span class="card-text">Farming Simulator 2D</span></div></li>
+            <li><div class="card" onclick="openGame('https://ellisonleao.github.io/clumsy-bird/', 'Flappy Bird')"><img loading="lazy" decoding="async" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOxYtqpL0TfXuH11QBByt0WKPGj0vzAEH7eA&s"><span class="card-text">Flappy Bird</span></div></li>
+            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/AngryBirds/', 'Angry Birds')"><img loading="lazy" decoding="async" src="https://upload.wikimedia.org/wikipedia/en/2/2d/Angry_Birds_promo_art.png"><span class="card-text">Angry Birds</span></div></li>
+            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/hillClimbRacing/', 'Hill Climb Racing Modded')"><img loading="lazy" decoding="async" src="https://repository-images.githubusercontent.com/189775144/6130cf00-f351-11e9-81dc-7425d9f5cdda"><span class="card-text">Hill Climb Racing Modded</span></div></li>
+            <li><div class="card" onclick="openGame('https://barbecuechickenroast.github.io/learntofly2/', 'Learn 2 Fly')"><img loading="lazy" decoding="async" src="https://m.media-amazon.com/images/I/81ktLod+ElL.png"><span class="card-text">Learn 2 Fly</span></div></li>
+            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/a-REAL-copy-of-gunspin/', 'Gun Spin')"><img loading="lazy" decoding="async" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTei07pjTSWlXal0yIdqvTJLZpaoRVwblLSZA&s"><span class="card-text">Gun Spin</span></div></li>
+            <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/Tanuki-Sunset/', 'Tanuki Sunset')"><img loading="lazy" decoding="async" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMVjR6jUeWRWZIwl86_qVugDgsYIje-fwW5w&s"><span class="card-text">Tanuki Sunset</span></div></li>
+            <li><div class="card" onclick="openGame('https://tunnelrush.github.io/', 'Tunnel Rush')"><img loading="lazy" decoding="async" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6s2c5R7rX5QO9qYv_N2-Vz6xQJtZzQ5TqXg&s"><span class="card-text">Tunnel Rush</span></div></li>
+            <li><div class="card" onclick="openGame('https://mathplay.github.io/moto-x3m/', 'Moto X3M')"><img loading="lazy" decoding="async" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Motorsport_Icon.svg/1024px-Motorsport_Icon.svg.png"><span class="card-text">Moto X3M</span></div></li>
+            <li><div class="card" onclick="openGame('https://cookieclickernew.com/', 'Cookie Clicker')"><img loading="lazy" decoding="async" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fassets.nintendo.com%2Fimage%2Fupload%2Fc_fill%2Cw_1200%2Fq_auto%3Abest%2Ff_auto%2Fdpr_2.0%2Fncom%2Fsoftware%2Fswitch%2F70010000066299%2F432bf350e866b2544f9a5cd80de83e0c24f4efddfd7811016c4aa33e48c5df7c&f=1&nofb=1&ipt=8db4881892c349612a7ada68dcad0e6a1efd39c2e48edd7ff7bd4693390c67c8"><span class="card-text">Cookie Clicker</span></div></li>
+            <li><div class="card" onclick="openGame('https://smashkarts.io/', 'Smash Karts')"><img loading="lazy" decoding="async" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Go-Kart_Racer.jpg/500px-Go-Kart_Racer.jpg"><span class="card-text">Smash Karts</span></div></li>
+            <li><div class="card" onclick="openGame('https://pure-js.com/ovo/', 'OvO')"><img loading="lazy" decoding="async" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Stickman_Icon.svg/200px-Stickman_Icon.svg.png"><span class="card-text">OvO</span></div></li>
+            <li><div class="card" onclick="openGame('https://coreball.io/', 'Core Ball')"><img loading="lazy" decoding="async" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Circle_with_lines.svg/200px-Circle_with_lines.svg.png"><span class="card-text">Core Ball</span></div></li>
         </ul>
     </section>
 
@@ -475,56 +425,56 @@
         
         <div class="panel">
             <h3>Hub Task Manager</h3>
-            <div id="task-list" style="margin-bottom: 20px;"></div>
-            <div style="display:flex; gap:10px;">
-                <input type="text" id="new-task-input" placeholder="What needs doing?" style="margin:0;">
+            <div id="task-list" style="margin-bottom: 20px"></div>
+            <div style="display: flex; gap: 10px">
+                <input type="text" id="new-task-input" placeholder="What needs doing?" style="margin: 0">
                 <button class="btn" onclick="addTask()">Add Task</button>
             </div>
         </div>
 
         <div class="panel">
             <h3>Cloud Notepad</h3>
-            <textarea id="note" rows="5" placeholder="System logs or personal notes..." onkeyup="localStorage.setItem('hubNote', this.value)"></textarea>
+            <textarea id="note" rows="5" placeholder="System logs or personal notes..."></textarea>
             <button class="btn" onclick="downloadNotes()">Export to .txt</button>
         </div>
         
         <div class="panel">
             <h3>Focus</h3>
-            <h2 id="pomo-display" style="font-size: 3.5rem; margin: 10px 0; font-family: 'Fira Code', monospace; color: var(--accent);">25:00</h2>
-            <div style="display:flex; gap:12px; justify-content:center;">
+            <h2 id="pomo-display" style="font-size: 3.5rem; margin: 10px 0; font-family: 'Fira Code', monospace">25:00</h2>
+            <div style="display: flex; gap: 12px; justify-content: center">
                 <button class="btn" onclick="startPomo(25)">Focus</button>
                 <button class="btn" onclick="startPomo(5)">Break</button>
-                <button class="btn" style="opacity: 0.7;" onclick="resetPomo()">Reset</button>
+                <button class="btn" style="opacity: 0.7" onclick="resetPomo()">Reset</button>
             </div>
         </div>
 
         <div class="panel">
             <h3>Calculator Pro</h3>
-            <input type="text" id="calc-out" readonly style="font-size: 2rem; text-align: right; font-weight: 700; font-family: 'Fira Code'; color: var(--accent);">
+            <input type="text" id="calc-out" readonly style="font-size: 2rem; text-align: right; font-weight: 700; font-family: 'Fira Code'">
             <div id="calc">
                 <button onclick="cin('1')">1</button><button onclick="cin('2')">2</button><button onclick="cin('3')">3</button><button onclick="cin('+')">+</button>
                 <button onclick="cin('4')">4</button><button onclick="cin('5')">5</button><button onclick="cin('6')">6</button><button onclick="cin('-')">-</button>
                 <button onclick="cin('7')">7</button><button onclick="cin('8')">8</button><button onclick="cin('9')">9</button><button onclick="cin('*')">*</button>
-                <button onclick="cclr()" style="color: #ff3b30;">C</button><button onclick="cin('0')">0</button><button onclick="cin('.')">.</button><button onclick="cin('/')">/</button>
-                <button onclick="cres()" style="grid-column: span 4; background: var(--accent); color:#000; font-size: 1.8rem; font-weight:700;">=</button>
+                <button onclick="cclr()">C</button><button onclick="cin('0')">0</button><button onclick="cin('.')">.</button><button onclick="cin('/')">/</button>
+                <button onclick="cres()" style="grid-column: span 4; font-size: 1.8rem; font-weight: 700">=</button>
             </div>
         </div>
         
         <div class="panel">
             <h3>Precision Stopwatch</h3>
-            <h2 id="sw-display" style="font-size: 3.5rem; margin: 10px 0; font-family: 'Fira Code', monospace; color: var(--accent);">00:00.00</h2>
-            <div style="display:flex; gap:12px; justify-content:center;">
+            <h2 id="sw-display" style="font-size: 3.5rem; margin: 10px 0; font-family: 'Fira Code', monospace">00:00.00</h2>
+            <div style="display: flex; gap: 12px; justify-content: center">
                 <button class="btn" id="sw-start" onclick="swStart()">Start</button>
-                <button class="btn" style="opacity: 0.7;" onclick="swReset()">Reset</button>
+                <button class="btn" style="opacity: 0.7" onclick="swReset()">Reset</button>
             </div>
         </div>
 
         <div class="panel">
             <h3>Quick Sketchpad</h3>
-            <canvas id="sketchpad" width="600" height="300" style="width: 100%; max-width: 600px; background: rgba(0,0,0,0.4); border: 1px solid var(--border); border-radius: 16px; cursor: crosshair; touch-action: none; display: block; margin: 0 auto; box-shadow: inset 0 2px 10px rgba(0,0,0,0.6);"></canvas>
-            <div style="display:flex; gap:15px; justify-content:center; align-items:center; margin-top: 15px;">
+            <canvas id="sketchpad" width="600" height="300" style="width: 100%; max-width: 600px; cursor: crosshair; touch-action: none; display: block; margin: 0 auto"></canvas>
+            <div style="display: flex; gap: 15px; justify-content: center; align-items: center; margin-top: 15px">
                 <button class="btn" onclick="clearSketch()">Clear</button>
-                <input type="color" id="sketch-color" value="#00f2fe" style="width: 42px; height: 42px; padding: 0; margin: 0; border: none; cursor: pointer; border-radius: 50%;">
+                <input type="color" id="sketch-color" value="#00f2fe" style="width: 42px; height: 42px; padding: 0; margin: 0; cursor: pointer">
             </div>
         </div>
     </section>
@@ -542,16 +492,16 @@
 
     <section id="news">
         <h1>Updates & Changelog</h1>
-        <div class="panel" style="text-align: left;">
-            <h2 style="margin-top:0; color:var(--accent);">V12.0 - The Meme & Engine Overhaul</h2>
+        <div class="panel" style="text-align: left">
+            <h2 style="margin-top: 0">V12.0 - The Meme & Engine Overhaul</h2>
             <p>• <strong>Meme Flying Mode Added</strong>: Built-in flying floating meme overlay system (off by default) bouncing dynamically across the screen!</p>
             <p>• <strong>Performance Optimization</strong>: Refactored animation frames with hardware-accelerated canvas loops, debounced search, and zero lag.</p>
-            <p>• <strong>UI Refresh</strong>: Deep glassmorphism styling, vibrant glowing accents, responsive navigation, and refined controls.</p>
+            <p>• <strong>UI Refresh</strong>: A clean, flat interface, reduced visual effects, responsive navigation, and lighter controls.</p>
         </div>
-        <div class="panel" style="text-align: left;">
-            <h2 style="margin-top:0;">V11.0 - The Glass Transformation</h2>
-            <p>• <strong>Visual Overhaul</strong>: Replaced the dark cyberpunk aesthetic with a sleek, visionOS-inspired Liquid Glass interface.</p>
-            <p>• <strong>Optimized Rendering</strong>: Particle system updated to use soft ambient orbs to maintain high FPS behind glass blurs.</p>
+        <div class="panel" style="text-align: left">
+            <h2 style="margin-top: 0">V11.0 - The Visual Refresh</h2>
+            <p>• <strong>Visual Overhaul</strong>: Introduced an experimental translucent interface in the previous release.</p>
+            <p>• <strong>Optimized Rendering</strong>: Particle system updated to use soft ambient orbs for a smoother visual background.</p>
         </div>
     </section>
 
@@ -565,11 +515,11 @@
             <li><div class="card" onclick="showMorse()"><span class="card-text">Morse Code</span></div></li>
             <li><div class="card" onclick="execCmd('b64')"><span class="card-text">Base64 Converter</span></div></li>
         </ul>
-        <div id="tool-out" style="text-align:center; margin-top: 25px; font-weight: bold; font-family: 'Fira Code'; color: var(--accent);"></div>
+        <div id="tool-out" style="text-align: center; margin-top: 25px; font-weight: bold; font-family: 'Fira Code'"></div>
         
-        <div id="unit-panel" class="panel" style="display:none; margin-top: 30px;">
+        <div id="unit-panel" class="panel" style="display: none; margin-top: 30px">
             <h3>Unit Converter</h3>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px">
                 <input type="number" id="unit-input" placeholder="Value" oninput="convertUnit()">
                 <select id="unit-type" onchange="convertUnit()">
                     <option value="cm-in">cm to inches</option>
@@ -580,22 +530,22 @@
                     <option value="f-c">F° to C°</option>
                 </select>
             </div>
-            <h2><strong id="unit-result" style="color:var(--accent);">0.00</strong></h2>
+            <h2><strong id="unit-result">0.00</strong></h2>
         </div>
 
-        <div id="morse-panel" class="panel" style="display:none; margin-top: 30px;">
+        <div id="morse-panel" class="panel" style="display: none; margin-top: 30px">
             <h3>Morse Translator</h3>
             <input type="text" id="morse-input" placeholder="Text to Morse..." oninput="translateMorse()">
-            <h2 id="morse-result" style="word-break: break-all; font-family: 'Fira Code'; font-weight: 500; color:var(--accent);">.... ..</h2>
+            <h2 id="morse-result" style="word-break: break-all; font-family: 'Fira Code'; font-weight: 500">.... ..</h2>
         </div>
 
-        <div id="rng-panel" class="panel" style="margin-top: 30px;">
+        <div id="rng-panel" class="panel" style="margin-top: 30px">
             <h3>Randomizer Tool</h3>
-            <div style="display:flex; gap:12px; justify-content:center;">
+            <div style="display: flex; gap: 12px; justify-content: center">
                 <button class="btn" onclick="rollDice()">Roll Dice</button>
                 <button class="btn" onclick="flipCoin()">Flip Coin</button>
             </div>
-            <h2 id="rng-result" style="margin-top: 20px; font-size: 2.2rem; font-weight: 700; color:var(--accent);">?</h2>
+            <h2 id="rng-result" style="margin-top: 20px; font-size: 2.2rem; font-weight: 700">?</h2>
         </div>
     </section>
 
@@ -606,9 +556,9 @@
                 <div class="terminal-line">Launchpad OS v12.0.0 (High Performance Engine)</div>
                 <div class="terminal-line">Type 'help' for available commands. Try 'meme' to toggle meme mode!</div>
             </div>
-            <div class="terminal-input-row" style="margin-top: 15px;">
-                <span style="font-weight: 700; color: var(--accent);">guest@launchpad:~$</span>
-                <input type="text" id="term-input" autofocus onkeyup="handleTerminal(event)">
+            <div class="terminal-input-row" style="margin-top: 15px">
+                <span style="font-weight: 700">guest@launchpad:~$</span>
+                <input type="text" id="term-input" autofocus>
             </div>
         </div>
     </section>
@@ -626,8 +576,8 @@
         <h1>Settings & Customization</h1>
         <div class="panel">
             <h3>Special Modes</h3>
-            <div style="display:flex; gap:15px; justify-content:center; flex-wrap: wrap; margin-bottom:20px;">
-                <button class="btn" id="meme-mode-btn" onclick="toggleMemeMode()" style="border-color: #ff0080;">Meme Mode: OFF</button>
+            <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px">
+                <button class="btn" id="meme-mode-btn" onclick="toggleMemeMode()">Meme Mode: OFF</button>
                 <button class="btn" id="perf-toggle-btn" onclick="togglePerfMode()">Performance: OFF</button>
             </div>
         </div>
@@ -636,21 +586,21 @@
             <h3>Environment Adjustments</h3>
             <div class="fx-control">
                 <label>Ambient Orbs</label>
-                <input type="range" min="0" max="60" value="25" oninput="updateFX('count', this.value)">
+                <input type="range" min="0" max="60" value="8" oninput="updateFX('count', this.value)">
             </div>
             <div class="fx-control">
                 <label>Drift Speed</label>
                 <input type="range" min="1" max="100" value="10" oninput="updateFX('speed', this.value)">
             </div>
             <div class="fx-control">
-                <label>Glass Frosting</label>
-                <input type="range" min="0" max="80" value="30" oninput="updateFX('blur', this.value)">
+                <label>Surface Tone</label>
+                <input type="range" min="0" max="80" value="30" oninput="updateFX('tone', this.value)">
             </div>
         </div>
 
         <div class="panel">
             <h3>Visual Toggles</h3>
-            <div style="display:flex; gap:12px; justify-content:center; flex-wrap: wrap;">
+            <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap">
                 <button class="btn" onclick="toggleScanlines()">CRT Scanlines</button>
                 <button class="btn" onclick="toggleGlitch()">Glitch Mode</button>
                 <button class="btn" onclick="toggleMatrix()">Matrix Rain</button>
@@ -659,7 +609,7 @@
 
         <div class="panel">
             <h3>Stealth Presets</h3>
-            <div style="display:flex; gap:12px; justify-content:center; flex-wrap: wrap;">
+            <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap">
                 <button class="btn" onclick="mask('My Drive - Google Drive', 'https://upload.wikimedia.org/wikipedia/commons/1/12/Google_Drive_icon_%282020%29.svg')">Mask: Drive</button>
                 <button class="btn" onclick="mask('Google Classroom', 'https://upload.wikimedia.org/wikipedia/commons/d/d5/Google_Classroom_icon.png')">Mask: Classroom</button>
                 <button class="btn" onclick="mask('Launchpad - Hub', 'https://raw.githubusercontent.com/VRGamer262Real/Hub/refs/heads/main/bg.jpg')">Reset Mask</button>
@@ -670,20 +620,20 @@
     <section id="questions">
         <h1>Feedback Engine</h1>
         <div class="panel">
-            <p style="opacity: 0.8; font-size: 0.9rem; margin-bottom: 20px;">Logged in users receive priority updates on issues.</p>
+            <p style="opacity: 0.8; font-size: 0.9rem; margin-bottom: 20px">Logged in users receive priority updates on issues.</p>
             
             <div class="feedback-grid">
                 <div>
-                    <label style="font-size: 0.72rem; text-transform: uppercase; opacity: 0.7; font-weight:700;">Issue Type</label>
-                    <div style="display:flex; gap:10px; margin-top:8px; margin-bottom: 18px;">
+                    <label style="font-size: 0.72rem; text-transform: uppercase; opacity: 0.7; font-weight: 700">Issue Type</label>
+                    <div style="display: flex; gap: 10px; margin-top: 8px; margin-bottom: 18px">
                         <div class="feedback-chip selected" onclick="selectIssue(this, 'Bug')">Bug</div>
                         <div class="feedback-chip" onclick="selectIssue(this, 'Request')">Request</div>
                         <div class="feedback-chip" onclick="selectIssue(this, 'Security')">Security</div>
                     </div>
                 </div>
                 <div>
-                    <label style="font-size: 0.72rem; text-transform: uppercase; opacity: 0.7; font-weight:700;">Priority</label>
-                    <select id="q-priority" style="margin-top:8px;">
+                    <label style="font-size: 0.72rem; text-transform: uppercase; opacity: 0.7; font-weight: 700">Priority</label>
+                    <select id="q-priority" style="margin-top: 8px">
                         <option value="Low">Low</option>
                         <option value="Medium" selected>Medium</option>
                         <option value="High">High (Breaking)</option>
@@ -694,8 +644,8 @@
             <input type="text" id="q-title" placeholder="Summary of issue...">
             <textarea id="q-body" rows="4" placeholder="Deep dive into the problem or suggestion..."></textarea>
             
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <div id="git-status" style="font-size: 0.88rem; font-weight: 600; color:var(--accent);">System Ready</div>
+            <div style="display: flex; justify-content: space-between; align-items: center">
+                <div id="git-status" style="font-size: 0.88rem; font-weight: 600">System Ready</div>
                 <button class="btn" id="git-btn" onclick="gitSubmit()">Submit Report</button>
             </div>
         </div>
@@ -706,51 +656,51 @@
         <div class="panel" id="profile-container">
             <div id="logged-out-view">
                 <h3>Not Authenticated</h3>
-                <p style="opacity:0.8; margin-bottom: 20px;">Connect your GitHub account to sync settings and tasks.</p>
+                <p style="opacity: 0.8; margin-bottom: 20px">Connect your GitHub account to sync settings and tasks.</p>
                 <button class="btn" onclick="handleAuthClick()">Authorize with GitHub</button>
             </div>
-            <div id="logged-in-view" style="display:none;">
+            <div id="logged-in-view" style="display: none">
                 <div class="user-profile-card">
-                    <img id="user-avatar" class="user-avatar-large" src="">
-                    <h2 id="user-name" style="margin:0; font-family: var(--title-font);"></h2>
-                    <p id="user-bio" style="opacity:0.8; font-size:0.95rem;"></p>
+                    <img loading="lazy" decoding="async" id="user-avatar" class="user-avatar-large" src="">
+                    <h2 id="user-name" style="margin: 0; font-family: var(--title-font)"></h2>
+                    <p id="user-bio" style="opacity: 0.8; font-size: 0.95rem"></p>
                 </div>
-                <div class="widget-row" style="margin-top:25px;">
+                <div class="widget-row" style="margin-top: 25px">
                     <div class="widget">
                         <div class="widget-label">Cloud Sync</div>
-                        <div class="widget-val" style="color:var(--success);">Active</div>
+                        <div class="widget-val">Active</div>
                     </div>
                     <div class="widget">
                         <div class="widget-label">User Tier</div>
                         <div class="widget-val">Player</div>
                     </div>
                 </div>
-                <button class="btn" style="margin-top:15px;" onclick="logout()">Sign Out</button>
+                <button class="btn" style="margin-top: 15px" onclick="logout()">Sign Out</button>
             </div>
         </div>
     </section>
 
     <section id="about">
         <h1>The Visionaries</h1>
-        <div style="display:flex; flex-direction:column; align-items:center; gap:25px;">
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 25px">
             <div class="panel">
-                <p style="font-size: 1.05rem; line-height: 1.6;">Launchpad was founded by VRGamer262 and zOcM to create a unified ecosystem for games, tools, and creativity. Ultra-fast, responsive, and completely customizable.</p>
+                <p style="font-size: 1.05rem; line-height: 1.6">Launchpad was founded by VRGamer262 and zOcM to create a unified ecosystem for games, tools, and creativity. Ultra-fast, responsive, and completely customizable.</p>
             </div>
-            <div style="display:flex; gap:30px; flex-wrap:wrap; justify-content:center;">
-                <div style="text-align:center;">
-                    <img src="https://raw.githubusercontent.com/VRGamer262Real/Hub/refs/heads/main/VRGamer262.jpg" style="width:220px; border-radius:28px; border:2px solid rgba(255,255,255,0.3); box-shadow: var(--panel-shadow);">
-                    <p style="font-weight:700; font-size: 1.1rem; margin-top:15px;">VRGamer262</p>
-                    <p style="font-size: 0.72rem; opacity: 0.7; font-weight: 700; color:var(--accent);">CO-FOUNDER / DEV</p>
+            <div style="display: flex; gap: 30px; flex-wrap: wrap; justify-content: center">
+                <div style="text-align: center">
+                    <img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/VRGamer262Real/Hub/refs/heads/main/VRGamer262.jpg" style="width: 220px">
+                    <p style="font-weight: 700; font-size: 1.1rem; margin-top: 15px">VRGamer262</p>
+                    <p style="font-size: 0.72rem; opacity: 0.7; font-weight: 700">CO-FOUNDER / DEV</p>
                 </div>
-                <div style="text-align:center;">
-                    <img src="https://raw.githubusercontent.com/VRGamer262Real/Hub/refs/heads/main/900-900.jpeg" style="width:220px; border-radius:28px; border:2px solid rgba(255,255,255,0.3); box-shadow: var(--panel-shadow);">
-                    <p style="font-weight:700; font-size: 1.1rem; margin-top:15px;">zOcM</p>
-                    <p style="font-size: 0.72rem; opacity: 0.7; font-weight: 700; color:var(--accent);">FOUNDER / DEV</p>
+                <div style="text-align: center">
+                    <img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/VRGamer262Real/Hub/refs/heads/main/900-900.jpeg" style="width: 220px">
+                    <p style="font-weight: 700; font-size: 1.1rem; margin-top: 15px">zOcM</p>
+                    <p style="font-size: 0.72rem; opacity: 0.7; font-weight: 700">FOUNDER / DEV</p>
                 </div>
-                <div style="text-align:center;">
-                    <img src="https://avatars.githubusercontent.com/u/281972132?v=4" style="width:220px; border-radius:28px; border:2px solid rgba(255,255,255,0.3); box-shadow: var(--panel-shadow);">
-                    <p style="font-weight:700; font-size: 1.1rem; margin-top:15px;">cocopuffs262</p>
-                    <p style="font-size: 0.72rem; opacity: 0.7; font-weight: 700; color:var(--accent);">DEV</p>
+                <div style="text-align: center">
+                    <img loading="lazy" decoding="async" src="https://avatars.githubusercontent.com/u/281972132?v=4" style="width: 220px">
+                    <p style="font-weight: 700; font-size: 1.1rem; margin-top: 15px">cocopuffs262</p>
+                    <p style="font-size: 0.72rem; opacity: 0.7; font-weight: 700">DEV</p>
                 </div>
             </div>
         </div>
@@ -760,695 +710,952 @@
     <div id="toast">Ready to launch?</div>
 
     <script>
-        // 1. HIGH-PERFORMANCE ENGINE & STATE
-        const particleCanvas = document.getElementById('particle-canvas');
-        const pCtx = particleCanvas.getContext('2d');
-        const memeCanvas = document.getElementById('meme-canvas');
-        const mCtx = memeCanvas.getContext('2d');
-        
-        let particles = [];
-        let memeSprites = [];
-        let isPerfMode = localStorage.getItem('hubPerfMode') === 'true';
-        let isMemeMode = false;
-        let isGlitch = false;
-        let currentGameUrl = "";
-        
-        let fxConfig = { count: 25, speed: 0.5, blur: 30 };
-        let currentUser = JSON.parse(localStorage.getItem('hubUser')) || null;
-        let activeIssueType = 'Bug';
+(() => {
+    'use strict';
 
-        // MEME MODE SPRITES (TEXT + EMOJI MEMES)
-        const memeItems = [
-            "🐶 DOGE", "🐱 POPCAT", "🗿 GIGACHAD", "🐸 PEPE", "🚀 STONKS", 
-            "🤡 CLOWN", "💀 DEAD", "🔥 THIS IS FINE", "🦖 RAWR", "🥑 NIKOCADO",
-            "✨ NO CAP", "🍌 BANANA", "🐈 NYAN", "📮 AMOGUS"
-        ];
+    // Lightweight state and guarded storage access.
+    const $ = (id) => document.getElementById(id);
+    const safeRead = (key, fallback = null) => {
+        try {
+            const raw = localStorage.getItem(key);
+            return raw === null ? fallback : JSON.parse(raw);
+        } catch { return fallback; }
+    };
+    const safeWrite = (key, value) => {
+        try { localStorage.setItem(key, typeof value === 'string' ? value : JSON.stringify(value)); }
+        catch { /* Storage can be blocked or full; the page still works for this session. */ }
+    };
+    const safeRemove = (key) => { try { localStorage.removeItem(key); } catch {} };
 
-        class FlyingMeme {
-            constructor() {
-                this.reset();
-            }
-            reset() {
-                this.x = Math.random() * window.innerWidth;
-                this.y = Math.random() * window.innerHeight;
-                this.vx = (Math.random() - 0.5) * 6;
-                this.vy = (Math.random() - 0.5) * 6;
-                if (Math.abs(this.vx) < 1.5) this.vx = 3;
-                if (Math.abs(this.vy) < 1.5) this.vy = -3;
-                this.text = memeItems[Math.floor(Math.random() * memeItems.length)];
-                this.size = Math.floor(Math.random() * 20) + 24;
-                this.rot = Math.random() * Math.PI * 2;
-                this.vRot = (Math.random() - 0.5) * 0.08;
-                this.color = `hsl(${Math.random() * 360}, 100%, 65%)`;
-            }
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                this.rot += this.vRot;
+    const particleCanvas = $('particle-canvas');
+    const pCtx = particleCanvas?.getContext('2d', { alpha: true });
+    const memeCanvas = $('meme-canvas');
+    const mCtx = memeCanvas?.getContext('2d', { alpha: true });
+    const matrixCanvas = $('matrix-canvas');
+    const matrixCtx = matrixCanvas?.getContext('2d', { alpha: true });
+    const sketchCanvas = $('sketchpad');
+    const sketchCtx = sketchCanvas?.getContext('2d');
 
-                if (this.x < 0 || this.x > window.innerWidth) this.vx *= -1;
-                if (this.y < 0 || this.y > window.innerHeight) this.vy *= -1;
-            }
-            draw() {
-                mCtx.save();
-                mCtx.translate(this.x, this.y);
-                mCtx.rotate(this.rot);
-                mCtx.font = `900 ${this.size}px 'Space Grotesk', sans-serif`;
-                mCtx.fillStyle = this.color;
-                mCtx.shadowColor = this.color;
-                mCtx.shadowBlur = 15;
-                mCtx.fillText(this.text, 0, 0);
-                mCtx.restore();
-            }
+    let viewportW = window.innerWidth;
+    let viewportH = window.innerHeight;
+    let pixelRatio = Math.min(window.devicePixelRatio || 1, 1.25);
+    let particles = [];
+    let memeSprites = [];
+    let isPerfMode = safeRead('hubPerfMode', false) === true;
+    let isMemeMode = false;
+    let isGlitch = false;
+    let isMatrix = false;
+    let currentGameUrl = '';
+    let currentGameName = '';
+    let activeIssueType = 'Bug';
+    let renderHandle = 0;
+    let lastFrameAt = 0;
+    let framesThisSecond = 0;
+    let toastHandle = 0;
+    let searchTimeout = 0;
+    let swT = 0;
+    let swI = 0;
+    let swStartedAt = 0;
+    let pomoI = 0;
+    let pomoEndAt = 0;
+    let isDrawing = false;
+    let lastSketchPoint = null;
+
+    const startTime = Date.now();
+    const fxConfig = { count: 8, speed: 0.5, tone: 16 };
+    const memeItems = [
+        '🐶 DOGE', '🐱 POPCAT', '🗿 GIGACHAD', '🐸 PEPE', '🚀 STONKS',
+        '🤡 CLOWN', '💀 DEAD', '🔥 THIS IS FINE', '🦖 RAWR', '🥑 NIKOCADO',
+        '✨ NO CAP', '🍌 BANANA', '🐈 NYAN', '📮 AMOGUS'
+    ];
+    let currentUser = safeRead('hubUser', null);
+    if (currentUser && !/^[a-z0-9-]{1,39}$/i.test(String(currentUser.username || ''))) currentUser = null;
+    let tasks = safeRead('hubTasks', [{ t: 'Explore Launchpad V12', c: false }]);
+    if (!Array.isArray(tasks)) tasks = [{ t: 'Explore Launchpad V12', c: false }];
+    tasks = tasks.filter((task) => task && typeof task.t === 'string').map((task) => ({ t: task.t, c: Boolean(task.c) }));
+
+    function resizeCanvas(canvas, ctx) {
+        if (!canvas || !ctx) return;
+        canvas.width = Math.max(1, Math.floor(viewportW * pixelRatio));
+        canvas.height = Math.max(1, Math.floor(viewportH * pixelRatio));
+        canvas.style.width = `${viewportW}px`;
+        canvas.style.height = `${viewportH}px`;
+        ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+    }
+
+    function resizeCanvases() {
+        viewportW = window.innerWidth;
+        viewportH = window.innerHeight;
+        pixelRatio = Math.min(window.devicePixelRatio || 1, 1.25);
+        resizeCanvas(particleCanvas, pCtx);
+        resizeCanvas(memeCanvas, mCtx);
+        resizeCanvas(matrixCanvas, matrixCtx);
+        initParticles();
+        if (isMatrix) initMatrix();
+    }
+
+    class FlyingMeme {
+        reset() {
+            this.x = Math.random() * viewportW;
+            this.y = Math.random() * viewportH;
+            this.vx = (Math.random() - 0.5) * 3.2 || 1;
+            this.vy = (Math.random() - 0.5) * 3.2 || -1;
+            this.text = memeItems[Math.floor(Math.random() * memeItems.length)];
+            this.size = 20 + Math.floor(Math.random() * 16);
+            this.rot = Math.random() * Math.PI * 2;
+            this.vRot = (Math.random() - 0.5) * 0.035;
+            this.color = `hsl(${Math.random() * 360}, 75%, 68%)`;
         }
-
-        function initMemeMode() {
-            memeSprites = [];
-            for (let i = 0; i < 20; i++) {
-                memeSprites.push(new FlyingMeme());
-            }
+        constructor() { this.reset(); }
+        update() {
+            this.x += this.vx;
+            this.y += this.vy;
+            this.rot += this.vRot;
+            if (this.x < 0 || this.x > viewportW) this.vx *= -1;
+            if (this.y < 0 || this.y > viewportH) this.vy *= -1;
         }
-
-        function toggleMemeMode() {
-            isMemeMode = !isMemeMode;
-            memeCanvas.style.display = isMemeMode ? 'block' : 'none';
-            document.getElementById('meme-toggle-text').innerText = isMemeMode ? "ON" : "OFF";
-            document.getElementById('meme-toggle-text').style.color = isMemeMode ? "#34c759" : "#ff3b30";
-            document.getElementById('meme-mode-btn').innerText = `Meme Mode: ${isMemeMode ? 'ON' : 'OFF'}`;
-            
-            if (isMemeMode) {
-                initMemeMode();
-                showToast("MEME MODE ACTIVATED! 🚀");
-            } else {
-                showToast("Meme Mode Deactivated.");
-            }
+        draw() {
+            if (!mCtx) return;
+            mCtx.save();
+            mCtx.translate(this.x, this.y);
+            mCtx.rotate(this.rot);
+            mCtx.font = `800 ${this.size}px ${getComputedStyle(document.body).fontFamily}`;
+            mCtx.fillStyle = this.color;
+            mCtx.fillText(this.text, 0, 0);
+            mCtx.restore();
         }
+    }
 
-        // MATRIX RAIN LOGIC
-        const matrixCanvas = document.getElementById('matrix-canvas');
-        const matrixCtx = matrixCanvas.getContext('2d');
-        const matrixChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$@#%*";
-        let matrixFontSize = 14, matrixColumns = 0, matrixDrops = [], isMatrix = false;
-
-        function initMatrix() {
-            matrixCanvas.width = window.innerWidth;
-            matrixCanvas.height = window.innerHeight;
-            matrixColumns = Math.floor(matrixCanvas.width / matrixFontSize);
-            matrixDrops = Array(matrixColumns).fill(1);
-        }
-
-        function drawMatrix() {
-            if(!isMatrix) return;
-            matrixCtx.fillStyle = "rgba(0, 0, 0, 0.06)";
-            matrixCtx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
-            matrixCtx.fillStyle = "#00f2fe";
-            matrixCtx.font = matrixFontSize + "px 'Fira Code'";
-            for (let i = 0; i < matrixDrops.length; i++) {
-                let text = matrixChars[Math.floor(Math.random() * matrixChars.length)];
-                matrixCtx.fillText(text, i * matrixFontSize, matrixDrops[i] * matrixFontSize);
-                if (matrixDrops[i] * matrixFontSize > matrixCanvas.height && Math.random() > 0.975) matrixDrops[i] = 0;
-                matrixDrops[i]++;
-            }
-        }
-
-        function toggleMatrix() {
-            isMatrix = !isMatrix;
-            matrixCanvas.style.opacity = isMatrix ? "1" : "0";
-            if(isMatrix) initMatrix();
-        }
-
-        function updateFX(type, val) {
-            if(type === 'count') { fxConfig.count = parseInt(val); initParticles(); }
-            if(type === 'speed') fxConfig.speed = val / 20;
-            if(type === 'blur') document.documentElement.style.setProperty('--blur-val', val + 'px');
-        }
-
-        function toggleScanlines() {
-            const s = document.getElementById('scanlines');
-            s.style.display = s.style.display === 'block' ? 'none' : 'block';
-        }
-
-        function toggleGlitch() {
-            isGlitch = !isGlitch;
-            document.getElementById('glitch-overlay').style.opacity = isGlitch ? '0.15' : '0';
-        }
-
-        function togglePerfMode() {
-            isPerfMode = !isPerfMode;
-            document.body.classList.toggle('perf-mode', isPerfMode);
-            localStorage.setItem('hubPerfMode', isPerfMode);
-            document.getElementById('perf-toggle-btn').innerText = isPerfMode ? "Performance: ON" : "Performance: OFF";
-            if(isPerfMode) {
-                pCtx.clearRect(0,0,particleCanvas.width, particleCanvas.height);
-                if(isMemeMode) toggleMemeMode();
-            } else {
-                initParticles();
-            }
-        }
-
-        if(isPerfMode) {
-            document.body.classList.add('perf-mode');
-            document.getElementById('perf-toggle-btn').innerText = "Performance: ON";
-        }
-
-        function initParticles() {
-            particleCanvas.width = window.innerWidth;
-            particleCanvas.height = window.innerHeight;
-            particles = [];
-            for(let i=0; i < fxConfig.count; i++) {
-                particles.push({
-                    x: Math.random() * particleCanvas.width, 
-                    y: Math.random() * particleCanvas.height,
-                    vx: (Math.random() - 0.5) * fxConfig.speed, 
-                    vy: (Math.random() - 0.5) * fxConfig.speed, 
-                    size: Math.random() * 120 + 40,
-                    color: i % 2 === 0 ? 'hsla(185, 100%, 50%, 0.15)' : 'hsla(320, 100%, 50%, 0.12)'
-                });
-            }
-        }
-
-        // UNIFIED ANIMATION LOOP FOR OPTIMAL PERFORMANCE
-        function renderLoop() {
-            if (!isPerfMode) {
-                // Particles
-                pCtx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
-                for (let i = 0; i < particles.length; i++) {
-                    let p = particles[i];
-                    p.x += p.vx * fxConfig.speed * 2; 
-                    p.y += p.vy * fxConfig.speed * 2;
-                    
-                    if(p.x < -p.size) p.x = particleCanvas.width + p.size;
-                    if(p.x > particleCanvas.width + p.size) p.x = -p.size;
-                    if(p.y < -p.size) p.y = particleCanvas.height + p.size;
-                    if(p.y > particleCanvas.height + p.size) p.y = -p.size;
-                    
-                    const grad = pCtx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size);
-                    grad.addColorStop(0, p.color);
-                    grad.addColorStop(1, 'transparent');
-                    pCtx.fillStyle = grad;
-                    
-                    pCtx.beginPath(); 
-                    pCtx.arc(p.x, p.y, p.size, 0, Math.PI*2); 
-                    pCtx.fill();
-                }
-
-                // Memes Flying Mode
-                if (isMemeMode) {
-                    mCtx.clearRect(0, 0, memeCanvas.width, memeCanvas.height);
-                    for (let i = 0; i < memeSprites.length; i++) {
-                        memeSprites[i].update();
-                        memeSprites[i].draw();
-                    }
-                }
-
-                // Matrix Rain
-                if (isMatrix) drawMatrix();
-            }
-            requestAnimationFrame(renderLoop);
-        }
-
-        window.onload = () => {
-            initParticles();
-            memeCanvas.width = window.innerWidth;
-            memeCanvas.height = window.innerHeight;
-            renderLoop();
-            
-            renderTasks(); syncAuthUI(); updateGreeting();
-            let p = 0;
-            const int = setInterval(() => {
-                p += Math.random() * 45;
-                document.getElementById('load-p').style.width = Math.min(p, 100) + "%";
-                if(p >= 100) {
-                    clearInterval(int);
-                    document.getElementById('loader').style.transform = "translateY(-100%)";
-                }
-            }, 80);
-        };
-
-        window.onresize = () => {
-            particleCanvas.width = window.innerWidth;
-            particleCanvas.height = window.innerHeight;
-            memeCanvas.width = window.innerWidth;
-            memeCanvas.height = window.innerHeight;
-            if (isMatrix) initMatrix();
-        };
-
-        // 2. NAVIGATION & COMMANDS
-        function showSec(id) {
-            playSfx('click');
-            document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
-            const target = document.getElementById(id);
-            if (target) target.classList.add('active');
-            
-            document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
-            const n = document.getElementById('nav-'+id);
-            if(n) n.classList.add('active');
-            
-            document.querySelectorAll('section.active .grid li').forEach((li, i) => li.style.setProperty('--i', i));
-            window.scrollTo(0,0); refreshHoverEffects();
-        }
-
-        function handleCmd(e) {
-            if(e.key === 'Enter') execCmd(document.getElementById('cmd-input').value);
-        }
-
-        function execCmd(raw) {
-            const cmd = raw.toLowerCase().trim();
-            document.getElementById('cmd-palette').classList.remove('active');
-            document.getElementById('cmd-input').value = "";
-            
-            if(cmd.startsWith('goto ')) showSec(cmd.replace('goto ', ''));
-            if(cmd === 'meme' || cmd === 'mememode') toggleMemeMode();
-            if(cmd === 'toggle perf') togglePerfMode();
-            if(cmd === 'toggle matrix') toggleMatrix();
-            if(cmd === 'login') handleAuthClick();
-            if(cmd === 'panic') panicMode();
-            if(cmd === 'b64') {
-                const text = prompt("Enter text to Base64 encode:");
-                if(text) alert("Encoded: " + btoa(text));
-            }
-            if(cmd === 'help') alert("Commands: goto [sec], meme, toggle perf, toggle matrix, b64, panic, login");
-        }
-
-        // TERMINAL ENGINE
-        function handleTerminal(e) {
-            if(e.key === 'Enter') {
-                const input = document.getElementById('term-input');
-                const val = input.value.trim().toLowerCase();
-                const display = document.getElementById('terminal-display');
-                
-                const safeInput = input.value.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-                
-                const line = document.createElement('div');
-                line.className = 'terminal-line';
-                line.innerHTML = `<span style="font-weight:700; color:var(--accent);">> ${safeInput}</span>`;
-                display.appendChild(line);
-
-                let output = "";
-                if(val === 'help') output = "Available: clear, meme, date, whoami, version, status, echo [text], system, neofetch";
-                else if(val === 'meme') { toggleMemeMode(); output = "Meme Flying Mode toggled."; }
-                else if(val === 'clear') { display.innerHTML = ""; output = "Terminal cleared."; }
-                else if(val === 'date') output = new Date().toString();
-                else if(val === 'whoami') output = currentUser ? currentUser.username : "guest_user_8492";
-                else if(val === 'version') output = "Launchpad Engine v12.0.0-perf";
-                else if(val === 'status') output = "All systems operational. Hardware Acceleration: Active.";
-                else if(val === 'system') output = `Platform: ${navigator.platform} | RAM: ${performance.memory ? Math.round(performance.memory.usedJSHeapSize / 1048576) + "MB" : "N/A"}`;
-                else if(val === 'neofetch') output = "LAUNCHPAD OS V12 | High-Performance Engine";
-                else if(val.startsWith('echo ')) output = input.value.substring(5).replace(/</g, "&lt;").replace(/>/g, "&gt;");
-                else output = "Command not recognized. Type 'help'.";
-
-                const res = document.createElement('div');
-                res.className = 'terminal-line';
-                res.innerText = output;
-                display.appendChild(res);
-                
-                input.value = "";
-                display.scrollTop = display.scrollHeight;
-            }
-        }
-
-        // GAME LOADER
-        function openGame(url, name) {
-            const theater = document.getElementById('game-view');
-            const frame = document.getElementById('game-frame');
-            const loader = document.getElementById('game-loader');
-            
-            currentGameUrl = url;
-            document.getElementById('active-game-name').innerText = name;
-            document.getElementById('game-status-text').innerText = "ESTABLISHING SECURE HANDSHAKE...";
-            
-            theater.classList.add('active');
-            loader.style.display = 'flex';
-            frame.src = url;
-            
-            frame.onload = () => {
-                loader.style.display = 'none';
-                document.getElementById('game-status-text').innerText = "LAUNCHPAD ENGINE: STABLE (ACTIVE)";
-            };
-
-            document.body.style.overflow = "hidden";
-        }
-
-        function reloadGame() {
-            const frame = document.getElementById('game-frame');
-            const loader = document.getElementById('game-loader');
-            loader.style.display = 'flex';
-            frame.src = frame.src;
-        }
-
-        function toggleFullscreen() {
-            const frame = document.getElementById('game-frame');
-            if (frame.requestFullscreen) frame.requestFullscreen();
-            else if (frame.webkitRequestFullscreen) frame.webkitRequestFullscreen();
-            else if (frame.msRequestFullscreen) frame.msRequestFullscreen();
-        }
-
-        function openInNewTab() { window.open(currentGameUrl, '_blank'); }
-
-        function toggleTheaterSize() {
-            const frame = document.getElementById('game-frame');
-            frame.style.width = frame.style.width === '85%' ? '100%' : '85%';
-            frame.style.margin = '0 auto';
-            frame.style.borderRadius = frame.style.width === '85%' ? '20px' : '0';
-        }
-
-        function closeGame() {
-            const theater = document.getElementById('game-view');
-            const frame = document.getElementById('game-frame');
-            theater.classList.remove('active');
-            frame.src = "about:blank";
-            document.body.style.overflow = "auto";
-        }
-
-        // DEBOUNCED SEARCH
-        let searchTimeout;
-        function universalSearch() {
-            clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(() => {
-                const q = document.getElementById('universalSearch').value.toLowerCase();
-                const res = document.getElementById('results-list');
-                if(q === "") { showSec('home'); return; }
-                showSec('results'); res.innerHTML = "";
-                document.querySelectorAll('section:not(#results) .card').forEach(i => {
-                    if(i.innerText.toLowerCase().includes(q)) {
-                        let li = i.parentElement.cloneNode(true);
-                        li.onclick = i.parentElement.onclick;
-                        res.appendChild(li);
-                    }
-                });
-                refreshHoverEffects();
-            }, 100);
-        }
-
-        // 3. TASKS & APPS
-        let tasks = JSON.parse(localStorage.getItem('hubTasks')) || [{t: "Explore Launchpad V12", c: false}];
-        function addTask() {
-            const input = document.getElementById('new-task-input');
-            if(!input.value) return;
-            tasks.push({t: input.value, c: false});
-            input.value = ""; saveTasks(); renderTasks();
-        }
-        function toggleTask(i) { tasks[i].c = !tasks[i].c; saveTasks(); renderTasks(); }
-        function saveTasks() { 
-            localStorage.setItem('hubTasks', JSON.stringify(tasks));
-            if(currentUser) {
-                document.getElementById('git-status').innerText = "Syncing with cloud...";
-                setTimeout(() => document.getElementById('git-status').innerText = "Synced!", 800);
-            }
-        }
-        function renderTasks() {
-            const list = document.getElementById('task-list');
-            list.innerHTML = tasks.map((t, i) => `
-                <div class="task-item">
-                    <input type="checkbox" ${t.c ? 'checked' : ''} onclick="toggleTask(${i})">
-                    <span style="font-weight:500; ${t.c ? 'text-decoration:line-through; opacity:0.5' : ''}">${t.t}</span>
-                </div>
-            `).join('');
-        }
-
-        function cin(v) { document.getElementById('calc-out').value += v; }
-        function cclr() { document.getElementById('calc-out').value = ""; }
-        function cres() { 
-            try { 
-                const output = eval(document.getElementById('calc-out').value);
-                if (output === undefined || isNaN(output) || !isFinite(output)) throw new Error("Invalid Equation");
-                document.getElementById('calc-out').value = output; 
-            } catch { 
-                document.getElementById('calc-out').value = "Error"; 
-                setTimeout(cclr, 1500);
-            } 
-        }
-        
-        let swT = 0, swI;
-        function swStart() {
-            const b = document.getElementById('sw-start');
-            if(b.innerText === "Start") {
-                swI = setInterval(() => {
-                    swT += 10;
-                    let ms = Math.floor((swT % 1000) / 10), s = Math.floor((swT / 1000) % 60), m = Math.floor(swT / 60000);
-                    document.getElementById('sw-display').innerText = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}.${ms.toString().padStart(2,'0')}`;
-                }, 10);
-                b.innerText = "Stop";
-            } else { clearInterval(swI); b.innerText = "Start"; }
-        }
-        function swReset() { clearInterval(swI); swT = 0; document.getElementById('sw-display').innerText = "00:00.00"; document.getElementById('sw-start').innerText = "Start"; }
-
-        let pomoI;
-        function startPomo(mins) {
-            clearInterval(pomoI);
-            let time = mins * 60;
-            pomoI = setInterval(() => {
-                let m = Math.floor(time / 60), s = time % 60;
-                document.getElementById('pomo-display').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
-                if(time <= 0) { clearInterval(pomoI); alert("Focus period complete!"); }
-                time--;
-            }, 1000);
-        }
-        function resetPomo() { clearInterval(pomoI); document.getElementById('pomo-display').innerText = "25:00"; }
-
-        function showUnitConverter() { document.getElementById('unit-panel').style.display = 'block'; window.scrollTo(0, document.body.scrollHeight); }
-        function convertUnit() {
-            const val = parseFloat(document.getElementById('unit-input').value);
-            const type = document.getElementById('unit-type').value;
-            let res = 0;
-            if(type === 'cm-in') res = val / 2.54;
-            if(type === 'in-cm') res = val * 2.54;
-            if(type === 'kg-lb') res = val * 2.20462;
-            if(type === 'lb-kg') res = val / 2.20462;
-            if(type === 'c-f') res = (val * 9/5) + 32;
-            if(type === 'f-c') res = (val - 32) * 5/9;
-            document.getElementById('unit-result').innerText = isNaN(res) ? "0.00" : res.toFixed(2);
-        }
-
-        function rollDice() { document.getElementById('rng-result').innerText = "Dice: " + (Math.floor(Math.random() * 6) + 1); }
-        function flipCoin() { document.getElementById('rng-result').innerText = "Coin: " + (Math.random() > 0.5 ? "Heads" : "Tails"); }
-
-        // SKETCHPAD
-        const sketchCanvas = document.getElementById('sketchpad');
-        const sketchCtx = sketchCanvas.getContext('2d');
-        let isDrawing = false;
-        sketchCanvas.addEventListener('mousedown', (e) => { isDrawing = true; drawSketch(e); });
-        sketchCanvas.addEventListener('mousemove', drawSketch);
-        window.addEventListener('mouseup', () => isDrawing = false);
-        
-        function drawSketch(e) {
-            if(!isDrawing) return;
-            const rect = sketchCanvas.getBoundingClientRect();
-            const scaleX = sketchCanvas.width / rect.width;
-            const scaleY = sketchCanvas.height / rect.height;
-            const x = (e.clientX - rect.left) * scaleX;
-            const y = (e.clientY - rect.top) * scaleY;
-            
-            sketchCtx.fillStyle = document.getElementById('sketch-color').value;
-            sketchCtx.beginPath();
-            sketchCtx.arc(x, y, 4, 0, Math.PI * 2);
-            sketchCtx.fill();
-        }
-        function clearSketch() { sketchCtx.clearRect(0,0,sketchCanvas.width, sketchCanvas.height); }
-
-        function showMorse() { document.getElementById('morse-panel').style.display = 'block'; window.scrollTo(0, document.body.scrollHeight); }
-        function translateMorse() {
-            const charMap = {'a': '.-', 'b': '-...', 'c': '-.-.', 'd': '-..', 'e': '.', 'f': '..-.', 'g': '--.', 'h': '....', 'i': '..', 'j': '.---', 'k': '-.-', 'l': '.-..', 'm': '--', 'n': '-.', 'o': '---', 'p': '.--.', 'q': '--.-', 'r': '.-.', 's': '...', 't': '-', 'u': '..-', 'v': '...-', 'w': '.--', 'x': '-..-', 'y': '-.--', 'z': '--..', '1': '.----', '2': '..---', '3': '...--', '4': '....-', '5': '.....', '6': '-....', '7': '--...', '8': '---..', '9': '----.', '0': '-----', ' ': '/'};
-            const input = document.getElementById('morse-input').value.toLowerCase();
-            const res = input.split('').map(c => charMap[c] || '').join(' ');
-            document.getElementById('morse-result').innerText = res || '.... ..';
-        }
-
-        function downloadNotes() {
-            const blob = new Blob([document.getElementById('note').value], {type: 'text/plain'});
-            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'launchpad-notes.txt'; a.click();
-        }
-
-        function genPass() {
-            const p = Math.random().toString(36).slice(-8) + Math.random().toString(36).toUpperCase().slice(-4) + "!@#";
-            document.getElementById('tool-out').innerText = "Generated: " + p;
-        }
-
-        function copySystemInfo() {
-            const info = `Platform: ${navigator.platform} | Resolution: ${screen.width}x${screen.height} | Launchpad Engine: V12`;
-            navigator.clipboard.writeText(info);
-            document.getElementById('tool-out').innerText = "System info copied!";
-        }
-
-        function showToast(msg) {
-            const t = document.getElementById('toast');
-            t.innerText = msg;
-            t.style.bottom = "35px";
-            setTimeout(() => t.style.bottom = "-100px", 3500);
-        }
-
-        function pMusic(src, name) {
-            const p = document.getElementById('player'); p.src = src; p.play();
-            showToast("Playing: " + name);
-        }
-
-        function playSfx(id) {
-            if(isPerfMode) return;
-            const s = document.getElementById('sfx-' + id);
-            if(s) { s.currentTime = 0; s.volume = 0.15; s.play(); }
-        }
-
-        // 4. AUTH & FEEDBACK
-        function handleAuthClick() {
-            if(currentUser) {
-                showSec('profile');
-            } else {
-                const userHandle = prompt("Enter your GitHub Username to connect:");
-                if(userHandle) {
-                    currentUser = {
-                        username: userHandle,
-                        avatar: `https://github.com/${userHandle}.png`,
-                        bio: "Launchpad User",
-                        loginDate: new Date().toLocaleDateString()
-                    };
-                    localStorage.setItem('hubUser', JSON.stringify(currentUser));
-                    syncAuthUI();
-                    showToast(`Logged in as @${userHandle}`);
-                }
-            }
-        }
-
-        function syncAuthUI() {
-            const badge = document.getElementById('auth-status');
-            const text = document.getElementById('auth-text');
-            const profileOut = document.getElementById('logged-out-view');
-            const profileIn = document.getElementById('logged-in-view');
-
-            if(currentUser) {
-                text.innerText = currentUser.username;
-                badge.innerHTML = `<img src="${currentUser.avatar}"> <span>${currentUser.username}</span>`;
-                document.getElementById('user-avatar').src = currentUser.avatar;
-                document.getElementById('user-name').innerText = currentUser.username;
-                document.getElementById('user-bio').innerText = currentUser.bio;
-                profileOut.style.display = 'none';
-                profileIn.style.display = 'block';
-                document.getElementById('greeting').innerText = `Welcome back, ${currentUser.username}!`;
-            } else {
-                text.innerText = "Sign in";
-                profileOut.style.display = 'block';
-                profileIn.style.display = 'none';
-            }
-        }
-
-        function logout() {
-            currentUser = null;
-            localStorage.removeItem('hubUser');
-            syncAuthUI();
-            showSec('home');
-        }
-
-        function selectIssue(el, type) {
-            document.querySelectorAll('.feedback-chip').forEach(c => c.classList.remove('selected'));
-            el.classList.add('selected');
-            activeIssueType = type;
-        }
-
-        async function gitSubmit() {
-            const t = document.getElementById('q-title').value;
-            const b = document.getElementById('q-body').value;
-            const p = document.getElementById('q-priority').value;
-            const status = document.getElementById('git-status');
-
-            if(!t || !b) return alert("Please provide both a title and description.");
-
-            status.innerText = "Formatting report...";
-            
-            let fullBody = `**Issue Type:** ${activeIssueType}\n**Priority:** ${p}\n\n**Description:**\n${b}\n\n---\n*Reported via Launchpad Engine V12*`;
-            if(currentUser) {
-                fullBody += `\n*User: @${currentUser.username}*`;
-            }
-
-            status.innerText = "Opening GitHub...";
-            setTimeout(() => {
-                window.open(`https://github.com/VRGamer262Real/Hub/issues/new?title=[${activeIssueType}] ${encodeURIComponent(t)}&body=${encodeURIComponent(fullBody)}`, '_blank');
-                status.innerText = "System Ready";
-            }, 800);
-        }
-
-        // 5. HARDWARE CURSOR & PERFORMANCE MONITOR
-        const start = Date.now();
-        const cur = document.getElementById('cursor'), fol = document.getElementById('cursor-follower');
-        
-        window.addEventListener('mousemove', (e) => {
-            if(isPerfMode) return;
-            cur.style.left = e.clientX + 'px'; cur.style.top = e.clientY + 'px';
-            fol.style.transform = `translate(${e.clientX - 19}px, ${e.clientY - 19}px)`;
-            
-            const moveX = (e.clientX - window.innerWidth / 2) * 0.012;
-            const moveY = (e.clientY - window.innerHeight / 2) * 0.012;
-            document.getElementById('bg-canvas').style.transform = `translate(${moveX}px, ${moveY}px) scale(1.04)`;
-        }, { passive: true });
-
-        let times = [];
-        function updatePerf() {
-            const now = performance.now();
-            while (times.length > 0 && times[0] <= now - 1000) times.shift();
-            times.push(now);
-            document.getElementById('perf').innerText = `FPS: ${times.length}`;
-            
-            const upS = Math.floor((Date.now() - start) / 1000);
-            const formatted = `${Math.floor(upS/60).toString().padStart(2,'0')}:${(upS%60).toString().padStart(2,'0')}`;
-            document.getElementById('uptime').innerText = `UPTIME: ${formatted}`;
-            document.getElementById('session-timer').innerText = formatted;
-            if(performance.memory) document.getElementById('mem-val').innerText = Math.round(performance.memory.usedJSHeapSize / 1048576) + " MB";
-            
-            setTimeout(updatePerf, 1000);
-        }
-        updatePerf();
-
-        setInterval(() => {
-            document.getElementById('clock').innerText = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            if(navigator.getBattery) navigator.getBattery().then(b => document.getElementById('battery').innerText = `${Math.floor(b.level*100)}%`);
-        }, 1000);
-
-        function mask(t, i) { document.getElementById('tab-title').innerText = t; document.getElementById('tab-icon').href = i; }
-
-        function updateGreeting() {
-            const h = new Date().getHours();
-            let g = "Welcome to Launchpad!";
-            if(h < 12) g = "Good morning, explorer.";
-            else if(h < 18) g = "Good afternoon, developer.";
-            else g = "Good evening, gamer.";
-            document.getElementById('greeting').innerText = g;
-        }
-
-        function panicMode() {
-            mask('Google', 'https://google.com/favicon.ico');
-            window.location.href = "https://google.com";
-        }
-
-        function refreshHoverEffects() {
-            document.querySelectorAll('a, button, .card, input, textarea, select').forEach(el => {
-                el.onmouseenter = () => { playSfx('hover'); if(!isPerfMode) document.body.classList.add('cursor-hover'); };
-                el.onmouseleave = () => { if(!isPerfMode) document.body.classList.remove('cursor-hover'); };
+    function initParticles() {
+        particles = [];
+        for (let i = 0; i < fxConfig.count; i++) {
+            particles.push({
+                x: Math.random() * viewportW,
+                y: Math.random() * viewportH,
+                vx: (Math.random() - 0.5) * 0.65,
+                vy: (Math.random() - 0.5) * 0.65,
+                size: 18 + Math.random() * 42,
+                tint: i % 2 === 0 ? '134,164,255' : '108,136,204'
             });
         }
-        
-        function toggleQuickMenu() {
-            const p = document.getElementById('cmd-palette');
-            p.classList.toggle('active');
-            if(p.classList.contains('active')) document.getElementById('cmd-input').focus();
+    }
+
+    function drawParticles() {
+        if (!pCtx || isPerfMode || fxConfig.count === 0) return;
+        pCtx.clearRect(0, 0, viewportW, viewportH);
+        for (const p of particles) {
+            p.x += p.vx * fxConfig.speed;
+            p.y += p.vy * fxConfig.speed;
+            if (p.x < -p.size) p.x = viewportW + p.size;
+            if (p.x > viewportW + p.size) p.x = -p.size;
+            if (p.y < -p.size) p.y = viewportH + p.size;
+            if (p.y > viewportH + p.size) p.y = -p.size;
+            pCtx.fillStyle = `rgba(${p.tint},0.12)`;
+            pCtx.beginPath();
+            pCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            pCtx.fill();
         }
+    }
 
-        document.getElementById('note').value = localStorage.getItem('hubNote') || "";
-        document.addEventListener('keydown', (e) => {
-            if(e.key === '`') window.location.href = "about:blank";
-            if(e.key === 'b' || e.key === 'B') panicMode();
-            if(e.key === 'Escape') { closeGame(); document.getElementById('cmd-palette').classList.remove('active'); }
-            if(e.ctrlKey && e.key === 'k') { e.preventDefault(); document.getElementById('cmd-palette').classList.add('active'); document.getElementById('cmd-input').focus(); }
-            if(e.key === '/') { if(document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') { e.preventDefault(); document.getElementById('universalSearch').focus(); }}
+    const matrixChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$@#%*';
+    const matrixFontSize = 16;
+    let matrixColumns = 0;
+    let matrixDrops = [];
+    function initMatrix() {
+        if (!matrixCtx) return;
+        matrixColumns = Math.floor(viewportW / matrixFontSize);
+        matrixDrops = Array.from({ length: matrixColumns }, () => Math.random() * -20);
+        matrixCtx.clearRect(0, 0, viewportW, viewportH);
+    }
+    function drawMatrix() {
+        if (!matrixCtx || !isMatrix) return;
+        matrixCtx.fillStyle = 'rgba(8,12,22,0.12)';
+        matrixCtx.fillRect(0, 0, viewportW, viewportH);
+        matrixCtx.fillStyle = '#86a4ff';
+        matrixCtx.font = `${matrixFontSize}px ${getComputedStyle(document.body).fontFamily}`;
+        for (let i = 0; i < matrixDrops.length; i++) {
+            const char = matrixChars[Math.floor(Math.random() * matrixChars.length)];
+            matrixCtx.fillText(char, i * matrixFontSize, matrixDrops[i] * matrixFontSize);
+            if (matrixDrops[i] * matrixFontSize > viewportH && Math.random() > 0.975) matrixDrops[i] = 0;
+            matrixDrops[i] += 0.7;
+        }
+    }
+
+    function refreshRenderLoop() {
+        const shouldRun = !document.hidden && ((!isPerfMode && fxConfig.count > 0) || isMemeMode || isMatrix);
+        if (shouldRun && !renderHandle) {
+            lastFrameAt = 0;
+            renderHandle = requestAnimationFrame(renderLoop);
+        } else if (!shouldRun && renderHandle) {
+            cancelAnimationFrame(renderHandle);
+            renderHandle = 0;
+        }
+    }
+
+    function renderLoop(timestamp) {
+        renderHandle = 0;
+        if (document.hidden) return;
+        if (timestamp - lastFrameAt >= 33) {
+            lastFrameAt = timestamp;
+            framesThisSecond++;
+            drawParticles();
+            if (isMemeMode && mCtx) {
+                mCtx.clearRect(0, 0, viewportW, viewportH);
+                for (const sprite of memeSprites) { sprite.update(); sprite.draw(); }
+            }
+            if (isMatrix) drawMatrix();
+        }
+        if ((!isPerfMode && fxConfig.count > 0) || isMemeMode || isMatrix) renderHandle = requestAnimationFrame(renderLoop);
+    }
+
+    function toggleMemeMode() {
+        if (isPerfMode) {
+            showToast('Turn Performance Mode off to enable Meme Mode.');
+            return;
+        }
+        isMemeMode = !isMemeMode;
+        if ($('meme-canvas')) $('meme-canvas').style.display = isMemeMode ? 'block' : 'none';
+        if ($('meme-toggle-text')) {
+            $('meme-toggle-text').textContent = isMemeMode ? 'ON' : 'OFF';
+            $('meme-toggle-text').style.color = isMemeMode ? 'var(--success)' : 'var(--danger)';
+        }
+        if ($('meme-mode-btn')) $('meme-mode-btn').textContent = `Meme Mode: ${isMemeMode ? 'ON' : 'OFF'}`;
+        if (isMemeMode) {
+            memeSprites = Array.from({ length: 8 }, () => new FlyingMeme());
+            showToast('Meme Mode activated!');
+        } else {
+            if (mCtx) mCtx.clearRect(0, 0, viewportW, viewportH);
+            showToast('Meme Mode deactivated.');
+        }
+        refreshRenderLoop();
+    }
+
+    function toggleMatrix() {
+        isMatrix = !isMatrix;
+        if (matrixCanvas) matrixCanvas.style.opacity = isMatrix ? '0.78' : '0';
+        if (isMatrix) initMatrix();
+        else if (matrixCtx) matrixCtx.clearRect(0, 0, viewportW, viewportH);
+        refreshRenderLoop();
+    }
+
+    function updateFX(type, value) {
+        const num = Number(value);
+        if (type === 'count') {
+            fxConfig.count = Math.max(0, Math.min(60, Number.parseInt(value, 10) || 0));
+            initParticles();
+            refreshRenderLoop();
+        } else if (type === 'speed') {
+            fxConfig.speed = Math.max(0.05, Math.min(5, num / 20));
+        } else if (type === 'tone') {
+            // Adjust the flat surface brightness without using expensive blur filters.
+            fxConfig.tone = Math.max(10, Math.min(22, 10 + num * 0.15));
+            document.documentElement.style.setProperty('--surface-tone', `${fxConfig.tone}%`);
+        }
+    }
+
+    function toggleScanlines() {
+        const el = $('scanlines');
+        const active = getComputedStyle(el).display !== 'none';
+        el.style.display = active ? 'none' : 'block';
+    }
+    function toggleGlitch() {
+        isGlitch = !isGlitch;
+        const overlay = $('glitch-overlay');
+        overlay.style.display = isGlitch ? 'block' : 'none';
+        overlay.style.opacity = isGlitch ? '0.12' : '0';
+    }
+    function togglePerfMode() {
+        isPerfMode = !isPerfMode;
+        document.body.classList.toggle('perf-mode', isPerfMode);
+        safeWrite('hubPerfMode', isPerfMode);
+        if ($('perf-toggle-btn')) $('perf-toggle-btn').textContent = `Performance: ${isPerfMode ? 'ON' : 'OFF'}`;
+        if ($('particle-canvas') && isPerfMode) pCtx?.clearRect(0, 0, viewportW, viewportH);
+        if (isPerfMode && isMemeMode) {
+            isMemeMode = false;
+            if (memeCanvas) memeCanvas.style.display = 'none';
+            if ($('meme-toggle-text')) { $('meme-toggle-text').textContent = 'OFF'; $('meme-toggle-text').style.color = 'var(--danger)'; }
+            if ($('meme-mode-btn')) $('meme-mode-btn').textContent = 'Meme Mode: OFF';
+        }
+        refreshRenderLoop();
+        showToast(isPerfMode ? 'Performance Mode enabled.' : 'Performance Mode disabled.');
+    }
+
+    function playSfx(id) {
+        if (isPerfMode) return;
+        const sound = $(`sfx-${id}`);
+        if (!sound) return;
+        sound.currentTime = 0;
+        sound.volume = id === 'hover' ? 0.04 : 0.12;
+        const result = sound.play();
+        if (result && typeof result.catch === 'function') result.catch(() => {});
+    }
+
+    // Keep the original subtle hover sound without attaching a listener to every card.
+    let lastHoveredElement = null;
+    let lastHoverSoundAt = 0;
+    const hoverSelector = 'a, button, .card, input, textarea, select, .feedback-chip, .auth-badge, .floating-action';
+    document.addEventListener('pointerover', (event) => {
+        const element = event.target.closest?.(hoverSelector);
+        if (!element || element === lastHoveredElement) return;
+        lastHoveredElement = element;
+        const now = performance.now();
+        if (now - lastHoverSoundAt > 160) {
+            lastHoverSoundAt = now;
+            playSfx('hover');
+        }
+    }, { passive: true });
+    document.addEventListener('pointerout', (event) => {
+        const element = event.target.closest?.(hoverSelector);
+        if (element && !element.contains(event.relatedTarget) && element === lastHoveredElement) lastHoveredElement = null;
+    }, { passive: true });
+
+    function showToast(message) {
+        const toast = $('toast');
+        if (!toast) return;
+        toast.textContent = message;
+        toast.classList.add('visible');
+        clearTimeout(toastHandle);
+        toastHandle = setTimeout(() => toast.classList.remove('visible'), 2800);
+    }
+
+    // Navigation and command palette.
+    function showSec(id) {
+        const target = $(id);
+        if (!target || target.tagName !== 'SECTION') return;
+        playSfx('click');
+        document.querySelectorAll('section').forEach((section) => section.classList.toggle('active', section === target));
+        document.querySelectorAll('.nav a').forEach((link) => link.classList.toggle('active', link.id === `nav-${id}`));
+        target.querySelectorAll('.grid li').forEach((item, index) => item.style.setProperty('--i', index));
+        window.scrollTo({ top: 0, behavior: isPerfMode ? 'auto' : 'smooth' });
+    }
+
+    function handleCmd(event) {
+        if (event.key === 'Enter') execCmd($('cmd-input').value);
+    }
+
+    function execCmd(raw) {
+        const cmd = String(raw || '').toLowerCase().trim();
+        $('cmd-palette').classList.remove('active');
+        $('cmd-input').value = '';
+        if (cmd.startsWith('goto ')) {
+            const sectionName = cmd.slice(5).trim();
+            const sectionId = sectionName === '3d' ? 'models' : sectionName;
+            if ($(sectionId)?.tagName === 'SECTION') showSec(sectionId);
+            else showToast(`Unknown section: ${sectionName}`);
+        } else if (cmd === 'meme' || cmd === 'mememode') toggleMemeMode();
+        else if (cmd === 'toggle perf') togglePerfMode();
+        else if (cmd === 'toggle matrix') toggleMatrix();
+        else if (cmd === 'login') handleAuthClick();
+        else if (cmd === 'panic') panicMode();
+        else if (cmd === 'b64') {
+            const input = prompt('Enter text to Base64 encode:');
+            if (input !== null) {
+                try {
+                    const bytes = new TextEncoder().encode(input);
+                    let binary = '';
+                    bytes.forEach((byte) => { binary += String.fromCharCode(byte); });
+                    alert(`Encoded: ${btoa(binary)}`);
+                } catch { showToast('Could not encode that text.'); }
+            }
+        } else if (cmd === 'help') {
+            alert('Commands: goto [section], meme, toggle perf, toggle matrix, b64, login, panic');
+        } else if (cmd) showToast(`Unknown command: ${cmd}`);
+    }
+
+    function toggleQuickMenu() {
+        const palette = $('cmd-palette');
+        palette.classList.toggle('active');
+        if (palette.classList.contains('active')) $('cmd-input').focus();
+    }
+
+    // Games theater.
+    function openGame(url, name) {
+        if (!url || !/^https?:|^\.\//i.test(url)) return;
+        const theater = $('game-view');
+        const frame = $('game-frame');
+        currentGameUrl = url;
+        currentGameName = name || 'Experience';
+        $('active-game-name').textContent = currentGameName;
+        $('game-status-text').textContent = 'LOADING EXPERIENCE…';
+        theater.classList.add('active');
+        $('game-loader').style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        frame.onload = () => {
+            if (!theater.classList.contains('active') || frame.src === 'about:blank') return;
+            $('game-loader').style.display = 'none';
+            $('game-status-text').textContent = 'LAUNCHPAD PLAYER · ACTIVE';
+        };
+        frame.src = url;
+    }
+    function reloadGame() {
+        if (!currentGameUrl) return;
+        $('game-loader').style.display = 'flex';
+        $('game-status-text').textContent = 'RELOADING…';
+        $('game-frame').src = currentGameUrl;
+    }
+    function toggleFullscreen() {
+        const frame = $('game-frame');
+        const request = frame.requestFullscreen || frame.webkitRequestFullscreen || frame.msRequestFullscreen;
+        if (request) {
+            const result = request.call(frame);
+            if (result && result.catch) result.catch(() => showToast('Fullscreen is unavailable in this browser.'));
+        } else showToast('Fullscreen is unavailable in this browser.');
+    }
+    function openInNewTab() {
+        if (currentGameUrl) window.open(currentGameUrl, '_blank', 'noopener,noreferrer');
+    }
+    function toggleTheaterSize() {
+        const frame = $('game-frame');
+        const wide = frame.dataset.wide !== 'true';
+        frame.dataset.wide = String(wide);
+        frame.style.width = wide ? '85%' : '100%';
+        frame.style.alignSelf = 'center';
+        frame.style.borderRadius = wide ? '12px' : '0';
+    }
+    function closeGame() {
+        const theater = $('game-view');
+        if (!theater.classList.contains('active')) return;
+        theater.classList.remove('active');
+        $('game-loader').style.display = 'none';
+        $('game-frame').src = 'about:blank';
+        document.body.style.overflow = '';
+        if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(() => {});
+    }
+
+    // Debounced search across every card without rebuilding source sections.
+    function universalSearch() {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            const query = $('universalSearch').value.trim().toLowerCase();
+            const results = $('results-list');
+            results.replaceChildren();
+            if (!query) { showSec('home'); return; }
+            document.querySelectorAll('section:not(#results) .card').forEach((card) => {
+                if (!card.textContent.toLowerCase().includes(query)) return;
+                const parent = card.parentElement;
+                const clone = parent.cloneNode(true);
+                clone.style.opacity = '1';
+                clone.style.transform = 'none';
+                results.appendChild(clone);
+            });
+            showSec('results');
+            if (!results.children.length) {
+                const empty = document.createElement('li');
+                empty.textContent = `No results found for “${query}”.`;
+                empty.style.color = 'var(--muted)';
+                empty.style.padding = '18px 4px';
+                empty.style.gridColumn = '1 / -1';
+                results.appendChild(empty);
+            }
+        }, 120);
+    }
+
+    // Task manager: render text safely using DOM nodes instead of HTML interpolation.
+    function saveTasks() {
+        safeWrite('hubTasks', tasks);
+        if (currentUser && $('git-status')) {
+            $('git-status').textContent = 'Saved locally';
+            setTimeout(() => {
+                if ($('git-status')) $('git-status').textContent = 'System Ready';
+            }, 1200);
+        }
+    }
+    function renderTasks() {
+        const list = $('task-list');
+        if (!list) return;
+        list.replaceChildren();
+        tasks.forEach((task, index) => {
+            const row = document.createElement('div');
+            row.className = 'task-item';
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.checked = task.c;
+            checkbox.setAttribute('aria-label', `Mark ${task.t} complete`);
+            checkbox.addEventListener('change', () => toggleTask(index));
+            const label = document.createElement('span');
+            label.textContent = task.t;
+            if (task.c) { label.style.textDecoration = 'line-through'; label.style.opacity = '.55'; }
+            row.append(checkbox, label);
+            list.appendChild(row);
         });
+    }
+    function addTask() {
+        const input = $('new-task-input');
+        const value = input.value.trim();
+        if (!value) { input.focus(); return; }
+        tasks.push({ t: value.slice(0, 300), c: false });
+        input.value = '';
+        saveTasks();
+        renderTasks();
+    }
+    function toggleTask(index) {
+        if (!tasks[index]) return;
+        tasks[index].c = !tasks[index].c;
+        saveTasks();
+        renderTasks();
+    }
 
-        const quotes = [
-            "Speed, precision, and memes.",
-            "Vision without execution is hallucination.",
-            "The future belongs to the customizable.",
-            "Simplicity is the ultimate sophistication.",
-            "Stay modular, stay fast."
-        ];
-        document.getElementById('quote-box').innerText = `"${quotes[Math.floor(Math.random()*quotes.length)]}"`;
-        
-        refreshHoverEffects(); showSec('home');
-    </script>
+    // Safe calculator parser: supports numbers, parentheses and +, -, *, / without eval().
+    function calculateExpression(source) {
+        const compact = String(source).replace(/\s+/g, '');
+        const tokens = compact.match(/(?:\d+(?:\.\d*)?|\.\d+)|[()+\-*/]/g) || [];
+        if (!compact || tokens.join('') !== compact) throw new Error('Invalid expression');
+        let index = 0;
+        function primary() {
+            const token = tokens[index++];
+            if (token === '+') return unary();
+            if (token === '-') return -unary();
+            if (token === '(') {
+                const value = expression();
+                if (tokens[index++] !== ')') throw new Error('Missing closing parenthesis');
+                return value;
+            }
+            if (token === undefined || !/^\d|^\./.test(token)) throw new Error('Expected a number');
+            const value = Number(token);
+            if (!Number.isFinite(value)) throw new Error('Invalid number');
+            return value;
+        }
+        function unary() { return primary(); }
+        function term() {
+            let value = primary();
+            while (tokens[index] === '*' || tokens[index] === '/') {
+                const op = tokens[index++];
+                const right = primary();
+                if (op === '/' && right === 0) throw new Error('Divide by zero');
+                value = op === '*' ? value * right : value / right;
+            }
+            return value;
+        }
+        function expression() {
+            let value = term();
+            while (tokens[index] === '+' || tokens[index] === '-') {
+                const op = tokens[index++];
+                const right = term();
+                value = op === '+' ? value + right : value - right;
+            }
+            return value;
+        }
+        const result = expression();
+        if (index !== tokens.length || !Number.isFinite(result)) throw new Error('Invalid expression');
+        return Number.parseFloat(result.toPrecision(12)).toString();
+    }
+    function cin(value) {
+        const output = $('calc-out');
+        if (output.value === 'Error') output.value = '';
+        output.value += value;
+    }
+    function cclr() { $('calc-out').value = ''; }
+    function cres() {
+        try { $('calc-out').value = calculateExpression($('calc-out').value); }
+        catch {
+            $('calc-out').value = 'Error';
+            setTimeout(cclr, 1300);
+        }
+    }
+
+    // Stopwatch and Pomodoro update on a moderate cadence to reduce idle work.
+    function formatStopwatch(ms) {
+        const total = Math.max(0, ms);
+        const min = Math.floor(total / 60000);
+        const sec = Math.floor((total % 60000) / 1000);
+        const centi = Math.floor((total % 1000) / 10);
+        return `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}.${String(centi).padStart(2, '0')}`;
+    }
+    function swStart() {
+        const button = $('sw-start');
+        if (button.textContent === 'Start') {
+            swStartedAt = Date.now() - swT;
+            swI = setInterval(() => {
+                swT = Date.now() - swStartedAt;
+                $('sw-display').textContent = formatStopwatch(swT);
+            }, 35);
+            button.textContent = 'Stop';
+        } else {
+            clearInterval(swI);
+            swI = 0;
+            button.textContent = 'Start';
+        }
+    }
+    function swReset() {
+        clearInterval(swI);
+        swI = 0;
+        swT = 0;
+        $('sw-display').textContent = '00:00.00';
+        $('sw-start').textContent = 'Start';
+    }
+    function startPomo(minutes) {
+        clearInterval(pomoI);
+        pomoEndAt = Date.now() + minutes * 60 * 1000;
+        const tick = () => {
+            const remaining = Math.max(0, Math.ceil((pomoEndAt - Date.now()) / 1000));
+            $('pomo-display').textContent = `${Math.floor(remaining / 60)}:${String(remaining % 60).padStart(2, '0')}`;
+            if (remaining <= 0) {
+                clearInterval(pomoI);
+                pomoI = 0;
+                showToast('Focus period complete!');
+            }
+        };
+        tick();
+        pomoI = setInterval(tick, 1000);
+    }
+    function resetPomo() {
+        clearInterval(pomoI);
+        pomoI = 0;
+        pomoEndAt = 0;
+        $('pomo-display').textContent = '25:00';
+    }
+
+    function showUnitConverter() {
+        $('unit-panel').style.display = 'block';
+        $('unit-input').focus();
+        $('unit-panel').scrollIntoView({ behavior: isPerfMode ? 'auto' : 'smooth', block: 'center' });
+    }
+    function convertUnit() {
+        const value = Number.parseFloat($('unit-input').value);
+        const type = $('unit-type').value;
+        if (!Number.isFinite(value)) { $('unit-result').textContent = '—'; return; }
+        const conversions = {
+            'cm-in': (n) => n / 2.54,
+            'in-cm': (n) => n * 2.54,
+            'kg-lb': (n) => n * 2.20462,
+            'lb-kg': (n) => n / 2.20462,
+            'c-f': (n) => (n * 9 / 5) + 32,
+            'f-c': (n) => (n - 32) * 5 / 9
+        };
+        $('unit-result').textContent = (conversions[type] || (() => 0))(value).toFixed(2);
+    }
+    function rollDice() { $('rng-result').textContent = `Dice: ${Math.floor(Math.random() * 6) + 1}`; }
+    function flipCoin() { $('rng-result').textContent = `Coin: ${Math.random() > 0.5 ? 'Heads' : 'Tails'}`; }
+
+    // Pointer-based drawing works with a mouse, stylus, or touchscreen.
+    function sketchPoint(event) {
+        const rect = sketchCanvas.getBoundingClientRect();
+        return { x: (event.clientX - rect.left) * (sketchCanvas.width / rect.width), y: (event.clientY - rect.top) * (sketchCanvas.height / rect.height) };
+    }
+    function startSketch(event) {
+        isDrawing = true;
+        lastSketchPoint = sketchPoint(event);
+        sketchCanvas.setPointerCapture?.(event.pointerId);
+        sketchCtx.strokeStyle = $('sketch-color').value;
+        sketchCtx.fillStyle = $('sketch-color').value;
+        sketchCtx.lineWidth = 4;
+        sketchCtx.lineCap = 'round';
+        sketchCtx.lineJoin = 'round';
+        sketchCtx.beginPath();
+        sketchCtx.moveTo(lastSketchPoint.x, lastSketchPoint.y);
+        sketchCtx.lineTo(lastSketchPoint.x + 0.1, lastSketchPoint.y + 0.1);
+        sketchCtx.stroke();
+    }
+    function moveSketch(event) {
+        if (!isDrawing || !lastSketchPoint) return;
+        const point = sketchPoint(event);
+        sketchCtx.strokeStyle = $('sketch-color').value;
+        sketchCtx.lineWidth = 4;
+        sketchCtx.lineCap = 'round';
+        sketchCtx.lineJoin = 'round';
+        sketchCtx.beginPath();
+        sketchCtx.moveTo(lastSketchPoint.x, lastSketchPoint.y);
+        sketchCtx.lineTo(point.x, point.y);
+        sketchCtx.stroke();
+        lastSketchPoint = point;
+    }
+    function endSketch() { isDrawing = false; lastSketchPoint = null; }
+    function clearSketch() { sketchCtx?.clearRect(0, 0, sketchCanvas.width, sketchCanvas.height); }
+
+    function showMorse() {
+        $('morse-panel').style.display = 'block';
+        $('morse-input').focus();
+        $('morse-panel').scrollIntoView({ behavior: isPerfMode ? 'auto' : 'smooth', block: 'center' });
+    }
+    function translateMorse() {
+        const map = {
+            a: '.-', b: '-...', c: '-.-.', d: '-..', e: '.', f: '..-.', g: '--.', h: '....', i: '..', j: '.---',
+            k: '-.-', l: '.-..', m: '--', n: '-.', o: '---', p: '.--.', q: '--.-', r: '.-.', s: '...', t: '-',
+            u: '..-', v: '...-', w: '.--', x: '-..-', y: '-.--', z: '--..', '1': '.----', '2': '..---',
+            '3': '...--', '4': '....-', '5': '.....', '6': '-....', '7': '--...', '8': '---..', '9': '----.', '0': '-----', ' ': '/'
+        };
+        const result = $('morse-input').value.toLowerCase().split('').map((char) => map[char] || (char === '\n' ? '/' : '')).join(' ').trim();
+        $('morse-result').textContent = result || 'Morse output will appear here.';
+    }
+
+    function downloadNotes() {
+        const blob = new Blob([$('note').value], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'launchpad-notes.txt';
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+    function genPass() {
+        const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%&*+-_';
+        const bytes = new Uint32Array(18);
+        if (window.crypto?.getRandomValues) window.crypto.getRandomValues(bytes);
+        else for (let i = 0; i < bytes.length; i++) bytes[i] = Math.floor(Math.random() * 0xffffffff);
+        const password = Array.from(bytes, (byte) => alphabet[byte % alphabet.length]).join('');
+        $('tool-out').textContent = `Generated: ${password}`;
+    }
+    async function copySystemInfo() {
+        const info = `Platform: ${navigator.platform} | Resolution: ${screen.width}x${screen.height} | Launchpad Engine: V12`;
+        try {
+            if (navigator.clipboard?.writeText) await navigator.clipboard.writeText(info);
+            else {
+                const temp = document.createElement('textarea');
+                temp.value = info;
+                temp.style.position = 'fixed';
+                temp.style.opacity = '0';
+                document.body.appendChild(temp);
+                temp.select();
+                const copied = document.execCommand('copy');
+                temp.remove();
+                if (!copied) throw new Error('Clipboard unavailable');
+            }
+            $('tool-out').textContent = 'System info copied!';
+        } catch { $('tool-out').textContent = info; showToast('Clipboard unavailable; system info is shown above.'); }
+    }
+
+    function pMusic(source, name) {
+        const player = $('player');
+        player.src = source;
+        player.play().then(() => showToast(`Playing: ${name}`)).catch(() => showToast(`Could not play “${name}”. Check its audio source.`));
+    }
+
+    // Lightweight local profile UI. It does not perform a real OAuth login.
+    function handleAuthClick() {
+        if (currentUser) { showSec('profile'); return; }
+        const handle = prompt('Enter your GitHub username to create a local Launchpad profile:');
+        if (handle === null || !handle.trim()) return;
+        const username = handle.trim().replace(/^@/, '');
+        if (!/^[a-z0-9-]{1,39}$/i.test(username)) {
+            showToast('Please enter a valid GitHub username.');
+            return;
+        }
+        currentUser = { username, avatar: `https://github.com/${encodeURIComponent(username)}.png`, bio: 'Launchpad User', loginDate: new Date().toLocaleDateString() };
+        safeWrite('hubUser', currentUser);
+        syncAuthUI();
+        showToast(`Local profile ready for @${username}.`);
+    }
+    function syncAuthUI() {
+        const badge = $('auth-status');
+        const profileOut = $('logged-out-view');
+        const profileIn = $('logged-in-view');
+        if (currentUser) {
+            const avatarURL = `https://github.com/${encodeURIComponent(currentUser.username)}.png`;
+            badge.replaceChildren();
+            const avatar = document.createElement('img');
+            avatar.src = avatarURL;
+            avatar.alt = '';
+            const name = document.createElement('span');
+            name.textContent = currentUser.username;
+            badge.append(avatar, name);
+            $('user-avatar').src = avatarURL;
+            $('user-avatar').alt = `${currentUser.username} avatar`;
+            $('user-name').textContent = currentUser.username;
+            $('user-bio').textContent = currentUser.bio || 'Launchpad User';
+            profileOut.style.display = 'none';
+            profileIn.style.display = 'block';
+            $('greeting').textContent = `Welcome back, ${currentUser.username}!`;
+        } else {
+            badge.replaceChildren();
+            const label = document.createElement('span');
+            label.id = 'auth-text';
+            label.textContent = 'Sign in';
+            badge.append(label);
+            profileOut.style.display = 'block';
+            profileIn.style.display = 'none';
+        }
+    }
+    function logout() {
+        currentUser = null;
+        safeRemove('hubUser');
+        syncAuthUI();
+        updateGreeting();
+        showSec('home');
+    }
+    function selectIssue(element, type) {
+        document.querySelectorAll('.feedback-chip').forEach((chip) => chip.classList.remove('selected'));
+        element.classList.add('selected');
+        activeIssueType = type;
+    }
+    function gitSubmit() {
+        const title = $('q-title').value.trim();
+        const body = $('q-body').value.trim();
+        const priority = $('q-priority').value;
+        const status = $('git-status');
+        if (!title || !body) { alert('Please provide both a title and description.'); return; }
+        const fullBody = `**Issue Type:** ${activeIssueType}\n**Priority:** ${priority}\n\n**Description:**\n${body}\n\n---\n*Reported via Launchpad Engine V12*${currentUser ? `\n*User: @${currentUser.username}*` : ''}`;
+        const url = new URL('https://github.com/VRGamer262Real/Hub/issues/new');
+        url.searchParams.set('title', `[${activeIssueType}] ${title}`);
+        url.searchParams.set('body', fullBody);
+        window.open(url.toString(), '_blank', 'noopener,noreferrer');
+        status.textContent = 'GitHub issue form opened in a new tab.';
+    }
+
+    function updateGreeting() {
+        if (currentUser) { $('greeting').textContent = `Welcome back, ${currentUser.username}!`; return; }
+        const hour = new Date().getHours();
+        $('greeting').textContent = hour < 12 ? 'Good morning, explorer.' : hour < 18 ? 'Good afternoon, developer.' : 'Good evening, gamer.';
+    }
+    function mask(title, iconUrl) {
+        $('tab-title').textContent = title;
+        $('tab-icon').href = iconUrl;
+    }
+    function panicMode() {
+        mask('Google', 'https://google.com/favicon.ico');
+        window.location.href = 'https://google.com';
+    }
+    function refreshHoverEffects() { /* Hover styling is handled by CSS; no per-element listeners are required. */ }
+
+    function updateClockAndStats() {
+        const now = Date.now();
+        const elapsedSeconds = Math.floor((now - startTime) / 1000);
+        const formatted = `${String(Math.floor(elapsedSeconds / 60)).padStart(2, '0')}:${String(elapsedSeconds % 60).padStart(2, '0')}`;
+        $('uptime').textContent = `UPTIME: ${formatted}`;
+        $('session-timer').textContent = formatted;
+        $('clock').textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        $('perf').textContent = renderHandle ? `FPS: ${Math.min(framesThisSecond, 30)}` : 'FPS: idle';
+        framesThisSecond = 0;
+        if (performance.memory?.usedJSHeapSize) $('mem-val').textContent = `${Math.round(performance.memory.usedJSHeapSize / 1048576)} MB`;
+    }
+    function initBattery() {
+        if (!navigator.getBattery) { $('battery').textContent = '—'; return; }
+        navigator.getBattery().then((battery) => {
+            const update = () => { $('battery').textContent = `${Math.round(battery.level * 100)}%${battery.charging ? ' ⚡' : ''}`; };
+            update();
+            battery.addEventListener('levelchange', update);
+            battery.addEventListener('chargingchange', update);
+        }).catch(() => { $('battery').textContent = '—'; });
+    }
+
+    function handleTerminal(event) {
+        if (event.key !== 'Enter') return;
+        const input = $('term-input');
+        const original = input.value.trim();
+        const value = original.toLowerCase();
+        const display = $('terminal-display');
+        const commandLine = document.createElement('div');
+        commandLine.className = 'terminal-line';
+        commandLine.textContent = `> ${original}`;
+        display.appendChild(commandLine);
+        let output = '';
+        if (value === 'help') output = 'Available: clear, meme, date, whoami, version, status, echo [text], system, neofetch';
+        else if (value === 'meme') { toggleMemeMode(); output = 'Meme Flying Mode toggled.'; }
+        else if (value === 'clear') { display.replaceChildren(); output = 'Terminal cleared.'; }
+        else if (value === 'date') output = new Date().toString();
+        else if (value === 'whoami') output = currentUser ? currentUser.username : 'guest_user';
+        else if (value === 'version') output = 'Launchpad Engine v12.0.0 · streamlined build';
+        else if (value === 'status') output = 'Launchpad is running. Canvas effects are throttled to reduce CPU use.';
+        else if (value === 'system') output = `Platform: ${navigator.platform} | RAM: ${performance.memory ? `${Math.round(performance.memory.usedJSHeapSize / 1048576)} MB` : 'N/A'}`;
+        else if (value === 'neofetch') output = 'LAUNCHPAD OS V12 · Lightweight UI';
+        else if (value.startsWith('echo ')) output = original.slice(5);
+        else if (value) output = "Command not recognized. Type 'help'.";
+        if (output) {
+            const resultLine = document.createElement('div');
+            resultLine.className = 'terminal-line';
+            resultLine.textContent = output;
+            display.appendChild(resultLine);
+        }
+        input.value = '';
+        display.scrollTop = display.scrollHeight;
+    }
+
+    // Keyboard shortcuts avoid stealing common typing keys.
+    document.addEventListener('keydown', (event) => {
+        const activeTag = document.activeElement?.tagName;
+        const typing = activeTag === 'INPUT' || activeTag === 'TEXTAREA' || document.activeElement?.isContentEditable;
+        if (event.key === 'Escape') {
+            closeGame();
+            $('cmd-palette').classList.remove('active');
+        }
+        if (event.ctrlKey && event.key.toLowerCase() === 'k') {
+            event.preventDefault();
+            $('cmd-palette').classList.add('active');
+            $('cmd-input').focus();
+        }
+        if (event.key === '/' && !typing) {
+            event.preventDefault();
+            $('universalSearch').focus();
+        }
+        if (event.altKey && event.shiftKey && event.key.toLowerCase() === 'b' && !typing) panicMode();
+    });
+
+    $('note').value = (() => { try { return localStorage.getItem('hubNote') || ''; } catch { return ''; } })();
+    $('note').addEventListener('input', () => {
+        try { localStorage.setItem('hubNote', $('note').value); } catch {}
+    });
+    $('new-task-input').addEventListener('keydown', (event) => { if (event.key === 'Enter') addTask(); });
+    $('term-input').addEventListener('keydown', handleTerminal);
+    $('sketchpad').addEventListener('pointerdown', startSketch);
+    $('sketchpad').addEventListener('pointermove', moveSketch);
+    $('sketchpad').addEventListener('pointerup', endSketch);
+    $('sketchpad').addEventListener('pointercancel', endSketch);
+    $('sketchpad').addEventListener('lostpointercapture', endSketch);
+    window.addEventListener('resize', resizeCanvases, { passive: true });
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden && renderHandle) { cancelAnimationFrame(renderHandle); renderHandle = 0; }
+        else refreshRenderLoop();
+    });
+
+    // Make mouse-operated cards keyboard accessible without changing their existing click actions.
+    document.querySelectorAll('.card[onclick]').forEach((card) => {
+        card.setAttribute('role', 'button');
+        card.setAttribute('tabindex', '0');
+        card.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                card.click();
+            }
+        });
+    });
+    document.querySelectorAll('.nav a').forEach((link) => {
+        link.setAttribute('href', `#${link.id.replace(/^nav-/, '')}`);
+        link.addEventListener('click', (event) => { event.preventDefault(); showSec(link.id.replace(/^nav-/, '')); });
+    });
+
+    // Expose the handlers used by inline controls in the original one-file markup.
+    Object.assign(window, {
+        toggleMemeMode, toggleMatrix, updateFX, toggleScanlines, toggleGlitch, togglePerfMode,
+        showSec, handleCmd, execCmd, toggleQuickMenu, openGame, reloadGame, toggleFullscreen,
+        openInNewTab, toggleTheaterSize, closeGame, universalSearch, addTask, toggleTask,
+        cin, cclr, cres, swStart, swReset, startPomo, resetPomo, showUnitConverter,
+        convertUnit, rollDice, flipCoin, clearSketch, showMorse, translateMorse, downloadNotes,
+        genPass, copySystemInfo, pMusic, handleAuthClick, logout, selectIssue, gitSubmit,
+        mask, panicMode, handleTerminal
+    });
+
+    // Initial paint and UI state.
+    document.documentElement.style.setProperty('--surface-tone', `${fxConfig.tone}%`);
+    resizeCanvases();
+    if (isPerfMode) {
+        document.body.classList.add('perf-mode');
+        $('perf-toggle-btn').textContent = 'Performance: ON';
+    }
+    renderTasks();
+    syncAuthUI();
+    updateGreeting();
+    const quotes = [
+        'Speed, precision, and memes.',
+        'Vision without execution is hallucination.',
+        'The future belongs to the customizable.',
+        'Simplicity is the ultimate sophistication.',
+        'Stay modular, stay fast.'
+    ];
+    $('quote-box').textContent = `“${quotes[Math.floor(Math.random() * quotes.length)]}”`;
+    if ($('meme-mode-btn')) $('meme-mode-btn').textContent = 'Meme Mode: OFF';
+    if ($('meme-toggle-text')) $('meme-toggle-text').textContent = 'OFF';
+    showSec('home');
+    initBattery();
+    updateClockAndStats();
+    setInterval(updateClockAndStats, 1000);
+    refreshRenderLoop();
+    $('load-p').style.width = '100%';
+    setTimeout(() => { $('loader').style.transform = 'translateY(-100%)'; }, 180);
+
+    // Background canvas stays paused when the tab is hidden and resumes when visible.
+})();
+
+</script>
 </body>
 </html>
