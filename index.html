@@ -1515,7 +1515,7 @@ input[type="color"] { width: 42px; height: 42px; min-height: 42px; padding: 3px;
         $('uptime').textContent = `UPTIME: ${formatted}`;
         $('session-timer').textContent = formatted;
         $('clock').textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-        $('perf').textContent = renderHandle ? `FPS: ${Math.min(framesThisSecond, 30)}` : 'FPS: idle';
+        $('perf').textContent = renderHandle ? `FPS: ${Math.min(framesThisSecond, 60)}` : 'FPS: idle';
         framesThisSecond = 0;
         if (performance.memory?.usedJSHeapSize) $('mem-val').textContent = `${Math.round(performance.memory.usedJSHeapSize / 1048576)} MB`;
     }
