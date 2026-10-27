@@ -895,7 +895,7 @@ input[type="color"] { width: 42px; height: 42px; min-height: 42px; padding: 3px;
     function renderLoop(timestamp) {
         renderHandle = 0;
         if (document.hidden) return;
-        if (timestamp - lastFrameAt >= 33) {
+        if (timestamp - lastFrameAt >= 63) {
             lastFrameAt = timestamp;
             framesThisSecond++;
             drawParticles();
