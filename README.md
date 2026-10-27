@@ -1,6 +1,6 @@
 # zOcM and VRGamer262
 
->We need to add to this release notes lol
+>I'm so happy this exists.
 
 <h2>Super tuff website</h2>
 
