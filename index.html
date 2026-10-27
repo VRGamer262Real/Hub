@@ -48,7 +48,7 @@ button { color: inherit; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 ::selection { color: #fff; background: #405fb4; }
 
-#bg-canvas { position: fixed; inset: 0; z-index: -3; pointer-events: none; background: radial-gradient(ellipse at 10% 0%, #172442 0, transparent 42%), radial-gradient(ellipse at 100% 100%, #151c34 0, transparent 40%), var(--bg-deep); }
+#bg-canvas { position: fixed; inset: 0; z-index: -3; pointer-events: none; background: radial-gradient(ellipse at 10% 0%, #172442 0, transparent 62%), radial-gradient(ellipse at 100% 100%, #151c34 0, transparent 40%), var(--bg-deep); }
 #particle-canvas { position: fixed; inset: 0; z-index: -2; width: 100%; height: 100%; pointer-events: none; opacity: .48; }
 #matrix-canvas { position: fixed; inset: 0; z-index: 5; width: 100%; height: 100%; opacity: 0; pointer-events: none; }
 #meme-canvas { position: fixed; inset: 0; z-index: 9990; width: 100%; height: 100%; pointer-events: none; display: none; }
@@ -449,7 +449,7 @@ input[type="color"] { width: 42px; height: 42px; min-height: 42px; padding: 3px;
         </div>
 
         <div class="panel">
-            <h3>Calculator Pro</h3>
+            <h3>Calculator</h3>
             <input type="text" id="calc-out" readonly style="font-size: 2rem; text-align: right; font-weight: 700; font-family: 'Fira Code'">
             <div id="calc">
                 <button onclick="cin('1')">1</button><button onclick="cin('2')">2</button><button onclick="cin('3')">3</button><button onclick="cin('+')">+</button>
