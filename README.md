@@ -1,6 +1,8 @@
 # zOcM and VRGamer262
 
->I'm so happy this exists.
+# PLEASE HELP US OUT!
+Go to https://github.com/VRGamer262Real/Hub/milestones and submit issues into the milestones. (And check status of new versions) For big features, submit into the next major version. (Ex. v14.0) 
+Small features, submit to smaller releases. (Ex. v13.1)
 
 <h2>Super tuff website</h2>
 
