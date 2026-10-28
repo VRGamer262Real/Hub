@@ -1211,7 +1211,7 @@ input[type="checkbox"] { accent-color:var(--accent); }
     ];
     let currentUser = safeRead('hubUser', null);
     if (currentUser && !/^[a-z0-9-]{1,39}$/i.test(String(currentUser.username || ''))) currentUser = null;
-    let tasks = safeRead('hubTasks', [{ t: 'Explore Launchpad V12', c: false }]);
+    let tasks = safeRead('hubTasks', [{ t: 'Explore Launchpad V14', c: false }]);
     if (!Array.isArray(tasks)) tasks = [{ t: 'Explore Launchpad V12', c: false }];
     tasks = tasks.filter((task) => task && typeof task.t === 'string').map((task) => ({ t: task.t, c: Boolean(task.c) }));
     let favorites = safeRead('hubFavorites', []);
