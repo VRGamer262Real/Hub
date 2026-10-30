@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title id="tab-title">Launchpad - zOcM and VRGamer262</title>
+    <title id="tab-title">Launchpad V15 - zOcM and VRGamer262</title>
     <meta name="description" content="A customizable arcade hub for games, utilities, music, and productivity.">
     <meta name="theme-color" content="#080d13">
     <meta charset="UTF-8">
@@ -197,7 +197,7 @@ input[type="color"] { width: 42px; height: 42px; min-height: 42px; padding: 3px;
 #unit-panel, #morse-panel { text-align: center; }
 #sketchpad { display: block; width: 100%; max-width: 600px; height: auto; margin: 0 auto; border: 1px solid var(--border); border-radius: 10px; background: #080d17; touch-action: none; cursor: crosshair; }
 
-.perf-mode #particle-canvas, .perf-mode #cursor, .perf-mode #cursor-follower, .perf-mode #scanlines, .perf-mode #glitch-overlay, .perf-mode #meme-canvas { display: none !important; }
+.perf-mode #particle-canvas, .perf-mode #matrix-canvas, .perf-mode #cursor, .perf-mode #cursor-follower, .perf-mode #scanlines, .perf-mode #glitch-overlay, .perf-mode #meme-canvas { display: none !important; }
 .perf-mode *, .perf-mode *::before, .perf-mode *::after { animation: none !important; transition: none !important; }
 .perf-mode .card, .perf-mode .panel, .perf-mode .nav, .perf-mode .widget { background: #111827 !important; border-color: #293246 !important; box-shadow: none !important; }
 .perf-mode section.active, .perf-mode .grid li { opacity: 1 !important; transform: none !important; }
@@ -322,7 +322,7 @@ body {
   letter-spacing: .06em;
 }
 .nav-wrapper::after {
-  content: "ARCADE OS  /  V14";
+  content: "ARCADE OS  /  V15";
   display: block;
   margin: 24px 13px 0;
   padding-top: 18px;
@@ -618,6 +618,23 @@ input[type="checkbox"] { accent-color:var(--accent); }
 }
 #universalSearch { padding-left: 48px !important; }
 </style>
+<style id="launchpad-v15-additions">
+.diagnostics-summary { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); }
+.diagnostics-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+.diagnostic-row { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; padding:13px 14px; border:1px solid var(--border); border-radius:11px; background:rgba(5,10,15,.35); }
+.diagnostic-row strong { color:var(--text); font-size:.84rem; }
+.diagnostic-row span { color:var(--muted); text-align:right; font-size:.82rem; overflow-wrap:anywhere; }
+.cloud-actions { display:flex; align-items:center; flex-wrap:wrap; gap:9px; margin-top:12px; }
+.inline-status { color:var(--muted); font-size:.82rem; }
+.setup-details { margin-top:18px; padding:14px; border:1px solid var(--border); border-radius:12px; background:rgba(5,10,15,.3); }
+.setup-details summary { color:var(--accent); cursor:pointer; font-weight:750; }
+.sql-block { max-width:100%; overflow:auto; padding:15px; border:1px solid var(--border); border-radius:10px; background:#05090d; color:#d7f4bd; font: .78rem/1.6 var(--mono); text-align:left; white-space:pre; }
+#supabase-config-panel label, #cloud-auth-panel label { display:block; margin:12px 0 7px; color:var(--muted); font-size:.78rem; font-weight:750; }
+#cloud-auth-panel p, #supabase-config-panel p { line-height:1.65; }
+#cloud-sync-state { font-size:1.05rem; }
+@media(max-width:760px) { .diagnostics-summary { grid-template-columns:repeat(2,minmax(0,1fr)); } .diagnostics-grid { grid-template-columns:1fr; } .diagnostic-row { gap:8px; } }
+@media(max-width:420px) { .cloud-actions .btn { flex:1 1 100%; } .diagnostic-row { flex-direction:column; } .diagnostic-row span { text-align:left; } }
+</style>
 </head>
 <body>
     <div id="scanlines"></div>
@@ -631,7 +648,7 @@ input[type="checkbox"] { accent-color:var(--accent); }
     <audio id="sfx-hover" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
 
     <div id="loader">
-        <div class="loader-logo">LAUNCHPAD <span>V14</span></div>
+        <div class="loader-logo">LAUNCHPAD <span>V15</span></div>
         <div class="load-bar"><div class="load-progress" id="load-p"></div></div>
         <div style="font-size: 0.72rem; margin-top: 15px; opacity: 0.7; letter-spacing: 2px; font-weight: 600">How's it going?</div>
     </div>
@@ -650,7 +667,7 @@ input[type="checkbox"] { accent-color:var(--accent); }
     <div id="cursor"></div>
     <div id="cursor-follower"></div>
 
-    <div class="floating-action" onclick="toggleQuickMenu()">+</div>
+    <button type="button" class="floating-action" onclick="toggleQuickMenu()" aria-label="Open command palette" title="Quick actions">+</button>
 
     <div id="game-view">
         <div id="game-loader">
@@ -708,6 +725,7 @@ input[type="checkbox"] { accent-color:var(--accent); }
             <li><a id="nav-music">♫ <span>Music</span></a></li>
             <li><a id="nav-news">↗ <span>Changelog</span></a></li>
             <li><a id="nav-tools">⌘ <span>Tools</span></a></li>
+            <li><a id="nav-diagnostics">⌁ <span>Diagnostics</span></a></li>
             <li><a id="nav-terminal">>_ <span>Terminal</span></a></li>
             <li><a id="nav-models">◇ <span>3D Models</span></a></li>
             <li><a id="nav-design">⚙ <span>Settings</span></a></li>
@@ -726,7 +744,7 @@ input[type="checkbox"] { accent-color:var(--accent); }
         <div class="hero-subtitle">WELCOME TO NEXT-GEN</div>
         <h1 class="rainbow-text hero-title">LAUNCHPAD</h1>
         <div class="home-accent-bar"></div>
-        <p class="hero-copy">Your games, tools, and creative space — all in one place.</p>
+        <p class="hero-copy">Your games, tools, diagnostics, and creative space — all in one place.</p>
         <div class="home-actions">
             <button class="btn btn-primary" onclick="playRandomGame()">▶ Surprise me</button>
             <button class="btn" onclick="showSec('games')">Browse library <span aria-hidden="true">↗</span></button>
@@ -760,11 +778,11 @@ input[type="checkbox"] { accent-color:var(--accent); }
 
         <h2 class="subsection-title">FEATURED CHANNELS</h2>
         <ul class="grid">
-            <li><a class="card" href="https://www.youtube.com/@zOcM" target="_blank"><span class="featured-badge">Creator</span><span class="card-text">YouTube (zOcM)</span></a></li>
-            <li><a class="card" href="https://www.youtube.com/@VRGamer262" target="_blank"><span class="featured-badge">Creator</span><span class="card-text">YouTube (VRGamer262)</span></a></li>
-            <li><a class="card" href="https://github.com/VRGamer262Real" target="_blank"><span class="card-text">GitHub (VRGamer262)</span></a></li>
-            <li><a class="card" href="https://github.com/zOcMYT/" target="_blank"><span class="card-text">GitHub (zOcM)</span></a></li>
-            <li><a class="card" href="https://github.com/cocopuffs262/" target="_blank"><span class="card-text">GitHub (cocopuffs262)</span></a></li>
+            <li><a class="card" href="https://www.youtube.com/@zOcM" target="_blank" rel="noopener noreferrer"><span class="featured-badge">Creator</span><span class="card-text">YouTube (zOcM)</span></a></li>
+            <li><a class="card" href="https://www.youtube.com/@VRGamer262" target="_blank" rel="noopener noreferrer"><span class="featured-badge">Creator</span><span class="card-text">YouTube (VRGamer262)</span></a></li>
+            <li><a class="card" href="https://github.com/VRGamer262Real" target="_blank" rel="noopener noreferrer"><span class="card-text">GitHub (VRGamer262)</span></a></li>
+            <li><a class="card" href="https://github.com/zOcMYT/" target="_blank" rel="noopener noreferrer"><span class="card-text">GitHub (zOcM)</span></a></li>
+            <li><a class="card" href="https://github.com/cocopuffs262/" target="_blank" rel="noopener noreferrer"><span class="card-text">GitHub (cocopuffs262)</span></a></li>
         </ul>
     </section>
 
@@ -824,7 +842,7 @@ input[type="checkbox"] { accent-color:var(--accent); }
 
     <section id="recent">
         <div class="section-heading-row">
-            <div><p class="eyebrow">YOUR PLAY HISTORY</p><h1>Recently Played</h1><p class="section-subtitle">Your latest launches are saved on this device.</p></div>
+            <div><p class="eyebrow">YOUR PLAY HISTORY</p><h1>Recently Played</h1><p class="section-subtitle">Your latest launches are saved locally and can sync after connecting a cloud account.</p></div>
             <button class="btn" onclick="clearRecentHistory()">Clear history</button>
         </div>
         <ul class="grid" id="recent-list"></ul>
@@ -918,10 +936,12 @@ input[type="checkbox"] { accent-color:var(--accent); }
         <h1>Updates & Changelog</h1>
         <div class="panel changelog-panel" style="text-align: left">
             <p class="eyebrow">CURRENT RELEASE</p>
-            <h2 style="margin-top: 0">V14.0 — Arcade OS Redesign</h2>
+            <h2 style="margin-top: 0">V15.0 — Performance, Detection & Cloud Sync</h2>
             <p>• <strong>All-new interface:</strong> a sidebar-based dashboard, redesigned game cards, and responsive layouts.</p>
             <p>• <strong>Personal library:</strong> favorites, persistent recent-game history, launch stats, and achievements.</p>
-            <p>• <strong>60 FPS canvas cap:</strong> background effects are paced at a maximum of 60 rendered frames per second.</p>
+            <p>• <strong>120 FPS canvas cap:</strong> Launchpad background effects are paced at up to 120 rendered frames per second on supported displays.</p>
+            <p>• <strong>Cloud accounts:</strong> Supabase email/password authentication, per-user cloud saves, automatic sync, and upload/restore controls.</p>
+            <p>• <strong>Diagnostics:</strong> browser, device, graphics, storage, and network capability detection.</p>
             <p>• <strong>Usability fixes:</strong> safer persistence, keyboard-friendly controls, and quick-launch actions.</p>
         </div>
         <div class="panel" style="text-align: left">
@@ -981,11 +1001,32 @@ input[type="checkbox"] { accent-color:var(--accent); }
         </div>
     </section>
 
+    <section id="diagnostics">
+        <div class="section-heading-row">
+            <div><p class="eyebrow">DEVICE & BROWSER CHECK</p><h1>System Diagnostics</h1><p class="section-subtitle">A local capability scan of this browser and device. Some details are intentionally hidden by browser privacy settings.</p></div>
+            <button class="btn btn-primary" onclick="runDiagnostics()">↻ Run detection</button>
+        </div>
+        <div class="widget-row diagnostics-summary">
+            <div class="widget"><div class="widget-label">Browser</div><div class="widget-val" id="detect-browser">Checking…</div></div>
+            <div class="widget"><div class="widget-label">Device</div><div class="widget-val" id="detect-device">Checking…</div></div>
+            <div class="widget"><div class="widget-label">Operating System</div><div class="widget-val" id="detect-os">Checking…</div></div>
+            <div class="widget"><div class="widget-label">Display</div><div class="widget-val" id="detect-display">Checking…</div></div>
+        </div>
+        <div class="panel">
+            <div class="section-heading-row"><div><h2>Capability & environment report</h2><p class="section-subtitle">No permissions are requested by this scan.</p></div><button class="btn" onclick="copyDiagnostics()">Copy report</button></div>
+            <div class="diagnostics-grid" id="diagnostics-grid" aria-live="polite"><div class="diagnostic-row"><strong>Scan status</strong><span>Run detection to inspect this environment.</span></div></div>
+        </div>
+        <div class="panel">
+            <h3>What this scan can and cannot detect</h3>
+            <p>It checks browser APIs, display metrics, graphics support, basic hardware hints, network hints, and local storage availability. Browsers may reduce or hide hardware details. It does not inspect other apps, scan files, bypass browser security, or control the frame rate of games inside their own iframes.</p>
+        </div>
+    </section>
+
     <section id="terminal">
         <h1>Launchpad Terminal</h1>
         <div class="panel">
             <div class="terminal-box" id="terminal-display">
-                <div class="terminal-line">Launchpad OS v14.0.0 (High Performance Engine)</div>
+                <div class="terminal-line">Launchpad OS v15.0.0 (120 FPS Engine)</div>
                 <div class="terminal-line">Type 'help' for available commands. Try 'meme' to toggle meme mode!</div>
             </div>
             <div class="terminal-input-row" style="margin-top: 15px">
@@ -1008,7 +1049,7 @@ input[type="checkbox"] { accent-color:var(--accent); }
         <h1>Settings & Customization</h1>
         <div class="panel">
             <h3>Special Modes</h3>
-            <p class="setting-note">Canvas effects are locked to a 60 FPS render cap. Embedded games are hosted by third-party sites and control their own frame rate.</p>
+            <p class="setting-note">Launchpad canvas effects are paced at a maximum of 120 FPS. Embedded third-party games control their own frame rates.</p>
             <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px">
                 <button class="btn" id="meme-mode-btn" onclick="toggleMemeMode()">Meme Mode: OFF</button>
                 <button class="btn" id="perf-toggle-btn" onclick="togglePerfMode()">Performance: OFF</button>
@@ -1085,31 +1126,87 @@ input[type="checkbox"] { accent-color:var(--accent); }
     </section>
 
     <section id="profile">
-        <h1>User Profile</h1>
+        <h1>Player Profile & Cloud Account</h1>
         <div class="panel" id="profile-container">
             <div id="logged-out-view">
-                <h3>Not Authenticated</h3>
-                <p style="opacity: 0.8; margin-bottom: 20px">Create a local profile for this browser. Profile details stay on this device.</p>
-                <button class="btn" onclick="handleAuthClick()">Create local profile</button>
+                <h3>Local profile</h3>
+                <p style="opacity: 0.8; margin-bottom: 18px">A local profile labels this browser only. Use the cloud account panel below to sign in and sync your library between devices.</p>
+                <button class="btn" onclick="createLocalProfile()">Create local profile</button>
             </div>
             <div id="logged-in-view" style="display: none">
                 <div class="user-profile-card">
-                    <img loading="lazy" decoding="async" id="user-avatar" class="user-avatar-large" src="">
+                    <img loading="lazy" decoding="async" id="user-avatar" class="user-avatar-large" src="" alt="">
                     <h2 id="user-name" style="margin: 0; font-family: var(--title-font)"></h2>
                     <p id="user-bio" style="opacity: 0.8; font-size: 0.95rem"></p>
                 </div>
                 <div class="widget-row" style="margin-top: 25px">
-                    <div class="widget">
-                        <div class="widget-label">Cloud Sync</div>
-                        <div class="widget-val">Active</div>
-                    </div>
-                    <div class="widget">
-                        <div class="widget-label">User Tier</div>
-                        <div class="widget-val">Player</div>
-                    </div>
+                    <div class="widget"><div class="widget-label">Cloud Sync</div><div class="widget-val" id="cloud-sync-state">Not connected</div></div>
+                    <div class="widget"><div class="widget-label">Account Type</div><div class="widget-val" id="account-type">Local profile</div></div>
                 </div>
-                <button class="btn" style="margin-top: 15px" onclick="logout()">Sign Out</button>
+                <p id="cloud-last-sync" class="section-subtitle" aria-live="polite">Your local profile is available on this browser.</p>
+                <div class="cloud-actions">
+                    <button class="btn btn-primary" onclick="syncCloudData('merge')">↻ Sync now</button>
+                    <button class="btn" onclick="syncCloudData('upload')">Upload local data</button>
+                    <button class="btn" onclick="syncCloudData('download')">Restore cloud data</button>
+                    <button class="btn" onclick="logout()">Sign out</button>
+                </div>
             </div>
+        </div>
+
+        <div class="panel" id="cloud-auth-panel">
+            <p class="eyebrow">SUPABASE AUTHENTICATION</p>
+            <h3>Sign in or create a cloud account</h3>
+            <p>Accounts use Supabase Auth. Your favorites, recent games, achievements, tasks, notes, and selected settings can sync through your own protected database.</p>
+            <label for="auth-display-name">Display name (used when creating an account)</label>
+            <input type="text" id="auth-display-name" maxlength="60" autocomplete="nickname" placeholder="Your player name">
+            <label for="auth-email">Email address</label>
+            <input type="email" id="auth-email" autocomplete="email" placeholder="you@example.com">
+            <label for="auth-password">Password</label>
+            <input type="password" id="auth-password" minlength="6" autocomplete="current-password" placeholder="At least 6 characters">
+            <div class="cloud-actions">
+                <button class="btn btn-primary" onclick="signInWithEmail()">Sign in</button>
+                <button class="btn" onclick="signUpWithEmail()">Create account</button>
+                <button class="btn" onclick="sendPasswordReset()">Reset password</button>
+            </div>
+            <p id="auth-message" class="setting-note" role="status" aria-live="polite">Configure your Supabase project below to enable real cloud accounts.</p>
+        </div>
+
+        <div class="panel" id="supabase-config-panel">
+            <p class="eyebrow">ONE-TIME SETUP</p>
+            <h3>Connect your Supabase project</h3>
+            <p>Enter your project's HTTPS URL and its <strong>publishable / anon public key</strong>. These values are stored in this browser. Never put a <code>service_role</code> or secret key in this HTML file.</p>
+            <label for="supabase-url">Project URL</label>
+            <input type="url" id="supabase-url" placeholder="https://your-project.supabase.co" autocomplete="url">
+            <label for="supabase-anon-key">Publishable / anon public key</label>
+            <input type="password" id="supabase-anon-key" placeholder="sb_publishable_… or legacy anon key" autocomplete="off">
+            <div class="cloud-actions">
+                <button class="btn btn-primary" onclick="saveSupabaseConfig()">Save connection</button>
+                <button class="btn" onclick="clearSupabaseConfig()">Clear connection</button>
+                <span id="supabase-config-status" class="inline-status">Not configured</span>
+            </div>
+            <details class="setup-details">
+                <summary>Database setup SQL (run once in Supabase SQL Editor)</summary>
+                <p>Create a table with Row Level Security so each signed-in user can only read and write their own Launchpad save.</p>
+                <pre class="sql-block"><code>create table if not exists public.launchpad_profiles (
+  user_id uuid primary key references auth.users(id) on delete cascade,
+  data jsonb not null default '{}'::jsonb,
+  updated_at timestamptz not null default now()
+);
+
+alter table public.launchpad_profiles enable row level security;
+
+drop policy if exists "Users manage their own Launchpad save" on public.launchpad_profiles;
+create policy "Users manage their own Launchpad save"
+on public.launchpad_profiles
+for all to authenticated
+using (auth.uid() = user_id)
+with check (auth.uid() = user_id);
+
+grant select, insert, update, delete
+on public.launchpad_profiles to authenticated;</code></pre>
+                <button class="btn" onclick="copySupabaseSQL()">Copy setup SQL</button>
+            </details>
+            <p class="section-subtitle" style="margin-top:14px">For production, host this page over HTTPS, enable email confirmation as desired, and keep Row Level Security enabled. A public anon key is designed for browser use only when database policies are correctly configured.</p>
         </div>
     </section>
 
@@ -1146,9 +1243,11 @@ input[type="checkbox"] { accent-color:var(--accent); }
 (() => {
     'use strict';
 
-    // Cap Launchpad's own canvas render loop to 60 FPS. Third-party iframe games have independent loops.
-    const MAX_FPS = 60;
+    // This is a single-file HTML5 page. Pace Launchpad's own canvas effects at no more than 120 FPS; third-party iframe games have independent loops.
+    const MAX_FPS = 120;
     const FRAME_INTERVAL = 1000 / MAX_FPS;
+    const SYNCABLE_KEYS = new Set(['hubTasks', 'hubFavorites', 'hubRecentGames', 'hubPlayedGames', 'hubLaunchCount', 'hubNote', 'hubPerfMode', 'hubFXConfig']);
+    const SYNCABLE_KEY_LIST = [...SYNCABLE_KEYS];
 
     // Lightweight state and guarded storage access.
     const $ = (id) => document.getElementById(id);
@@ -1159,8 +1258,13 @@ input[type="checkbox"] { accent-color:var(--accent); }
         } catch { return fallback; }
     };
     const safeWrite = (key, value) => {
-        try { localStorage.setItem(key, typeof value === 'string' ? value : JSON.stringify(value)); }
-        catch { /* Storage can be blocked or full; the page still works for this session. */ }
+        try {
+            localStorage.setItem(key, typeof value === 'string' ? value : JSON.stringify(value));
+            if (SYNCABLE_KEYS.has(key)) {
+                try { localStorage.setItem('hubLocalUpdatedAt', String(Date.now())); } catch {}
+                scheduleCloudSync();
+            }
+        } catch { /* Storage can be blocked or full; the page still works for this session. */ }
     };
     const safeRemove = (key) => { try { localStorage.removeItem(key); } catch {} };
 
@@ -1199,16 +1303,29 @@ input[type="checkbox"] { accent-color:var(--accent); }
     let lastSketchPoint = null;
 
     const startTime = Date.now();
-    const fxConfig = { count: 8, speed: 0.5, tone: 16 };
+    const savedFX = safeRead('hubFXConfig', null);
+    const fxConfig = {
+        count: Number.isFinite(Number(savedFX?.count)) ? Math.max(0, Math.min(60, Number(savedFX.count))) : 8,
+        speed: Number.isFinite(Number(savedFX?.speed)) ? Math.max(0.05, Math.min(5, Number(savedFX.speed))) : 0.5,
+        tone: Number.isFinite(Number(savedFX?.tone)) ? Math.max(10, Math.min(22, Number(savedFX.tone))) : 16
+    };
     const memeItems = [
         '🐶 DOGE', '🐱 POPCAT', '🗿 GIGACHAD', '🐸 PEPE', '🚀 STONKS',
         '🤡 CLOWN', '💀 DEAD', '🔥 THIS IS FINE', '🦖 RAWR', '🥑 NIKOCADO',
         '✨ NO CAP', '🍌 BANANA', '🐈 NYAN', '📮 AMOGUS'
     ];
     let currentUser = safeRead('hubUser', null);
+    let supabaseConfig = safeRead('hubSupabaseConfig', null);
+    if (!supabaseConfig || typeof supabaseConfig.url !== 'string' || typeof supabaseConfig.anonKey !== 'string') supabaseConfig = null;
+    let authSession = safeRead('hubAuthSession', null);
+    if (!authSession || typeof authSession.access_token !== 'string' || typeof authSession.refresh_token !== 'string') authSession = null;
+    let cloudSyncTimer = 0;
+    let cloudSyncBusy = false;
+    let applyingCloudData = false;
+    let lastCloudSyncAt = 0;
     if (currentUser && !/^[a-z0-9-]{1,39}$/i.test(String(currentUser.username || ''))) currentUser = null;
-    let tasks = safeRead('hubTasks', [{ t: 'Explore Launchpad V14', c: false }]);
-    if (!Array.isArray(tasks)) tasks = [{ t: 'Explore Launchpad V12', c: false }];
+    let tasks = safeRead('hubTasks', [{ t: 'Explore Launchpad V15', c: false }]);
+    if (!Array.isArray(tasks)) tasks = [{ t: 'Explore Launchpad V15', c: false }];
     tasks = tasks.filter((task) => task && typeof task.t === 'string').map((task) => ({ t: task.t, c: Boolean(task.c) }));
     let favorites = safeRead('hubFavorites', []);
     if (!Array.isArray(favorites)) favorites = [];
@@ -1255,10 +1372,10 @@ input[type="checkbox"] { accent-color:var(--accent); }
             this.color = `hsl(${Math.random() * 360}, 75%, 68%)`;
         }
         constructor() { this.reset(); }
-        update() {
-            this.x += this.vx;
-            this.y += this.vy;
-            this.rot += this.vRot;
+        update(frameScale = 1) {
+            this.x += this.vx * frameScale;
+            this.y += this.vy * frameScale;
+            this.rot += this.vRot * frameScale;
             if (this.x < 0 || this.x > viewportW) this.vx *= -1;
             if (this.y < 0 || this.y > viewportH) this.vy *= -1;
         }
@@ -1288,12 +1405,12 @@ input[type="checkbox"] { accent-color:var(--accent); }
         }
     }
 
-    function drawParticles() {
+    function drawParticles(frameScale = 1) {
         if (!pCtx || isPerfMode || fxConfig.count === 0) return;
         pCtx.clearRect(0, 0, viewportW, viewportH);
         for (const p of particles) {
-            p.x += p.vx * fxConfig.speed;
-            p.y += p.vy * fxConfig.speed;
+            p.x += p.vx * fxConfig.speed * frameScale;
+            p.y += p.vy * fxConfig.speed * frameScale;
             if (p.x < -p.size) p.x = viewportW + p.size;
             if (p.x > viewportW + p.size) p.x = -p.size;
             if (p.y < -p.size) p.y = viewportH + p.size;
@@ -1315,9 +1432,9 @@ input[type="checkbox"] { accent-color:var(--accent); }
         matrixDrops = Array.from({ length: matrixColumns }, () => Math.random() * -20);
         matrixCtx.clearRect(0, 0, viewportW, viewportH);
     }
-    function drawMatrix() {
+    function drawMatrix(frameScale = 1) {
         if (!matrixCtx || !isMatrix) return;
-        matrixCtx.fillStyle = 'rgba(8,12,22,0.12)';
+        matrixCtx.fillStyle = `rgba(8,12,22,${1 - Math.pow(1 - 0.12, frameScale)})`;
         matrixCtx.fillRect(0, 0, viewportW, viewportH);
         matrixCtx.fillStyle = '#86a4ff';
         matrixCtx.font = `${matrixFontSize}px ${getComputedStyle(document.body).fontFamily}`;
@@ -1325,7 +1442,7 @@ input[type="checkbox"] { accent-color:var(--accent); }
             const char = matrixChars[Math.floor(Math.random() * matrixChars.length)];
             matrixCtx.fillText(char, i * matrixFontSize, matrixDrops[i] * matrixFontSize);
             if (matrixDrops[i] * matrixFontSize > viewportH && Math.random() > 0.975) matrixDrops[i] = 0;
-            matrixDrops[i] += 0.7;
+            matrixDrops[i] += 0.7 * frameScale;
         }
     }
 
@@ -1345,15 +1462,17 @@ input[type="checkbox"] { accent-color:var(--accent); }
         if (document.hidden) return;
         const elapsed = timestamp - lastFrameAt;
         if (elapsed >= FRAME_INTERVAL) {
+            // Keep legacy effect speeds consistent while allowing up to 120 paints per second.
+            const frameScale = Math.min(3, elapsed / (1000 / 60));
             // Skip missed frames rather than attempting a burst of catch-up paints.
             lastFrameAt = timestamp - (elapsed % FRAME_INTERVAL);
             framesThisSecond++;
-            drawParticles();
+            drawParticles(frameScale);
             if (isMemeMode && mCtx) {
                 mCtx.clearRect(0, 0, viewportW, viewportH);
-                for (const sprite of memeSprites) { sprite.update(); sprite.draw(); }
+                for (const sprite of memeSprites) { sprite.update(frameScale); sprite.draw(); }
             }
-            if (isMatrix) drawMatrix();
+            if (isMatrix) drawMatrix(frameScale);
         }
         if ((!isPerfMode && fxConfig.count > 0) || isMemeMode || isMatrix) renderHandle = requestAnimationFrame(renderLoop);
     }
@@ -1381,6 +1500,7 @@ input[type="checkbox"] { accent-color:var(--accent); }
     }
 
     function toggleMatrix() {
+        if (isPerfMode) { showToast('Turn Performance Mode off to enable Matrix Rain.'); return; }
         isMatrix = !isMatrix;
         if (matrixCanvas) matrixCanvas.style.opacity = isMatrix ? '0.78' : '0';
         if (isMatrix) initMatrix();
@@ -1401,6 +1521,7 @@ input[type="checkbox"] { accent-color:var(--accent); }
             fxConfig.tone = Math.max(10, Math.min(22, 10 + num * 0.15));
             document.documentElement.style.setProperty('--surface-tone', `${fxConfig.tone}%`);
         }
+        safeWrite('hubFXConfig', fxConfig);
     }
 
     function toggleScanlines() {
@@ -1425,6 +1546,11 @@ input[type="checkbox"] { accent-color:var(--accent); }
             if (memeCanvas) memeCanvas.style.display = 'none';
             if ($('meme-toggle-text')) { $('meme-toggle-text').textContent = 'OFF'; $('meme-toggle-text').style.color = 'var(--danger)'; }
             if ($('meme-mode-btn')) $('meme-mode-btn').textContent = 'Meme Mode: OFF';
+        }
+        if (isPerfMode && isMatrix) {
+            isMatrix = false;
+            if (matrixCanvas) matrixCanvas.style.opacity = '0';
+            matrixCtx?.clearRect(0, 0, viewportW, viewportH);
         }
         refreshRenderLoop();
         showToast(isPerfMode ? 'Performance Mode enabled.' : 'Performance Mode disabled.');
@@ -1520,7 +1646,11 @@ input[type="checkbox"] { accent-color:var(--accent); }
 
     // Games theater.
     function openGame(url, name) {
-        if (!url || !/^https?:|^\.\//i.test(url)) return;
+        if (!url) return;
+        let parsedGameURL;
+        try { parsedGameURL = new URL(url, window.location.href); } catch { showToast('That game URL is invalid.'); return; }
+        if (!['http:', 'https:'].includes(parsedGameURL.protocol)) { showToast('Only HTTP and HTTPS game URLs are supported.'); return; }
+        url = parsedGameURL.href;
         const theater = $('game-view');
         const frame = $('game-frame');
         currentGameUrl = url;
@@ -2011,7 +2141,7 @@ input[type="checkbox"] { accent-color:var(--accent); }
         $('tool-out').textContent = `Generated: ${password}`;
     }
     async function copySystemInfo() {
-        const info = `Platform: ${navigator.platform} | Resolution: ${screen.width}x${screen.height} | Launchpad Engine: V12`;
+        const info = `Browser: ${detectBrowser()} | OS: ${detectOS()} | Device: ${detectDeviceType()} | Platform: ${navigator.platform || 'Hidden'} | Resolution: ${screen.width}x${screen.height} | Cores: ${navigator.hardwareConcurrency || 'Unknown'} | RAM hint: ${navigator.deviceMemory ? `${navigator.deviceMemory} GB` : 'Hidden'} | Launchpad: V15 / ${MAX_FPS} FPS canvas cap`;
         try {
             if (navigator.clipboard?.writeText) await navigator.clipboard.writeText(info);
             else {
@@ -2035,41 +2165,134 @@ input[type="checkbox"] { accent-color:var(--accent); }
         player.play().then(() => showToast(`Playing: ${name}`)).catch(() => showToast(`Could not play “${name}”. Check its audio source.`));
     }
 
-    // Lightweight local profile UI. It does not perform a real OAuth login.
-    function handleAuthClick() {
-        if (currentUser) { showSec('profile'); return; }
-        const handle = prompt('Enter your GitHub username to create a local Launchpad profile:');
-        if (handle === null || !handle.trim()) return;
-        const username = handle.trim().replace(/^@/, '');
-        if (!/^[a-z0-9-]{1,39}$/i.test(username)) {
-            showToast('Please enter a valid GitHub username.');
-            return;
+    // Supabase email/password auth + per-user cloud save. The browser uses only a public anon key;
+    // the database table must have RLS enabled with the policy shown in the Profile setup panel.
+    function setAuthMessage(message, isError = false) {
+        const el = $('auth-message');
+        if (el) {
+            el.textContent = message;
+            el.style.borderColor = isError ? 'rgba(255,126,142,.35)' : 'rgba(193,255,90,.18)';
         }
-        currentUser = { username, avatar: `https://github.com/${encodeURIComponent(username)}.png`, bio: 'Launchpad User', loginDate: new Date().toLocaleDateString() };
+    }
+    function setCloudStatus(message) {
+        const state = $('cloud-sync-state');
+        const last = $('cloud-last-sync');
+        if (state) state.textContent = message;
+        if (last && lastCloudSyncAt) last.textContent = `Last successful sync: ${new Date(lastCloudSyncAt).toLocaleString()}`;
+        else if (last && !authSession) last.textContent = 'Local profile data remains saved on this browser.';
+    }
+    function scheduleCloudSync() {
+        if (applyingCloudData || !authSession?.access_token || !supabaseConfig?.url || !navigator.onLine) return;
+        clearTimeout(cloudSyncTimer);
+        cloudSyncTimer = setTimeout(() => syncCloudData('merge', true), 1600);
+    }
+    function getSupabaseError(payload, fallback) {
+        return payload?.msg || payload?.message || payload?.error_description || payload?.error || fallback;
+    }
+    async function supabaseRequest(path, options = {}, useSession = false) {
+        if (!supabaseConfig?.url || !supabaseConfig?.anonKey) throw new Error('Supabase is not configured. Open Profile and add your project URL and public anon key.');
+        const headers = {
+            apikey: supabaseConfig.anonKey,
+            'Content-Type': 'application/json',
+            ...(options.headers || {})
+        };
+        if (useSession) {
+            if (!authSession?.access_token) throw new Error('Please sign in first.');
+            headers.Authorization = `Bearer ${authSession.access_token}`;
+        }
+        const response = await fetch(`${supabaseConfig.url}${path}`, { ...options, headers });
+        const raw = await response.text();
+        let payload = null;
+        if (raw) { try { payload = JSON.parse(raw); } catch { payload = { message: raw }; } }
+        if (!response.ok) throw new Error(getSupabaseError(payload, `Request failed (${response.status}).`));
+        return payload;
+    }
+    function saveAuthSession(payload) {
+        if (!payload?.access_token || !payload?.refresh_token) throw new Error('The authentication service did not return a valid session.');
+        const priorUser = authSession?.user || null;
+        authSession = {
+            access_token: payload.access_token,
+            refresh_token: payload.refresh_token,
+            token_type: payload.token_type || 'bearer',
+            expires_at: payload.expires_at || (Math.floor(Date.now() / 1000) + Number(payload.expires_in || 3600)),
+            user: payload.user || priorUser
+        };
+        safeWrite('hubAuthSession', authSession);
+        if (authSession.user) updateUserFromAuth(authSession.user);
+        syncAuthUI();
+    }
+    function updateUserFromAuth(user) {
+        const meta = user?.user_metadata || {};
+        const email = String(user?.email || '');
+        const username = String(meta.display_name || meta.username || (email.includes('@') ? email.split('@')[0] : 'Launchpad Player')).slice(0, 60);
+        currentUser = {
+            username: username || 'Launchpad Player',
+            email,
+            avatar: typeof meta.avatar_url === 'string' ? meta.avatar_url : '',
+            bio: 'Supabase cloud account'
+        };
+        safeWrite('hubUser', currentUser);
+    }
+    async function refreshAuthSession() {
+        if (!authSession?.refresh_token) throw new Error('Your session has expired. Please sign in again.');
+        const previousUser = authSession.user;
+        const payload = await supabaseRequest('/auth/v1/token?grant_type=refresh_token', {
+            method: 'POST',
+            body: JSON.stringify({ refresh_token: authSession.refresh_token })
+        });
+        if (!payload.user && previousUser) payload.user = previousUser;
+        saveAuthSession(payload);
+    }
+    async function ensureFreshSession() {
+        if (!authSession?.access_token) throw new Error('Please sign in first.');
+        const expiresAt = Number(authSession.expires_at || 0);
+        if (!expiresAt || expiresAt <= Math.floor(Date.now() / 1000) + 60) await refreshAuthSession();
+    }
+    function detectSafeAvatar() {
+        const initials = String(currentUser?.username || 'LP').trim().split(/\s+/).slice(0, 2).map((part) => part[0] || '').join('').toUpperCase() || 'LP';
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96"><rect width="100%" height="100%" rx="48" fill="#273a31"/><text x="50%" y="55%" font-family="Arial,sans-serif" font-size="32" font-weight="700" fill="#c1ff5a" text-anchor="middle" dominant-baseline="middle">${initials.replace(/[&<>"']/g, '')}</text></svg>`;
+        return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+    }
+    function handleAuthClick() {
+        showSec('profile');
+        if (!currentUser && !authSession) $('auth-email')?.focus();
+    }
+    function createLocalProfile() {
+        if (currentUser && !authSession) { showToast('A local profile already exists.'); return; }
+        const handle = prompt('Enter a display name for this browser-only Launchpad profile:');
+        if (handle === null || !handle.trim()) return;
+        const username = handle.trim().slice(0, 60);
+        currentUser = { username, avatar: '', bio: 'Local Launchpad profile', loginDate: new Date().toLocaleDateString() };
         safeWrite('hubUser', currentUser);
         syncAuthUI();
-        showToast(`Local profile ready for @${username}.`);
+        showToast(`Local profile ready for ${username}. Cloud sync is not enabled until you sign in.`);
     }
     function syncAuthUI() {
         const badge = $('auth-status');
         const profileOut = $('logged-out-view');
         const profileIn = $('logged-in-view');
-        if (currentUser) {
-            const avatarURL = `https://github.com/${encodeURIComponent(currentUser.username)}.png`;
+        const signedIn = Boolean(authSession?.access_token && authSession?.user);
+        const hasProfile = Boolean(currentUser || signedIn);
+        if (signedIn && authSession.user && !currentUser?.email) updateUserFromAuth(authSession.user);
+        if (hasProfile) {
+            const displayName = authSession?.user?.email || currentUser?.username || 'Launchpad Player';
+            const avatarURL = currentUser?.avatar || (!signedIn && currentUser?.username && /^[a-z0-9-]{1,39}$/i.test(currentUser.username) ? `https://github.com/${encodeURIComponent(currentUser.username)}.png` : detectSafeAvatar());
             badge.replaceChildren();
             const avatar = document.createElement('img');
             avatar.src = avatarURL;
             avatar.alt = '';
             const name = document.createElement('span');
-            name.textContent = currentUser.username;
+            name.textContent = displayName;
             badge.append(avatar, name);
             $('user-avatar').src = avatarURL;
-            $('user-avatar').alt = `${currentUser.username} avatar`;
-            $('user-name').textContent = currentUser.username;
-            $('user-bio').textContent = currentUser.bio || 'Launchpad User';
+            $('user-avatar').alt = `${displayName} avatar`;
+            $('user-name').textContent = displayName;
+            $('user-bio').textContent = signedIn ? 'Authenticated cloud account' : (currentUser?.bio || 'Local Launchpad profile');
             profileOut.style.display = 'none';
             profileIn.style.display = 'block';
-            $('greeting').textContent = `Welcome back, ${currentUser.username}!`;
+            $('account-type').textContent = signedIn ? 'Cloud account' : 'Local only';
+            setCloudStatus(signedIn ? 'Connected' : 'Local only');
+            $('greeting').textContent = signedIn ? `Welcome back, ${displayName}!` : `Welcome, ${displayName}!`;
         } else {
             badge.replaceChildren();
             const label = document.createElement('span');
@@ -2078,15 +2301,258 @@ input[type="checkbox"] { accent-color:var(--accent); }
             badge.append(label);
             profileOut.style.display = 'block';
             profileIn.style.display = 'none';
+            setCloudStatus('Not connected');
         }
     }
-    function logout() {
+    async function signInWithEmail() {
+        const email = $('auth-email').value.trim().toLowerCase();
+        const password = $('auth-password').value;
+        if (!email || !password) { setAuthMessage('Enter your email and password.', true); return; }
+        try {
+            setAuthMessage('Signing in…');
+            const payload = await supabaseRequest('/auth/v1/token?grant_type=password', { method: 'POST', body: JSON.stringify({ email, password }) });
+            saveAuthSession(payload);
+            setAuthMessage('Signed in successfully. Syncing your Launchpad data…');
+            await syncCloudData('merge', true);
+            showToast('Cloud account connected.');
+        } catch (error) { setAuthMessage(error.message || 'Sign in failed.', true); }
+    }
+    async function signUpWithEmail() {
+        const email = $('auth-email').value.trim().toLowerCase();
+        const password = $('auth-password').value;
+        const displayName = $('auth-display-name').value.trim().slice(0, 60);
+        if (!email || !password) { setAuthMessage('Enter an email and password to create an account.', true); return; }
+        if (password.length < 6) { setAuthMessage('Use a password with at least 6 characters.', true); return; }
+        try {
+            setAuthMessage('Creating your account…');
+            const payload = await supabaseRequest('/auth/v1/signup', {
+                method: 'POST',
+                body: JSON.stringify({ email, password, data: { display_name: displayName || email.split('@')[0] } })
+            });
+            if (payload?.access_token && payload?.refresh_token) {
+                saveAuthSession(payload);
+                setAuthMessage('Account created. Syncing your Launchpad data…');
+                await syncCloudData('merge', true);
+                showToast('Cloud account created.');
+            } else {
+                setAuthMessage('Account created. Check your email for the confirmation link, then return here and sign in.');
+            }
+        } catch (error) { setAuthMessage(error.message || 'Account creation failed.', true); }
+    }
+    async function sendPasswordReset() {
+        const email = $('auth-email').value.trim().toLowerCase();
+        if (!email) { setAuthMessage('Enter your account email first.', true); return; }
+        try {
+            await supabaseRequest('/auth/v1/recover', { method: 'POST', body: JSON.stringify({ email }) });
+            setAuthMessage('If the email is registered, Supabase will send a password reset message.');
+        } catch (error) { setAuthMessage(error.message || 'Could not request a password reset.', true); }
+    }
+    function readSyncValue(key) {
+        try {
+            const raw = localStorage.getItem(key);
+            if (raw === null) return null;
+            if (key === 'hubNote') return raw;
+            return JSON.parse(raw);
+        } catch { return null; }
+    }
+    function collectLocalSnapshot() {
+        const values = {};
+        for (const key of SYNCABLE_KEY_LIST) values[key] = readSyncValue(key);
+        let updatedAt = 0;
+        try { updatedAt = Number(localStorage.getItem('hubLocalUpdatedAt')) || 0; } catch {}
+        return { version: 1, updatedAt, values };
+    }
+    function normalizeList(value) { return Array.isArray(value) ? value : []; }
+    function mergeByUrl(localItems, cloudItems, dateKey, limit) {
+        const map = new Map();
+        for (const item of [...normalizeList(localItems), ...normalizeList(cloudItems)]) {
+            if (!item || typeof item.url !== 'string') continue;
+            const prior = map.get(item.url);
+            if (!prior || Number(item[dateKey] || 0) >= Number(prior[dateKey] || 0)) map.set(item.url, item);
+        }
+        return [...map.values()].sort((a, b) => Number(b[dateKey] || 0) - Number(a[dateKey] || 0)).slice(0, limit);
+    }
+    function mergeCloudSnapshots(localSnapshot, cloudSnapshot) {
+        const localValues = localSnapshot?.values || {};
+        const cloudValues = cloudSnapshot?.values || {};
+        const localTime = Number(localSnapshot?.updatedAt || 0);
+        const cloudTime = Number(cloudSnapshot?.updatedAt || 0);
+        const values = { ...cloudValues, ...localValues };
+        values.hubFavorites = mergeByUrl(localValues.hubFavorites, cloudValues.hubFavorites, 'addedAt', 100);
+        values.hubRecentGames = mergeByUrl(localValues.hubRecentGames, cloudValues.hubRecentGames, 'playedAt', 12);
+        values.hubPlayedGames = [...new Set([...normalizeList(localValues.hubPlayedGames), ...normalizeList(cloudValues.hubPlayedGames)].filter((url) => typeof url === 'string' && /^https?:\/\//i.test(url)))].slice(-5000);
+        const taskMap = new Map();
+        for (const task of [...normalizeList(cloudValues.hubTasks), ...normalizeList(localValues.hubTasks)]) {
+            if (!task || typeof task.t !== 'string') continue;
+            const key = task.t.trim().toLowerCase();
+            const old = taskMap.get(key);
+            taskMap.set(key, { t: task.t, c: Boolean(task.c || old?.c) });
+        }
+        values.hubTasks = [...taskMap.values()].slice(0, 500);
+        values.hubLaunchCount = Math.max(0, Number(localValues.hubLaunchCount) || 0, Number(cloudValues.hubLaunchCount) || 0);
+        // Notes and single-value preferences use the newer snapshot to avoid silently overwriting the latest edit.
+        const preferred = cloudTime > localTime ? cloudValues : localValues;
+        for (const key of ['hubNote', 'hubPerfMode', 'hubFXConfig']) {
+            if (Object.prototype.hasOwnProperty.call(preferred, key)) values[key] = preferred[key];
+        }
+        return { version: 1, updatedAt: Math.max(Date.now(), localTime, cloudTime), values };
+    }
+    function applyCloudSnapshot(snapshot) {
+        const values = snapshot?.values || {};
+        applyingCloudData = true;
+        try {
+            for (const key of SYNCABLE_KEY_LIST) {
+                if (!Object.prototype.hasOwnProperty.call(values, key)) continue;
+                const value = values[key];
+                if (key === 'hubNote') localStorage.setItem(key, String(value ?? ''));
+                else localStorage.setItem(key, JSON.stringify(value));
+            }
+            if (Array.isArray(values.hubTasks)) tasks = values.hubTasks.filter((task) => task && typeof task.t === 'string').map((task) => ({ t: task.t, c: Boolean(task.c) }));
+            if (Array.isArray(values.hubFavorites)) favorites = values.hubFavorites.filter((item) => item && typeof item.url === 'string').slice(0, 100);
+            if (Array.isArray(values.hubRecentGames)) recentGames = values.hubRecentGames.filter((item) => item && typeof item.url === 'string').slice(0, 12);
+            if (Array.isArray(values.hubPlayedGames)) playedGameUrls = [...new Set(values.hubPlayedGames.filter((url) => typeof url === 'string'))].slice(0, 5000);
+            if (Number.isFinite(Number(values.hubLaunchCount))) gameLaunchCount = Math.max(0, Number(values.hubLaunchCount));
+            if (typeof values.hubPerfMode === 'boolean') isPerfMode = values.hubPerfMode;
+            if (values.hubFXConfig && typeof values.hubFXConfig === 'object') {
+                fxConfig.count = Math.max(0, Math.min(60, Number(values.hubFXConfig.count) || 0));
+                fxConfig.speed = Math.max(0.05, Math.min(5, Number(values.hubFXConfig.speed) || 0.5));
+                fxConfig.tone = Math.max(10, Math.min(22, Number(values.hubFXConfig.tone) || 16));
+                document.documentElement.style.setProperty('--surface-tone', `${fxConfig.tone}%`);
+            }
+            localStorage.setItem('hubLocalUpdatedAt', String(Number(snapshot.updatedAt) || Date.now()));
+        } catch (error) {
+            console.warn('Could not fully apply the cloud save:', error);
+        } finally { applyingCloudData = false; }
+        document.body.classList.toggle('perf-mode', isPerfMode);
+        if ($('perf-toggle-btn')) $('perf-toggle-btn').textContent = `Performance: ${isPerfMode ? 'ON' : 'OFF'}`;
+        renderTasks(); renderCollections(); updateAchievementStats(); enhanceAllGameCards();
+        if (isPerfMode) pCtx?.clearRect(0, 0, viewportW, viewportH);
+        refreshRenderLoop();
+        $('note').value = String(readSyncValue('hubNote') || '');
+    }
+    async function readCloudSnapshot() {
+        await ensureFreshSession();
+        const userId = authSession?.user?.id;
+        if (!userId) throw new Error('Your account session is missing its user ID. Sign in again.');
+        const query = `/rest/v1/launchpad_profiles?user_id=eq.${encodeURIComponent(userId)}&select=data,updated_at&limit=1`;
+        const rows = await supabaseRequest(query, { method: 'GET' }, true);
+        if (!Array.isArray(rows) || !rows.length) return null;
+        const data = rows[0].data && typeof rows[0].data === 'object' ? rows[0].data : {};
+        return { version: Number(data.version) || 1, updatedAt: Number(data.updatedAt) || (Date.parse(rows[0].updated_at || '') || 0), values: data.values || {} };
+    }
+    async function writeCloudSnapshot(snapshot) {
+        await ensureFreshSession();
+        const userId = authSession?.user?.id;
+        if (!userId) throw new Error('Your account session is missing its user ID.');
+        const body = [{ user_id: userId, data: snapshot, updated_at: new Date().toISOString() }];
+        await supabaseRequest('/rest/v1/launchpad_profiles?on_conflict=user_id', {
+            method: 'POST',
+            headers: { Prefer: 'resolution=merge-duplicates,return=minimal' },
+            body: JSON.stringify(body)
+        }, true);
+    }
+    async function syncCloudData(mode = 'merge', silent = false) {
+        if (!authSession?.access_token || !supabaseConfig) {
+            if (!silent) { setCloudStatus('Not connected'); showToast('Connect Supabase and sign in to use cloud sync.'); }
+            return false;
+        }
+        if (!navigator.onLine) { setCloudStatus('Offline'); if (!silent) showToast('You are offline. Your local data is still saved.'); return false; }
+        if (cloudSyncBusy) return false;
+        cloudSyncBusy = true;
+        setCloudStatus('Syncing…');
+        try {
+            await ensureFreshSession();
+            if (mode === 'download') {
+                const cloud = await readCloudSnapshot();
+                if (!cloud) throw new Error('No cloud save exists yet for this account. Use Upload local data or Sync now first.');
+                applyCloudSnapshot(cloud);
+            } else if (mode === 'upload') {
+                await writeCloudSnapshot(collectLocalSnapshot());
+            } else {
+                const local = collectLocalSnapshot();
+                const cloud = await readCloudSnapshot();
+                const merged = cloud ? mergeCloudSnapshots(local, cloud) : { ...local, updatedAt: Date.now() };
+                applyCloudSnapshot(merged);
+                await writeCloudSnapshot(merged);
+            }
+            lastCloudSyncAt = Date.now();
+            setCloudStatus('Synced ✓');
+            const last = $('cloud-last-sync');
+            if (last) last.textContent = `Last successful sync: ${new Date(lastCloudSyncAt).toLocaleString()}`;
+            if (!silent) showToast(mode === 'download' ? 'Cloud data restored.' : mode === 'upload' ? 'Local data uploaded.' : 'Launchpad data synced.');
+            return true;
+        } catch (error) {
+            console.error('Launchpad cloud sync failed:', error);
+            setCloudStatus('Sync error');
+            if (!silent) showToast(error.message || 'Cloud sync failed.');
+            setAuthMessage(error.message || 'Cloud sync failed.', true);
+            return false;
+        } finally { cloudSyncBusy = false; }
+    }
+    async function logout() {
+        if (authSession?.access_token && supabaseConfig) {
+            try { await supabaseRequest('/auth/v1/logout', { method: 'POST' }, true); } catch (error) { console.warn('Remote sign-out could not be confirmed:', error); }
+        }
+        authSession = null;
+        safeRemove('hubAuthSession');
         currentUser = null;
         safeRemove('hubUser');
+        clearTimeout(cloudSyncTimer);
         syncAuthUI();
         updateGreeting();
+        setAuthMessage('Signed out. Your local Launchpad data remains on this device.');
         showSec('home');
     }
+    async function saveSupabaseConfig() {
+        const rawURL = $('supabase-url').value.trim().replace(/\/+$/, '');
+        const anonKey = $('supabase-anon-key').value.trim();
+        try {
+            const parsed = new URL(rawURL);
+            const localHost = ['localhost', '127.0.0.1'].includes(parsed.hostname);
+            if (parsed.protocol !== 'https:' && !(parsed.protocol === 'http:' && localHost)) throw new Error('Use an HTTPS Supabase URL (HTTP is allowed only for localhost).');
+            if (parsed.pathname !== '' && parsed.pathname !== '/') throw new Error('Enter the project root URL without a path.');
+            if (parsed.search || parsed.hash) throw new Error('Remove query parameters and fragments from the project URL.');
+            if (anonKey.length < 20) throw new Error("Enter the project's publishable / anon public key.");
+            const changed = !supabaseConfig || supabaseConfig.url !== parsed.origin || supabaseConfig.anonKey !== anonKey;
+            supabaseConfig = { url: parsed.origin, anonKey };
+            safeWrite('hubSupabaseConfig', supabaseConfig);
+            if (changed && authSession) {
+                authSession = null; safeRemove('hubAuthSession'); currentUser = null; safeRemove('hubUser'); syncAuthUI();
+            }
+            $('supabase-url').value = supabaseConfig.url;
+            $('supabase-anon-key').value = anonKey;
+            $('supabase-config-status').textContent = 'Connection settings saved';
+            setAuthMessage('Supabase connection saved. You can now create an account or sign in.');
+            showToast('Supabase settings saved.');
+        } catch (error) { $('supabase-config-status').textContent = 'Not configured'; setAuthMessage(error.message, true); }
+    }
+    function clearSupabaseConfig() {
+        if (!confirm('Clear this browser’s Supabase connection settings and sign out? Your cloud account and cloud data will not be deleted.')) return;
+        supabaseConfig = null; authSession = null; currentUser = null;
+        safeRemove('hubSupabaseConfig'); safeRemove('hubAuthSession'); safeRemove('hubUser');
+        $('supabase-url').value = ''; $('supabase-anon-key').value = '';
+        $('supabase-config-status').textContent = 'Not configured';
+        syncAuthUI(); setAuthMessage('Connection settings cleared. Local game data remains on this browser.');
+    }
+    function copySupabaseSQL() {
+        const sql = $('supabase-config-panel')?.querySelector('.sql-block')?.innerText || '';
+        if (navigator.clipboard?.writeText) navigator.clipboard.writeText(sql).then(() => showToast('SQL copied.')).catch(() => showToast('Clipboard unavailable. Select and copy the SQL manually.'));
+        else showToast('Select and copy the SQL block manually.');
+    }
+    async function restoreCloudSession() {
+        if (!supabaseConfig || !authSession) { syncAuthUI(); return; }
+        try {
+            await ensureFreshSession();
+            if (authSession.user) updateUserFromAuth(authSession.user);
+            syncAuthUI();
+            await syncCloudData('merge', true);
+        } catch (error) {
+            console.warn('Could not restore saved cloud session:', error);
+            authSession = null; safeRemove('hubAuthSession'); syncAuthUI();
+            setAuthMessage('Your saved cloud session expired. Please sign in again.', true);
+        }
+    }
+
     function selectIssue(element, type) {
         document.querySelectorAll('.feedback-chip').forEach((chip) => chip.classList.remove('selected'));
         element.classList.add('selected');
@@ -2098,7 +2564,7 @@ input[type="checkbox"] { accent-color:var(--accent); }
         const priority = $('q-priority').value;
         const status = $('git-status');
         if (!title || !body) { alert('Please provide both a title and description.'); return; }
-        const fullBody = `**Issue Type:** ${activeIssueType}\n**Priority:** ${priority}\n\n**Description:**\n${body}\n\n---\n*Reported via Launchpad Engine V12*${currentUser ? `\n*User: @${currentUser.username}*` : ''}`;
+        const fullBody = `**Issue Type:** ${activeIssueType}\n**Priority:** ${priority}\n\n**Description:**\n${body}\n\n---\n*Reported via Launchpad Engine V15*${currentUser ? `\n*User: @${currentUser.username}*` : ''}`;
         const url = new URL('https://github.com/VRGamer262Real/Hub/issues/new');
         url.searchParams.set('title', `[${activeIssueType}] ${title}`);
         url.searchParams.set('body', fullBody);
@@ -2106,7 +2572,109 @@ input[type="checkbox"] { accent-color:var(--accent); }
         status.textContent = 'GitHub issue form opened in a new tab.';
     }
 
+    function detectBrowser() {
+        const ua = navigator.userAgent || '';
+        const brands = navigator.userAgentData?.brands?.map((item) => item.brand).filter((name) => !/Not.?A.?Brand/i.test(name));
+        if (brands?.length) return brands.join(' / ');
+        if (/Edg\//.test(ua)) return 'Microsoft Edge';
+        if (/OPR\//.test(ua)) return 'Opera';
+        if (/Firefox\//.test(ua)) return 'Mozilla Firefox';
+        if (/CriOS\//.test(ua)) return 'Chrome (iOS)';
+        if (/Chrome\//.test(ua)) return 'Google Chrome';
+        if (/Safari\//.test(ua)) return 'Safari';
+        return 'Other / privacy-masked';
+    }
+    function detectOS() {
+        const platform = navigator.userAgentData?.platform || navigator.platform || navigator.userAgent || '';
+        if (/mac/i.test(platform)) return 'macOS';
+        if (/win/i.test(platform)) return 'Windows';
+        if (/android/i.test(platform)) return 'Android';
+        if (/iphone|ipad|ios/i.test(platform)) return 'iOS / iPadOS';
+        if (/linux/i.test(platform)) return 'Linux';
+        if (/cros/i.test(platform)) return 'ChromeOS';
+        return 'Unknown / masked';
+    }
+    function detectDeviceType() {
+        const ua = navigator.userAgent || '';
+        if (/ipad|tablet/i.test(ua) || (navigator.userAgentData?.mobile === false && /Android/i.test(ua))) return 'Tablet';
+        if (navigator.userAgentData?.mobile || /iphone|ipod|android.*mobile|windows phone/i.test(ua)) return 'Mobile';
+        return matchMedia('(pointer: coarse)').matches ? 'Touch-capable' : 'Desktop';
+    }
+    function getWebGLDetails() {
+        try {
+            const canvas = document.createElement('canvas');
+            const gl = canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+            if (!gl) return { supported: false, renderer: 'Unavailable' };
+            const extension = gl.getExtension('WEBGL_debug_renderer_info');
+            const renderer = extension ? gl.getParameter(extension.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER);
+            const version = gl.getParameter(gl.VERSION);
+            const result = { supported: true, renderer: String(renderer || 'Browser masked'), version: String(version || 'Unknown') };
+            gl.getExtension('WEBGL_lose_context')?.loseContext();
+            return result;
+        } catch { return { supported: false, renderer: 'Blocked by browser' }; }
+    }
+    function runDiagnostics() {
+        const browser = detectBrowser();
+        const os = detectOS();
+        const device = detectDeviceType();
+        const display = `${screen.width} × ${screen.height} · ${window.devicePixelRatio || 1}×`;
+        $('detect-browser').textContent = browser;
+        $('detect-device').textContent = device;
+        $('detect-os').textContent = os;
+        $('detect-display').textContent = display;
+        const webgl = getWebGLDetails();
+        const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        const storageOK = (() => { try { const key = '__lp_test__'; localStorage.setItem(key, '1'); localStorage.removeItem(key); return true; } catch { return false; } })();
+        const memory = navigator.deviceMemory ? `${navigator.deviceMemory} GB (browser estimate)` : 'Not exposed';
+        const cores = navigator.hardwareConcurrency ? `${navigator.hardwareConcurrency} logical cores (browser hint)` : 'Not exposed';
+        const checks = [
+            ['Network status', navigator.onLine ? 'Online' : 'Offline'],
+            ['Connection hint', connection ? `${connection.effectiveType || 'Unknown'}${connection.downlink ? ` · ${connection.downlink} Mbps estimate` : ''}${connection.saveData ? ' · data saver on' : ''}` : 'Not exposed'],
+            ['Touch input', navigator.maxTouchPoints > 0 ? `Supported · ${navigator.maxTouchPoints} touch points` : 'No touch points reported'],
+            ['CPU hint', cores],
+            ['Memory hint', memory],
+            ['WebGL', webgl.supported ? `Available · ${webgl.version}` : webgl.renderer],
+            ['Graphics renderer', webgl.renderer],
+            ['WebGPU', 'gpu' in navigator ? 'API detected (adapter access not requested)' : 'Not available'],
+            ['WebAssembly', typeof WebAssembly === 'object' ? 'Available' : 'Unavailable'],
+            ['Service workers', 'serviceWorker' in navigator && window.isSecureContext ? 'Available in this secure context' : 'Unavailable or insecure context'],
+            ['Local storage', storageOK ? 'Available' : 'Blocked or unavailable'],
+            ['IndexedDB', 'indexedDB' in window ? 'API available' : 'Unavailable'],
+            ['Cookies', navigator.cookieEnabled ? 'Enabled' : 'Disabled'],
+            ['Notifications', 'Notification' in window ? `Supported · permission: ${Notification.permission}` : 'Unavailable'],
+            ['Clipboard', navigator.clipboard?.writeText ? 'Clipboard API available (permission/user gesture may be required)' : 'Fallback copy only'],
+            ['Reduced motion', matchMedia('(prefers-reduced-motion: reduce)').matches ? 'Requested by system' : 'Not requested'],
+            ['Color scheme', matchMedia('(prefers-color-scheme: light)').matches ? 'Light preference' : 'Dark / no light preference'],
+            ['Language & timezone', `${navigator.language || 'Unknown'} · ${Intl.DateTimeFormat().resolvedOptions().timeZone || 'Unknown'}`],
+            ['Viewport', `${window.innerWidth} × ${window.innerHeight}`],
+            ['Secure context', window.isSecureContext ? 'Yes (HTTPS or localhost)' : 'No · some browser APIs may be limited'],
+            ['Battery API', navigator.getBattery ? 'Available (not queried by this scan)' : 'Not exposed'],
+            ['Launchpad render cap', `${MAX_FPS} FPS for Launchpad canvas effects only`]
+        ];
+        const grid = $('diagnostics-grid');
+        grid.replaceChildren();
+        for (const [label, value] of checks) {
+            const row = document.createElement('div'); row.className = 'diagnostic-row';
+            const strong = document.createElement('strong'); strong.textContent = label;
+            const span = document.createElement('span'); span.textContent = value;
+            row.append(strong, span); grid.appendChild(row);
+        }
+        $('diagnostics-grid').dataset.report = checks.map(([label, value]) => `${label}: ${value}`).join('\n');
+        return checks;
+    }
+    async function copyDiagnostics() {
+        const report = `Launchpad V15 diagnostics\nBrowser: ${detectBrowser()}\nOS: ${detectOS()}\nDevice: ${detectDeviceType()}\n${$('diagnostics-grid').dataset.report || ''}`;
+        try {
+            await navigator.clipboard.writeText(report);
+            showToast('Diagnostics report copied.');
+        } catch {
+            $('tool-out').textContent = report;
+            showToast('Clipboard unavailable. Report displayed in Tools.');
+        }
+    }
+
     function updateGreeting() {
+        if (authSession?.user) { $('greeting').textContent = `Welcome back, ${authSession.user.email || currentUser?.username || 'player'}!`; return; }
         if (currentUser) { $('greeting').textContent = `Welcome back, ${currentUser.username}!`; return; }
         const hour = new Date().getHours();
         $('greeting').textContent = hour < 12 ? 'Good morning, explorer.' : hour < 18 ? 'Good afternoon, developer.' : 'Good evening, gamer.';
@@ -2129,7 +2697,7 @@ input[type="checkbox"] { accent-color:var(--accent); }
         $('session-timer').textContent = formatted;
         if ($('achievement-session')) $('achievement-session').textContent = formatted;
         $('clock').textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-        $('perf').textContent = renderHandle ? `FPS: ${Math.min(framesThisSecond, MAX_FPS)} / ${MAX_FPS}` : `FPS: capped at ${MAX_FPS}`;
+        $('perf').textContent = renderHandle ? `FPS: ${Math.min(framesThisSecond, MAX_FPS)} / ${MAX_FPS}` : `FPS: idle · cap ${MAX_FPS}`;
         framesThisSecond = 0;
         if (performance.memory?.usedJSHeapSize) $('mem-val').textContent = `${Math.round(performance.memory.usedJSHeapSize / 1048576)} MB`;
     }
@@ -2154,15 +2722,17 @@ input[type="checkbox"] { accent-color:var(--accent); }
         commandLine.textContent = `> ${original}`;
         display.appendChild(commandLine);
         let output = '';
-        if (value === 'help') output = 'Available: clear, meme, date, whoami, version, status, echo [text], system, neofetch';
+        if (value === 'help') output = 'Available: clear, meme, date, whoami, version, status, system, neofetch, diagnostics, sync, echo [text]';
         else if (value === 'meme') { toggleMemeMode(); output = 'Meme Flying Mode toggled.'; }
         else if (value === 'clear') { display.replaceChildren(); output = 'Terminal cleared.'; }
         else if (value === 'date') output = new Date().toString();
         else if (value === 'whoami') output = currentUser ? currentUser.username : 'guest_user';
-        else if (value === 'version') output = 'Launchpad Engine v14.0 · Arcade OS';
-        else if (value === 'status') output = `Launchpad is running. Canvas effects are capped at ${MAX_FPS} FPS; embedded games control their own frame rate.`;
-        else if (value === 'system') output = `Platform: ${navigator.platform} | RAM: ${performance.memory ? `${Math.round(performance.memory.usedJSHeapSize / 1048576)} MB` : 'N/A'}`;
-        else if (value === 'neofetch') output = 'LAUNCHPAD OS V14 · 60 FPS Canvas Cap';
+        else if (value === 'version') output = 'Launchpad Engine v15.0 · Arcade OS';
+        else if (value === 'status') output = `Launchpad is running. Launchpad effects are capped at ${MAX_FPS} FPS; embedded games control their own frame rate.`;
+        else if (value === 'system') output = `Browser: ${detectBrowser()} | OS: ${detectOS()} | Device: ${detectDeviceType()} | CPU hint: ${navigator.hardwareConcurrency || 'N/A'} cores | RAM hint: ${navigator.deviceMemory || 'N/A'} GB`;
+        else if (value === 'diagnostics') { showSec('diagnostics'); runDiagnostics(); output = 'Diagnostics report refreshed.'; }
+        else if (value === 'sync') { syncCloudData('merge'); output = 'Cloud sync requested.'; }
+        else if (value === 'neofetch') output = `LAUNCHPAD OS V15 · ${MAX_FPS} FPS Canvas Cap · ${detectBrowser()} · ${detectOS()}`;
         else if (value.startsWith('echo ')) output = original.slice(5);
         else if (value) output = "Command not recognized. Type 'help'.";
         if (output) {
@@ -2196,9 +2766,7 @@ input[type="checkbox"] { accent-color:var(--accent); }
     });
 
     $('note').value = (() => { try { return localStorage.getItem('hubNote') || ''; } catch { return ''; } })();
-    $('note').addEventListener('input', () => {
-        try { localStorage.setItem('hubNote', $('note').value); } catch {}
-    });
+    $('note').addEventListener('input', () => safeWrite('hubNote', $('note').value));
     $('new-task-input').addEventListener('keydown', (event) => { if (event.key === 'Enter') addTask(); });
     $('term-input').addEventListener('keydown', handleTerminal);
     $('sketchpad').addEventListener('pointerdown', startSketch);
@@ -2211,6 +2779,8 @@ input[type="checkbox"] { accent-color:var(--accent); }
         if (document.hidden && renderHandle) { cancelAnimationFrame(renderHandle); renderHandle = 0; }
         else refreshRenderLoop();
     });
+    window.addEventListener('online', () => { setCloudStatus(authSession ? 'Online · syncing…' : 'Local only'); if (authSession) syncCloudData('merge', true); });
+    window.addEventListener('offline', () => setCloudStatus(authSession ? 'Offline · changes saved locally' : 'Offline'));
 
     // Make mouse-operated cards keyboard accessible without changing their existing click actions.
     document.querySelectorAll('.card[onclick]').forEach((card) => {
@@ -2237,22 +2807,35 @@ input[type="checkbox"] { accent-color:var(--accent); }
         convertUnit, rollDice, flipCoin, clearSketch, showMorse, translateMorse, downloadNotes,
         genPass, copySystemInfo, pMusic, handleAuthClick, logout, selectIssue, gitSubmit,
         mask, panicMode, handleTerminal, toggleFavorite, clearFavorites, clearRecentHistory,
-        renderCollections, updateAchievementStats, playRandomGame
+        renderCollections, updateAchievementStats, playRandomGame,
+        createLocalProfile, signInWithEmail, signUpWithEmail, sendPasswordReset, syncCloudData,
+        saveSupabaseConfig, clearSupabaseConfig, copySupabaseSQL, runDiagnostics, copyDiagnostics
     });
 
     // Initial paint and UI state.
     document.documentElement.style.setProperty('--surface-tone', `${fxConfig.tone}%`);
     resizeCanvases();
+    if (supabaseConfig) {
+        $('supabase-url').value = supabaseConfig.url;
+        $('supabase-anon-key').value = supabaseConfig.anonKey;
+        $('supabase-config-status').textContent = 'Connection settings saved';
+    }
     if (isPerfMode) {
         document.body.classList.add('perf-mode');
         $('perf-toggle-btn').textContent = 'Performance: ON';
     }
+    const fxSliders = document.querySelectorAll('#design input[type=range]');
+    if (fxSliders[0]) fxSliders[0].value = String(fxConfig.count);
+    if (fxSliders[1]) fxSliders[1].value = String(Math.round(fxConfig.speed * 20));
+    if (fxSliders[2]) fxSliders[2].value = String(Math.round((fxConfig.tone - 10) / 0.15));
     renderTasks();
     enhanceAllGameCards();
     renderCollections();
     updateAchievementStats();
     syncAuthUI();
     updateGreeting();
+    runDiagnostics();
+    restoreCloudSession();
     const quotes = [
         'Speed, precision, and memes.',
         'Vision without execution is hallucination.',
