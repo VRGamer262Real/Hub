@@ -940,7 +940,7 @@ input[type="checkbox"] { accent-color:var(--accent); }
             <p>• <strong>All-new interface:</strong> a sidebar-based dashboard, redesigned game cards, and responsive layouts.</p>
             <p>• <strong>Personal library:</strong> favorites, persistent recent-game history, launch stats, and achievements.</p>
             <p>• <strong>120 FPS canvas cap:</strong> Launchpad background effects are paced at up to 120 rendered frames per second on supported displays.</p>
-            <p>• <strong>Cloud accounts:</strong> Supabase email/password authentication, per-user cloud saves, automatic sync, and upload/restore controls.</p>
+            <p>• <strong>Cloud accounts:</strong> Supabase email/password authentication, per-user cloud saves, automatic sync, and upload/restore controls. (BETA)</p>
             <p>• <strong>Diagnostics:</strong> browser, device, graphics, storage, and network capability detection.</p>
             <p>• <strong>Usability fixes:</strong> safer persistence, keyboard-friendly controls, and quick-launch actions.</p>
         </div>
@@ -1154,7 +1154,7 @@ input[type="checkbox"] { accent-color:var(--accent); }
         </div>
 
         <div class="panel" id="cloud-auth-panel">
-            <p class="eyebrow">SUPABASE AUTHENTICATION</p>
+            <p class="eyebrow">SUPABASE AUTHENTICATION (BETA, DOESN'T WORK RIGHT NOW)</p>
             <h3>Sign in or create a cloud account</h3>
             <p>Accounts use Supabase Auth. Your favorites, recent games, achievements, tasks, notes, and selected settings can sync through your own protected database.</p>
             <label for="auth-display-name">Display name (used when creating an account)</label>
@@ -1172,11 +1172,11 @@ input[type="checkbox"] { accent-color:var(--accent); }
         </div>
 
         <div class="panel" id="supabase-config-panel">
-            <p class="eyebrow">ONE-TIME SETUP</p>
+            <p class="eyebrow">ONE-TIME SETUP (IGNORE)</p>
             <h3>Connect your Supabase project</h3>
             <p>Enter your project's HTTPS URL and its <strong>publishable / anon public key</strong>. These values are stored in this browser. Never put a <code>service_role</code> or secret key in this HTML file.</p>
             <label for="supabase-url">Project URL</label>
-            <input type="url" id="supabase-url" placeholder="https://your-project.supabase.co" autocomplete="url">
+            <input type="url" id="supabase-url" placeholder="https://xoeddjvfthnqsdkqwkhw.supabase.co" autocomplete="url">
             <label for="supabase-anon-key">Publishable / anon public key</label>
             <input type="password" id="supabase-anon-key" placeholder="sb_publishable_… or legacy anon key" autocomplete="off">
             <div class="cloud-actions">
