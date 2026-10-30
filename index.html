@@ -44,7 +44,7 @@ body {
     font: 400 15px/1.55 var(--font);
 }
 button, input, textarea, select { font: inherit; }
-button, a, .card, .auth-badge, .feedback-chip, .floating-action { cursor: pointer; }
+button, a, .card, .profile-badge, .feedback-chip, .floating-action { cursor: pointer; }
 a { color: inherit; }
 button { color: inherit; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
@@ -79,9 +79,9 @@ button { color: inherit; }
 .status-tag { display: inline-flex; align-items: center; gap: 8px; min-height: 29px; padding: 5px 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface-soft); color: var(--text); }
 .status-dot { width: 7px; height: 7px; flex: 0 0 auto; border-radius: 50%; background: var(--success); }
 #perf, #uptime, #clock, #battery { white-space: nowrap; font-variant-numeric: tabular-nums; }
-.auth-badge { display: inline-flex; align-items: center; gap: 7px; min-height: 31px; padding: 4px 10px; border: 1px solid var(--border); border-radius: 8px; color: var(--text); background: var(--surface-soft); }
-.auth-badge:hover, .status-tag:hover { border-color: var(--border-strong); }
-.auth-badge img { width: 21px; height: 21px; border-radius: 50%; object-fit: cover; }
+.profile-badge { display: inline-flex; align-items: center; gap: 7px; min-height: 31px; padding: 4px 10px; border: 1px solid var(--border); border-radius: 8px; color: var(--text); background: var(--surface-soft); }
+.profile-badge:hover, .status-tag:hover { border-color: var(--border-strong); }
+.profile-badge img { width: 21px; height: 21px; border-radius: 50%; object-fit: cover; }
 
 .search-area { position: relative; width: min(720px, calc(100% - 32px)); margin: 30px auto 20px; }
 .search-area input { width: 100%; min-height: 52px; padding: 14px 18px 14px 48px; margin: 0; border: 1px solid var(--border); border-radius: 12px; background: #111a2d; color: var(--text); font-size: .97rem; box-shadow: none; }
@@ -287,7 +287,7 @@ body {
   -webkit-backdrop-filter: blur(22px) saturate(140%);
 }
 .status-bar > div:last-child { gap: 9px; }
-.status-tag, .auth-badge {
+.status-tag, .profile-badge {
   min-height: 31px;
   padding: 5px 10px;
   border: 1px solid var(--border);
@@ -624,16 +624,37 @@ input[type="checkbox"] { accent-color:var(--accent); }
 .diagnostic-row { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; padding:13px 14px; border:1px solid var(--border); border-radius:11px; background:rgba(5,10,15,.35); }
 .diagnostic-row strong { color:var(--text); font-size:.84rem; }
 .diagnostic-row span { color:var(--muted); text-align:right; font-size:.82rem; overflow-wrap:anywhere; }
-.cloud-actions { display:flex; align-items:center; flex-wrap:wrap; gap:9px; margin-top:12px; }
-.inline-status { color:var(--muted); font-size:.82rem; }
-.setup-details { margin-top:18px; padding:14px; border:1px solid var(--border); border-radius:12px; background:rgba(5,10,15,.3); }
-.setup-details summary { color:var(--accent); cursor:pointer; font-weight:750; }
-.sql-block { max-width:100%; overflow:auto; padding:15px; border:1px solid var(--border); border-radius:10px; background:#05090d; color:#d7f4bd; font: .78rem/1.6 var(--mono); text-align:left; white-space:pre; }
-#supabase-config-panel label, #cloud-auth-panel label { display:block; margin:12px 0 7px; color:var(--muted); font-size:.78rem; font-weight:750; }
-#cloud-auth-panel p, #supabase-config-panel p { line-height:1.65; }
-#cloud-sync-state { font-size:1.05rem; }
-@media(max-width:760px) { .diagnostics-summary { grid-template-columns:repeat(2,minmax(0,1fr)); } .diagnostics-grid { grid-template-columns:1fr; } .diagnostic-row { gap:8px; } }
-@media(max-width:420px) { .cloud-actions .btn { flex:1 1 100%; } .diagnostic-row { flex-direction:column; } .diagnostic-row span { text-align:left; } }
+#profile-container, #local-data-panel { max-width: 980px; }
+#local-data-panel label { display:block; margin:12px 0 7px; color:var(--muted); font-size:.78rem; font-weight:750; }
+#local-data-panel p { line-height:1.65; }
+.local-data-actions { display:flex; align-items:center; flex-wrap:wrap; gap:9px; margin-top:14px; }
+.library-toolbar { display:grid; grid-template-columns:minmax(180px,1.6fr) minmax(150px,1fr) minmax(145px,1fr) auto auto; gap:10px; margin:18px 0 20px; padding:14px; border:1px solid var(--border); border-radius:15px; background:rgba(12,19,27,.78); }
+.library-toolbar input, .library-toolbar select { margin:0 !important; min-width:0; }
+.library-result-count { align-self:center; color:var(--muted); font-size:.78rem; white-space:nowrap; }
+.task-item .task-remove { flex:0 0 auto; min-height:32px; padding:5px 9px; border:1px solid rgba(255,126,142,.24); border-radius:8px; background:rgba(255,126,142,.08); color:#ffb8c0; }
+.task-item .task-remove:hover { background:rgba(255,126,142,.17); }
+#player { display:block; width:100%; margin:8px 0 4px; }
+#profile-status { max-width:min(260px,42vw); }
+.profile-avatar-small { width:22px; height:22px; border-radius:50%; object-fit:cover; }
+.backup-note { margin-top:12px; color:var(--muted); font-size:.82rem; }
+#backup-file { display:none; }
+@media(max-width:760px) { .diagnostics-summary { grid-template-columns:repeat(2,minmax(0,1fr)); } .diagnostics-grid { grid-template-columns:1fr; } .diagnostic-row { gap:8px; } .library-toolbar { grid-template-columns:1fr 1fr; } .library-toolbar input { grid-column:1 / -1; } }
+@media(max-width:420px) { .local-data-actions .btn { flex:1 1 100%; } .diagnostic-row { flex-direction:column; } .diagnostic-row span { text-align:left; } .library-toolbar { grid-template-columns:1fr; } .library-toolbar input { grid-column:auto; } .library-result-count { white-space:normal; } }
+
+/* V15 refinements */
+.status-bar { box-shadow: 0 8px 28px rgba(0,0,0,.12); }
+.status-tag, .profile-badge { backdrop-filter: blur(12px); }
+.profile-badge { display:inline-flex; align-items:center; gap:8px; min-height:31px; max-width:260px; overflow:hidden; padding:4px 10px; border:1px solid var(--border); border-radius:999px; background:rgba(255,255,255,.035); color:var(--text); }
+.profile-badge:hover { border-color:var(--border-strong); }
+.profile-badge span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.library-toolbar .btn { min-height:45px; }
+.library-toolbar [hidden] { display:none !important; }
+.game-bar { flex-wrap:wrap; }
+.game-controls { gap:8px; }
+.game-btn:focus-visible, .favorite-toggle:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+.panel > audio { accent-color:var(--accent); }
+#sketchpad { background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px); background-size:24px 24px; }
+@media(max-width:760px) { .profile-badge { max-width:100%; } .game-controls { gap:6px; } }
 </style>
 </head>
 <body>
@@ -684,10 +705,11 @@ input[type="checkbox"] { accent-color:var(--accent); }
                 <button class="game-btn" title="Fullscreen" onclick="toggleFullscreen()">⛶</button>
                 <button class="game-btn" title="Wide Mode" onclick="toggleTheaterSize()">Wide</button>
                 <button class="game-btn" title="Open in New Tab" onclick="openInNewTab()">New Tab</button>
+                <button class="game-btn" title="Copy game link" onclick="copyCurrentGameLink()">Copy Link</button>
                 <button class="game-btn" onclick="closeGame()">EXIT</button>
             </div>
         </div>
-        <iframe id="game-frame" src="about:blank"></iframe>
+        <iframe id="game-frame" src="about:blank" title="Launchpad game player" allow="autoplay; fullscreen; gamepad; clipboard-read; clipboard-write; accelerometer; gyroscope" referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
     
     <div class="status-bar">
@@ -699,10 +721,10 @@ input[type="checkbox"] { accent-color:var(--accent); }
             <div id="meme-status-badge" class="status-tag" style="cursor: pointer" onclick="toggleMemeMode()">
                 <span>MEME MODE: <strong id="meme-toggle-text">OFF</strong></span>
             </div>
-            <div id="auth-status" class="auth-badge" onclick="handleAuthClick()">
-                <svg width="15" height="15" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
-                <span id="auth-text">Sign in</span>
+            <div id="profile-status" class="profile-badge" onclick="handleProfileClick()" role="button" tabindex="0" title="Open local player profile">
+                <span id="profile-text">Local profile</span>
             </div>
+            <div class="status-tag" id="network-status" aria-live="polite"><span class="status-dot"></span><span>Online</span></div>
             <div id="perf">FPS: --</div>
             <div id="uptime">UPTIME: 00:00</div>
             <div id="clock">00:00:00</div>
@@ -787,7 +809,14 @@ input[type="checkbox"] { accent-color:var(--accent); }
     </section>
 
     <section id="games">
-        <h1>Games Library</h1>
+        <div class="section-heading-row"><div><p class="eyebrow">THE ARCADE</p><h1>Games Library</h1><p class="section-subtitle">Search, sort, and filter your complete game collection.</p></div><button class="btn btn-primary" onclick="playRandomGame()">▶ Random game</button></div>
+        <div class="library-toolbar" role="search" aria-label="Filter game library">
+            <input id="library-filter" type="search" placeholder="Filter games by name…" oninput="filterGameLibrary()" aria-label="Filter games by name">
+            <select id="library-scope" onchange="filterGameLibrary()" aria-label="Choose games to show"><option value="all">All games</option><option value="favorites">Favorites</option><option value="played">Played</option></select>
+            <select id="library-sort" onchange="sortGameLibrary()" aria-label="Sort games"><option value="default">Default order</option><option value="az">Name: A to Z</option><option value="za">Name: Z to A</option><option value="popular">Most launched</option><option value="recent">Recently played</option></select>
+            <span class="library-result-count" id="library-result-count" role="status">Loading library…</span>
+            <button class="btn" type="button" onclick="resetLibraryFilters()">Reset</button>
+        </div>
         <ul class="grid">
             <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/polytrack/', 'Polytrack')"><img loading="lazy" decoding="async" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSq4z0oIn1dnrq__vTuC1IthPoyEBUIpJx2tw&s"><span class="card-text">Polytrack</span></div></li>
             <li><div class="card" onclick="openGame('https://vrgamer262real.github.io/SM64-PC-Port-WebGL/', 'Super Mario 64')"><img loading="lazy" decoding="async" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkoAQSTi9tlUnGXUqns2Ky01hBdj5o-Os8GDzym6yebpfjd8Imb5PJIQw:https://www.nintendo.com/eu/media/images/10_share_images/games_15/nintendo_7/SI_N64_SuperMario64.jpg&s=10"><span class="card-text">Super Mario 64</span></div></li>
@@ -842,7 +871,7 @@ input[type="checkbox"] { accent-color:var(--accent); }
 
     <section id="recent">
         <div class="section-heading-row">
-            <div><p class="eyebrow">YOUR PLAY HISTORY</p><h1>Recently Played</h1><p class="section-subtitle">Your latest launches are saved locally and can sync after connecting a cloud account.</p></div>
+            <div><p class="eyebrow">YOUR PLAY HISTORY</p><h1>Recently Played</h1><p class="section-subtitle">Your latest launches are saved locally in this browser.</p></div>
             <button class="btn" onclick="clearRecentHistory()">Clear history</button>
         </div>
         <ul class="grid" id="recent-list"></ul>
@@ -866,16 +895,17 @@ input[type="checkbox"] { accent-color:var(--accent); }
         <h1>Productivity Suite</h1>
         
         <div class="panel">
-            <h3>Hub Task Manager</h3>
+            <div class="section-heading-row"><h3>Hub Task Manager</h3><button class="text-button" onclick="clearCompletedTasks()">Clear completed</button></div>
             <div id="task-list" style="margin-bottom: 20px"></div>
             <div style="display: flex; gap: 10px">
                 <input type="text" id="new-task-input" placeholder="What needs doing?" style="margin: 0">
-                <button class="btn" onclick="addTask()">Add Task</button>
+                <button class="btn btn-primary" onclick="addTask()">Add Task</button>
             </div>
+            <p id="task-save-status" class="backup-note">Changes save automatically</p>
         </div>
 
         <div class="panel">
-            <h3>Cloud Notepad</h3>
+            <h3>Saved Notepad</h3>
             <textarea id="note" rows="5" placeholder="System logs or personal notes..."></textarea>
             <button class="btn" onclick="downloadNotes()">Export to .txt</button>
         </div>
@@ -916,13 +946,15 @@ input[type="checkbox"] { accent-color:var(--accent); }
             <canvas id="sketchpad" width="600" height="300" style="width: 100%; max-width: 600px; cursor: crosshair; touch-action: none; display: block; margin: 0 auto"></canvas>
             <div style="display: flex; gap: 15px; justify-content: center; align-items: center; margin-top: 15px">
                 <button class="btn" onclick="clearSketch()">Clear</button>
+                <button class="btn" onclick="downloadSketch()">Save PNG</button>
                 <input type="color" id="sketch-color" value="#00f2fe" style="width: 42px; height: 42px; padding: 0; margin: 0; cursor: pointer">
             </div>
         </div>
     </section>
 
     <section id="music">
-        <h1>Audio Systems</h1>
+        <p class="eyebrow">SOUNDTRACK</p><h1>Audio Systems</h1>
+        <div class="panel"><h3>Now Playing</h3><audio id="player" controls loop preload="none"></audio><p class="section-subtitle" id="music-status" style="margin:8px 0 0">Choose a soundtrack below to start playback.</p></div>
         <ul class="grid">
             <li><div class="card" onclick="pMusic('bg.mp3', 'Default Theme')"><span class="card-text">Default Theme</span></div></li>
             <li><div class="card" onclick="pMusic('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', 'Chill Vibes')"><span class="card-text">Chill Vibes</span></div></li>
@@ -936,13 +968,13 @@ input[type="checkbox"] { accent-color:var(--accent); }
         <h1>Updates & Changelog</h1>
         <div class="panel changelog-panel" style="text-align: left">
             <p class="eyebrow">CURRENT RELEASE</p>
-            <h2 style="margin-top: 0">V15.0 — Performance, Detection & Cloud Sync</h2>
+            <h2 style="margin-top: 0">V15.0 — Local Saves, Performance & Detection</h2>
             <p>• <strong>All-new interface:</strong> a sidebar-based dashboard, redesigned game cards, and responsive layouts.</p>
             <p>• <strong>Personal library:</strong> favorites, persistent recent-game history, launch stats, and achievements.</p>
             <p>• <strong>120 FPS canvas cap:</strong> Launchpad background effects are paced at up to 120 rendered frames per second on supported displays.</p>
-            <p>• <strong>Cloud accounts:</strong> Supabase email/password authentication, per-user cloud saves, automatic sync, and upload/restore controls. (BETA)</p>
+            <p>• <strong>Local-first profiles:</strong> browser-only player profiles plus portable JSON backups for exporting and restoring your Launchpad data.</p>
             <p>• <strong>Diagnostics:</strong> browser, device, graphics, storage, and network capability detection.</p>
-            <p>• <strong>Usability fixes:</strong> safer persistence, keyboard-friendly controls, and quick-launch actions.</p>
+            <p>• <strong>Usability upgrades:</strong> searchable and sortable library, keyboard-friendly controls, task cleanup, local data tools, and quick-launch actions.</p>
         </div>
         <div class="panel" style="text-align: left">
             <h2 style="margin-top: 0">V13.0 - The Meme & Engine Overhaul</h2>
@@ -1073,6 +1105,16 @@ input[type="checkbox"] { accent-color:var(--accent); }
         </div>
 
         <div class="panel">
+            <h3>Accent Color</h3>
+            <p class="section-subtitle">Personalize the highlight color across Launchpad. This preference is saved in this browser.</p>
+            <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+                <label for="accent-color" style="font-weight:750">Interface accent</label>
+                <input type="color" id="accent-color" value="#c1ff5a" onchange="setAccent(this.value)" style="margin:0">
+                <button class="btn" onclick="resetAccent()">Reset color</button>
+            </div>
+        </div>
+
+        <div class="panel">
             <h3>Visual Toggles</h3>
             <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap">
                 <button class="btn" onclick="toggleScanlines()">CRT Scanlines</button>
@@ -1094,7 +1136,7 @@ input[type="checkbox"] { accent-color:var(--accent); }
     <section id="questions">
         <h1>Feedback Engine</h1>
         <div class="panel">
-            <p style="opacity: 0.8; font-size: 0.9rem; margin-bottom: 20px">Logged in users receive priority updates on issues.</p>
+            <p style="opacity: 0.8; font-size: 0.9rem; margin-bottom: 20px">Share a bug report, feature request, or security concern with the project team.</p>
             
             <div class="feedback-grid">
                 <div>
@@ -1126,87 +1168,47 @@ input[type="checkbox"] { accent-color:var(--accent); }
     </section>
 
     <section id="profile">
-        <h1>Player Profile & Cloud Account</h1>
+        <p class="eyebrow">PLAYER SETTINGS</p>
+        <h1>Local Player Profile</h1>
         <div class="panel" id="profile-container">
             <div id="logged-out-view">
-                <h3>Local profile</h3>
-                <p style="opacity: 0.8; margin-bottom: 18px">A local profile labels this browser only. Use the cloud account panel below to sign in and sync your library between devices.</p>
-                <button class="btn" onclick="createLocalProfile()">Create local profile</button>
+                <h3>Create a player profile</h3>
+                <p>Your profile is stored only in this browser. It helps personalize your Launchpad dashboard and does not require an account or remote service.</p>
+                <button class="btn btn-primary" onclick="createLocalProfile()">Create local profile</button>
             </div>
-            <div id="logged-in-view" style="display: none">
+            <div id="logged-in-view" style="display:none">
                 <div class="user-profile-card">
                     <img loading="lazy" decoding="async" id="user-avatar" class="user-avatar-large" src="" alt="">
-                    <h2 id="user-name" style="margin: 0; font-family: var(--title-font)"></h2>
-                    <p id="user-bio" style="opacity: 0.8; font-size: 0.95rem"></p>
+                    <h2 id="user-name" style="margin:0"></h2>
+                    <p id="user-bio" style="margin:0;color:var(--muted)">Local Launchpad profile</p>
                 </div>
-                <div class="widget-row" style="margin-top: 25px">
-                    <div class="widget"><div class="widget-label">Cloud Sync</div><div class="widget-val" id="cloud-sync-state">Not connected</div></div>
-                    <div class="widget"><div class="widget-label">Account Type</div><div class="widget-val" id="account-type">Local profile</div></div>
+                <div class="widget-row" style="margin-top:22px">
+                    <div class="widget"><div class="widget-label">Games Launched</div><div class="widget-val" id="profile-launches">0</div></div>
+                    <div class="widget"><div class="widget-label">Unique Games</div><div class="widget-val" id="profile-unique">0</div></div>
+                    <div class="widget"><div class="widget-label">Favorites</div><div class="widget-val" id="profile-favorites">0</div></div>
                 </div>
-                <p id="cloud-last-sync" class="section-subtitle" aria-live="polite">Your local profile is available on this browser.</p>
-                <div class="cloud-actions">
-                    <button class="btn btn-primary" onclick="syncCloudData('merge')">↻ Sync now</button>
-                    <button class="btn" onclick="syncCloudData('upload')">Upload local data</button>
-                    <button class="btn" onclick="syncCloudData('download')">Restore cloud data</button>
-                    <button class="btn" onclick="logout()">Sign out</button>
+                <div class="local-data-actions">
+                    <button class="btn" onclick="renameLocalProfile()">Edit display name</button>
+                    <button class="btn" onclick="deleteLocalProfile()">Remove profile</button>
                 </div>
             </div>
         </div>
 
-        <div class="panel" id="cloud-auth-panel">
-            <p class="eyebrow">SUPABASE AUTHENTICATION (BETA, DOESN'T WORK RIGHT NOW)</p>
-            <h3>Sign in or create a cloud account</h3>
-            <p>Accounts use Supabase Auth. Your favorites, recent games, achievements, tasks, notes, and selected settings can sync through your own protected database.</p>
-            <label for="auth-display-name">Display name (used when creating an account)</label>
-            <input type="text" id="auth-display-name" maxlength="60" autocomplete="nickname" placeholder="Your player name">
-            <label for="auth-email">Email address</label>
-            <input type="email" id="auth-email" autocomplete="email" placeholder="you@example.com">
-            <label for="auth-password">Password</label>
-            <input type="password" id="auth-password" minlength="6" autocomplete="current-password" placeholder="At least 6 characters">
-            <div class="cloud-actions">
-                <button class="btn btn-primary" onclick="signInWithEmail()">Sign in</button>
-                <button class="btn" onclick="signUpWithEmail()">Create account</button>
-                <button class="btn" onclick="sendPasswordReset()">Reset password</button>
+        <div class="panel" id="local-data-panel">
+            <p class="eyebrow">YOUR DATA, YOUR DEVICE</p>
+            <h3>Local saves & backups</h3>
+            <p>Favorites, recently played games, achievements, tasks, notes, and preferences are saved in this browser. Nothing is uploaded automatically. Export a backup to move your data to another browser or device.</p>
+            <div class="widget-row" style="margin:18px 0 6px">
+                <div class="widget"><div class="widget-label">Save Location</div><div class="widget-val">This browser</div></div>
+                <div class="widget"><div class="widget-label">Network Account</div><div class="widget-val">Not required</div></div>
             </div>
-            <p id="auth-message" class="setting-note" role="status" aria-live="polite">Configure your Supabase project below to enable real cloud accounts.</p>
-        </div>
-
-        <div class="panel" id="supabase-config-panel">
-            <p class="eyebrow">ONE-TIME SETUP (IGNORE)</p>
-            <h3>Connect your Supabase project</h3>
-            <p>Enter your project's HTTPS URL and its <strong>publishable / anon public key</strong>. These values are stored in this browser. Never put a <code>service_role</code> or secret key in this HTML file.</p>
-            <label for="supabase-url">Project URL</label>
-            <input type="url" id="supabase-url" placeholder="https://xoeddjvfthnqsdkqwkhw.supabase.co" autocomplete="url">
-            <label for="supabase-anon-key">Publishable / anon public key</label>
-            <input type="password" id="supabase-anon-key" placeholder="sb_publishable_… or legacy anon key" autocomplete="off">
-            <div class="cloud-actions">
-                <button class="btn btn-primary" onclick="saveSupabaseConfig()">Save connection</button>
-                <button class="btn" onclick="clearSupabaseConfig()">Clear connection</button>
-                <span id="supabase-config-status" class="inline-status">Not configured</span>
+            <div class="local-data-actions">
+                <button class="btn btn-primary" onclick="exportLocalData()">↓ Export backup</button>
+                <button class="btn" onclick="document.getElementById('backup-file').click()">↑ Import backup</button>
+                <button class="btn" onclick="clearLocalData()">Reset local data</button>
+                <input id="backup-file" type="file" accept=".json,application/json" onchange="importLocalData(event)">
             </div>
-            <details class="setup-details">
-                <summary>Database setup SQL (run once in Supabase SQL Editor)</summary>
-                <p>Create a table with Row Level Security so each signed-in user can only read and write their own Launchpad save.</p>
-                <pre class="sql-block"><code>create table if not exists public.launchpad_profiles (
-  user_id uuid primary key references auth.users(id) on delete cascade,
-  data jsonb not null default '{}'::jsonb,
-  updated_at timestamptz not null default now()
-);
-
-alter table public.launchpad_profiles enable row level security;
-
-drop policy if exists "Users manage their own Launchpad save" on public.launchpad_profiles;
-create policy "Users manage their own Launchpad save"
-on public.launchpad_profiles
-for all to authenticated
-using (auth.uid() = user_id)
-with check (auth.uid() = user_id);
-
-grant select, insert, update, delete
-on public.launchpad_profiles to authenticated;</code></pre>
-                <button class="btn" onclick="copySupabaseSQL()">Copy setup SQL</button>
-            </details>
-            <p class="section-subtitle" style="margin-top:14px">For production, host this page over HTTPS, enable email confirmation as desired, and keep Row Level Security enabled. A public anon key is designed for browser use only when database policies are correctly configured.</p>
+            <p class="backup-note" id="backup-status" role="status" aria-live="polite">Tip: keep a backup file somewhere safe before clearing browser data.</p>
         </div>
     </section>
 
@@ -1236,7 +1238,6 @@ on public.launchpad_profiles to authenticated;</code></pre>
         </div>
     </section>
 
-    <audio id="player" src="bg.mp3" loop></audio>
     <div id="toast">Ready to launch?</div>
 
     <script>
@@ -1246,8 +1247,6 @@ on public.launchpad_profiles to authenticated;</code></pre>
     // This is a single-file HTML5 page. Pace Launchpad's own canvas effects at no more than 120 FPS; third-party iframe games have independent loops.
     const MAX_FPS = 120;
     const FRAME_INTERVAL = 1000 / MAX_FPS;
-    const SYNCABLE_KEYS = new Set(['hubTasks', 'hubFavorites', 'hubRecentGames', 'hubPlayedGames', 'hubLaunchCount', 'hubNote', 'hubPerfMode', 'hubFXConfig']);
-    const SYNCABLE_KEY_LIST = [...SYNCABLE_KEYS];
 
     // Lightweight state and guarded storage access.
     const $ = (id) => document.getElementById(id);
@@ -1260,10 +1259,6 @@ on public.launchpad_profiles to authenticated;</code></pre>
     const safeWrite = (key, value) => {
         try {
             localStorage.setItem(key, typeof value === 'string' ? value : JSON.stringify(value));
-            if (SYNCABLE_KEYS.has(key)) {
-                try { localStorage.setItem('hubLocalUpdatedAt', String(Date.now())); } catch {}
-                scheduleCloudSync();
-            }
         } catch { /* Storage can be blocked or full; the page still works for this session. */ }
     };
     const safeRemove = (key) => { try { localStorage.removeItem(key); } catch {} };
@@ -1288,6 +1283,7 @@ on public.launchpad_profiles to authenticated;</code></pre>
     let isMatrix = false;
     let currentGameUrl = '';
     let currentGameName = '';
+    let gameLoadTimeout = 0;
     let activeIssueType = 'Bug';
     let renderHandle = 0;
     let lastFrameAt = 0;
@@ -1304,6 +1300,7 @@ on public.launchpad_profiles to authenticated;</code></pre>
 
     const startTime = Date.now();
     const savedFX = safeRead('hubFXConfig', null);
+    const savedAccent = safeRead('hubAccent', '#c1ff5a');
     const fxConfig = {
         count: Number.isFinite(Number(savedFX?.count)) ? Math.max(0, Math.min(60, Number(savedFX.count))) : 8,
         speed: Number.isFinite(Number(savedFX?.speed)) ? Math.max(0.05, Math.min(5, Number(savedFX.speed))) : 0.5,
@@ -1315,15 +1312,10 @@ on public.launchpad_profiles to authenticated;</code></pre>
         '✨ NO CAP', '🍌 BANANA', '🐈 NYAN', '📮 AMOGUS'
     ];
     let currentUser = safeRead('hubUser', null);
-    let supabaseConfig = safeRead('hubSupabaseConfig', null);
-    if (!supabaseConfig || typeof supabaseConfig.url !== 'string' || typeof supabaseConfig.anonKey !== 'string') supabaseConfig = null;
-    let authSession = safeRead('hubAuthSession', null);
-    if (!authSession || typeof authSession.access_token !== 'string' || typeof authSession.refresh_token !== 'string') authSession = null;
-    let cloudSyncTimer = 0;
-    let cloudSyncBusy = false;
-    let applyingCloudData = false;
-    let lastCloudSyncAt = 0;
-    if (currentUser && !/^[a-z0-9-]{1,39}$/i.test(String(currentUser.username || ''))) currentUser = null;
+    if (!currentUser || typeof currentUser.username !== 'string' || !currentUser.username.trim()) currentUser = null;
+    if (currentUser) currentUser = { username: currentUser.username.trim().slice(0, 60), bio: 'Local Launchpad profile', avatar: '' };
+    let gamePlayCounts = safeRead('hubGamePlayCounts', {});
+    if (!gamePlayCounts || typeof gamePlayCounts !== 'object' || Array.isArray(gamePlayCounts)) gamePlayCounts = {};
     let tasks = safeRead('hubTasks', [{ t: 'Explore Launchpad V15', c: false }]);
     if (!Array.isArray(tasks)) tasks = [{ t: 'Explore Launchpad V15', c: false }];
     tasks = tasks.filter((task) => task && typeof task.t === 'string').map((task) => ({ t: task.t, c: Boolean(task.c) }));
@@ -1569,7 +1561,7 @@ on public.launchpad_profiles to authenticated;</code></pre>
     // Keep the original subtle hover sound without attaching a listener to every card.
     let lastHoveredElement = null;
     let lastHoverSoundAt = 0;
-    const hoverSelector = 'a, button, .card, input, textarea, select, .feedback-chip, .auth-badge, .floating-action';
+    const hoverSelector = 'a, button, .card, input, textarea, select, .feedback-chip, .profile-badge, .floating-action';
     document.addEventListener('pointerover', (event) => {
         const element = event.target.closest?.(hoverSelector);
         if (!element || element === lastHoveredElement) return;
@@ -1621,7 +1613,8 @@ on public.launchpad_profiles to authenticated;</code></pre>
         } else if (cmd === 'meme' || cmd === 'mememode') toggleMemeMode();
         else if (cmd === 'toggle perf') togglePerfMode();
         else if (cmd === 'toggle matrix') toggleMatrix();
-        else if (cmd === 'login') handleAuthClick();
+        else if (cmd === 'profile') handleProfileClick();
+        else if (cmd === 'backup') exportLocalData();
         else if (cmd === 'panic') panicMode();
         else if (cmd === 'b64') {
             const input = prompt('Enter text to Base64 encode:');
@@ -1634,7 +1627,7 @@ on public.launchpad_profiles to authenticated;</code></pre>
                 } catch { showToast('Could not encode that text.'); }
             }
         } else if (cmd === 'help') {
-            alert('Commands: goto [section], meme, toggle perf, toggle matrix, b64, login, panic');
+            alert('Commands: goto [section], profile, backup, meme, toggle perf, toggle matrix, b64, panic');
         } else if (cmd) showToast(`Unknown command: ${cmd}`);
     }
 
@@ -1661,18 +1654,33 @@ on public.launchpad_profiles to authenticated;</code></pre>
         theater.classList.add('active');
         $('game-loader').style.display = 'flex';
         document.body.style.overflow = 'hidden';
+        clearTimeout(gameLoadTimeout);
         frame.onload = () => {
             if (!theater.classList.contains('active') || frame.src === 'about:blank') return;
+            clearTimeout(gameLoadTimeout);
             $('game-loader').style.display = 'none';
             $('game-status-text').textContent = 'LAUNCHPAD PLAYER · ACTIVE';
         };
         frame.src = url;
+        gameLoadTimeout = setTimeout(() => {
+            if (theater.classList.contains('active') && $('game-loader').style.display !== 'none') {
+                $('game-loader').style.display = 'none';
+                $('game-status-text').textContent = 'Still loading? This site may block embeds — try New Tab.';
+            }
+        }, 12000);
     }
     function reloadGame() {
         if (!currentGameUrl) return;
+        clearTimeout(gameLoadTimeout);
         $('game-loader').style.display = 'flex';
         $('game-status-text').textContent = 'RELOADING…';
         $('game-frame').src = currentGameUrl;
+        gameLoadTimeout = setTimeout(() => {
+            if ($('game-view').classList.contains('active') && $('game-loader').style.display !== 'none') {
+                $('game-loader').style.display = 'none';
+                $('game-status-text').textContent = 'Still loading? Try New Tab.';
+            }
+        }, 12000);
     }
     function toggleFullscreen() {
         const frame = $('game-frame');
@@ -1684,6 +1692,20 @@ on public.launchpad_profiles to authenticated;</code></pre>
     }
     function openInNewTab() {
         if (currentGameUrl) window.open(currentGameUrl, '_blank', 'noopener,noreferrer');
+    }
+    async function copyCurrentGameLink() {
+        if (!currentGameUrl) return;
+        try {
+            await navigator.clipboard.writeText(currentGameUrl);
+            showToast('Game link copied.');
+        } catch {
+            const field = document.createElement('textarea');
+            field.value = currentGameUrl;
+            field.style.position = 'fixed'; field.style.opacity = '0';
+            document.body.appendChild(field); field.select();
+            const copied = document.execCommand('copy'); field.remove();
+            showToast(copied ? 'Game link copied.' : 'Could not access the clipboard.');
+        }
     }
     function toggleTheaterSize() {
         const frame = $('game-frame');
@@ -1697,6 +1719,7 @@ on public.launchpad_profiles to authenticated;</code></pre>
         const theater = $('game-view');
         if (!theater.classList.contains('active')) return;
         theater.classList.remove('active');
+        clearTimeout(gameLoadTimeout);
         $('game-loader').style.display = 'none';
         $('game-frame').src = 'about:blank';
         document.body.style.overflow = '';
@@ -1729,6 +1752,54 @@ on public.launchpad_profiles to authenticated;</code></pre>
                 results.appendChild(empty);
             }
         }, 120);
+    }
+
+    // Library controls operate on the original list and never remove game entries.
+    function filterGameLibrary() {
+        const query = ($('library-filter')?.value || '').trim().toLowerCase();
+        const scope = $('library-scope')?.value || 'all';
+        const list = $('games')?.querySelector(':scope > .grid');
+        if (!list) return;
+        let visible = 0;
+        const items = [...list.children];
+        items.forEach((item, index) => {
+            if (!item.dataset.originalIndex) item.dataset.originalIndex = String(index + 1);
+            const card = item.querySelector('.card');
+            const name = (card?.dataset.gameName || card?.textContent || '').toLowerCase();
+            const url = card?.dataset.gameUrl || '';
+            const matchesScope = scope === 'all' || (scope === 'favorites' && isFavorite(url)) || (scope === 'played' && playedGameUrls.includes(url));
+            const matchesQuery = !query || name.includes(query);
+            item.hidden = !(matchesScope && matchesQuery);
+            if (!item.hidden) visible++;
+        });
+        const count = $('library-result-count');
+        if (count) count.textContent = `${visible} of ${items.length} games`;
+    }
+    function sortGameLibrary() {
+        const list = $('games')?.querySelector(':scope > .grid');
+        if (!list) return;
+        const mode = $('library-sort')?.value || 'default';
+        const items = [...list.children];
+        const recentRank = new Map(recentGames.map((item, index) => [item.url, index]));
+        items.sort((a, b) => {
+            const ca = a.querySelector('.card'); const cb = b.querySelector('.card');
+            const na = ca?.dataset.gameName || ca?.textContent || '';
+            const nb = cb?.dataset.gameName || cb?.textContent || '';
+            const ua = ca?.dataset.gameUrl || ''; const ub = cb?.dataset.gameUrl || '';
+            if (mode === 'az') return na.localeCompare(nb, undefined, { sensitivity: 'base' });
+            if (mode === 'za') return nb.localeCompare(na, undefined, { sensitivity: 'base' });
+            if (mode === 'popular') return (Number(gamePlayCounts[ub]) || 0) - (Number(gamePlayCounts[ua]) || 0) || na.localeCompare(nb);
+            if (mode === 'recent') return (recentRank.get(ua) ?? 9999) - (recentRank.get(ub) ?? 9999) || na.localeCompare(nb);
+            return Number(a.dataset.originalIndex || 0) - Number(b.dataset.originalIndex || 0);
+        });
+        items.forEach((item) => list.appendChild(item));
+        filterGameLibrary();
+    }
+    function resetLibraryFilters() {
+        if ($('library-filter')) $('library-filter').value = '';
+        if ($('library-scope')) $('library-scope').value = 'all';
+        if ($('library-sort')) $('library-sort').value = 'default';
+        sortGameLibrary();
     }
 
     // Local game library: favorites, play history, and lightweight achievement tracking.
@@ -1782,6 +1853,7 @@ on public.launchpad_profiles to authenticated;</code></pre>
         renderCollections();
         updateAchievementStats();
         enhanceAllGameCards();
+        filterGameLibrary(); renderProfileUI();
     }
     function clearFavorites() {
         if (!favorites.length) { showToast('Your favorites are already empty.'); return; }
@@ -1789,7 +1861,7 @@ on public.launchpad_profiles to authenticated;</code></pre>
         safeWrite('hubFavorites', favorites);
         renderCollections();
         updateAchievementStats();
-        enhanceAllGameCards();
+        enhanceAllGameCards(); filterGameLibrary(); renderProfileUI();
         showToast('Favorites cleared.');
     }
     function clearRecentHistory() {
@@ -1798,6 +1870,7 @@ on public.launchpad_profiles to authenticated;</code></pre>
         safeWrite('hubRecentGames', recentGames);
         renderCollections();
         updateAchievementStats();
+        sortGameLibrary(); renderProfileUI();
         showToast('Recent history cleared.');
     }
     function recordGameLaunch(url, name) {
@@ -1806,12 +1879,15 @@ on public.launchpad_profiles to authenticated;</code></pre>
         recentGames = [{ url, name, image, playedAt: Date.now() }, ...recentGames.filter((item) => item.url !== url)].slice(0, 12);
         if (!playedGameUrls.includes(url)) playedGameUrls.push(url);
         playedGameUrls = playedGameUrls.slice(-5000);
+        gamePlayCounts[url] = Math.min(1000000, (Number(gamePlayCounts[url]) || 0) + 1);
         gameLaunchCount += 1;
         safeWrite('hubRecentGames', recentGames);
         safeWrite('hubPlayedGames', playedGameUrls);
+        safeWrite('hubGamePlayCounts', gamePlayCounts);
         safeWrite('hubLaunchCount', gameLaunchCount);
         renderCollections();
         updateAchievementStats();
+        sortGameLibrary(); renderProfileUI();
     }
     function renderCollection(listId, emptyId, items) {
         const list = $(listId);
@@ -1872,7 +1948,9 @@ on public.launchpad_profiles to authenticated;</code></pre>
             { icon: '📚', title: 'Collector', detail: 'Save 5 favorite games.', unlocked: favorites.length >= 5 },
             { icon: '🏁', title: 'Regular', detail: 'Launch 10 games in total.', unlocked: gameLaunchCount >= 10 },
             { icon: '🌟', title: 'Arcade Curator', detail: 'Save 10 favorite games.', unlocked: favorites.length >= 10 },
-            { icon: '🚀', title: 'Veteran', detail: 'Launch 25 games in total.', unlocked: gameLaunchCount >= 25 }
+            { icon: '🚀', title: 'Veteran', detail: 'Launch 25 games in total.', unlocked: gameLaunchCount >= 25 },
+            { icon: '🧩', title: 'Completionist', detail: 'Try 15 different games.', unlocked: uniqueGames >= 15 },
+            { icon: '⚡', title: 'Arcade Regular', detail: 'Launch 50 games in total.', unlocked: gameLaunchCount >= 50 }
         ];
         badges.replaceChildren();
         for (const milestone of milestones) {
@@ -1896,11 +1974,11 @@ on public.launchpad_profiles to authenticated;</code></pre>
     // Task manager: render text safely using DOM nodes instead of HTML interpolation.
     function saveTasks() {
         safeWrite('hubTasks', tasks);
-        if (currentUser && $('git-status')) {
-            $('git-status').textContent = 'Saved locally';
-            setTimeout(() => {
-                if ($('git-status')) $('git-status').textContent = 'System Ready';
-            }, 1200);
+        const saveStatus = $('task-save-status');
+        if (saveStatus) {
+            saveStatus.textContent = 'Saved on this browser';
+            clearTimeout(saveStatus._resetTimer);
+            saveStatus._resetTimer = setTimeout(() => { saveStatus.textContent = 'Changes save automatically'; }, 1600);
         }
     }
     function renderTasks() {
@@ -1918,7 +1996,13 @@ on public.launchpad_profiles to authenticated;</code></pre>
             const label = document.createElement('span');
             label.textContent = task.t;
             if (task.c) { label.style.textDecoration = 'line-through'; label.style.opacity = '.55'; }
-            row.append(checkbox, label);
+            const remove = document.createElement('button');
+            remove.type = 'button';
+            remove.className = 'task-remove';
+            remove.textContent = 'Remove';
+            remove.setAttribute('aria-label', `Remove task ${task.t}`);
+            remove.addEventListener('click', () => removeTask(index));
+            row.append(checkbox, label, remove);
             list.appendChild(row);
         });
     }
@@ -1936,6 +2020,18 @@ on public.launchpad_profiles to authenticated;</code></pre>
         tasks[index].c = !tasks[index].c;
         saveTasks();
         renderTasks();
+    }
+    function removeTask(index) {
+        if (!tasks[index]) return;
+        tasks.splice(index, 1);
+        saveTasks();
+        renderTasks();
+    }
+    function clearCompletedTasks() {
+        const before = tasks.length;
+        tasks = tasks.filter((task) => !task.c);
+        saveTasks(); renderTasks();
+        showToast(`${before - tasks.length} completed task(s) cleared.`);
     }
 
     // Safe calculator parser: supports numbers, parentheses and +, -, *, / without eval().
@@ -2104,6 +2200,14 @@ on public.launchpad_profiles to authenticated;</code></pre>
     }
     function endSketch() { isDrawing = false; lastSketchPoint = null; }
     function clearSketch() { sketchCtx?.clearRect(0, 0, sketchCanvas.width, sketchCanvas.height); }
+    function downloadSketch() {
+        if (!sketchCanvas) return;
+        const link = document.createElement('a');
+        link.download = 'launchpad-sketch.png';
+        link.href = sketchCanvas.toDataURL('image/png');
+        link.click();
+        showToast('Sketch saved as PNG.');
+    }
 
     function showMorse() {
         $('morse-panel').style.display = 'block';
@@ -2161,397 +2265,186 @@ on public.launchpad_profiles to authenticated;</code></pre>
 
     function pMusic(source, name) {
         const player = $('player');
+        if (!player) return;
         player.src = source;
-        player.play().then(() => showToast(`Playing: ${name}`)).catch(() => showToast(`Could not play “${name}”. Check its audio source.`));
+        const result = player.play();
+        if (result?.then) result.then(() => {
+            if ($('music-status')) $('music-status').textContent = `Now playing: ${name}`;
+            showToast(`Playing: ${name}`);
+        }).catch(() => {
+            if ($('music-status')) $('music-status').textContent = `Playback could not start for ${name}. Use the audio controls to retry.`;
+            showToast(`Could not play “${name}”. Check its audio source.`);
+        });
     }
 
-    // Supabase email/password auth + per-user cloud save. The browser uses only a public anon key;
-    // the database table must have RLS enabled with the policy shown in the Profile setup panel.
-    function setAuthMessage(message, isError = false) {
-        const el = $('auth-message');
-        if (el) {
-            el.textContent = message;
-            el.style.borderColor = isError ? 'rgba(255,126,142,.35)' : 'rgba(193,255,90,.18)';
-        }
-    }
-    function setCloudStatus(message) {
-        const state = $('cloud-sync-state');
-        const last = $('cloud-last-sync');
-        if (state) state.textContent = message;
-        if (last && lastCloudSyncAt) last.textContent = `Last successful sync: ${new Date(lastCloudSyncAt).toLocaleString()}`;
-        else if (last && !authSession) last.textContent = 'Local profile data remains saved on this browser.';
-    }
-    function scheduleCloudSync() {
-        if (applyingCloudData || !authSession?.access_token || !supabaseConfig?.url || !navigator.onLine) return;
-        clearTimeout(cloudSyncTimer);
-        cloudSyncTimer = setTimeout(() => syncCloudData('merge', true), 1600);
-    }
-    function getSupabaseError(payload, fallback) {
-        return payload?.msg || payload?.message || payload?.error_description || payload?.error || fallback;
-    }
-    async function supabaseRequest(path, options = {}, useSession = false) {
-        if (!supabaseConfig?.url || !supabaseConfig?.anonKey) throw new Error('Supabase is not configured. Open Profile and add your project URL and public anon key.');
-        const headers = {
-            apikey: supabaseConfig.anonKey,
-            'Content-Type': 'application/json',
-            ...(options.headers || {})
-        };
-        if (useSession) {
-            if (!authSession?.access_token) throw new Error('Please sign in first.');
-            headers.Authorization = `Bearer ${authSession.access_token}`;
-        }
-        const response = await fetch(`${supabaseConfig.url}${path}`, { ...options, headers });
-        const raw = await response.text();
-        let payload = null;
-        if (raw) { try { payload = JSON.parse(raw); } catch { payload = { message: raw }; } }
-        if (!response.ok) throw new Error(getSupabaseError(payload, `Request failed (${response.status}).`));
-        return payload;
-    }
-    function saveAuthSession(payload) {
-        if (!payload?.access_token || !payload?.refresh_token) throw new Error('The authentication service did not return a valid session.');
-        const priorUser = authSession?.user || null;
-        authSession = {
-            access_token: payload.access_token,
-            refresh_token: payload.refresh_token,
-            token_type: payload.token_type || 'bearer',
-            expires_at: payload.expires_at || (Math.floor(Date.now() / 1000) + Number(payload.expires_in || 3600)),
-            user: payload.user || priorUser
-        };
-        safeWrite('hubAuthSession', authSession);
-        if (authSession.user) updateUserFromAuth(authSession.user);
-        syncAuthUI();
-    }
-    function updateUserFromAuth(user) {
-        const meta = user?.user_metadata || {};
-        const email = String(user?.email || '');
-        const username = String(meta.display_name || meta.username || (email.includes('@') ? email.split('@')[0] : 'Launchpad Player')).slice(0, 60);
-        currentUser = {
-            username: username || 'Launchpad Player',
-            email,
-            avatar: typeof meta.avatar_url === 'string' ? meta.avatar_url : '',
-            bio: 'Supabase cloud account'
-        };
-        safeWrite('hubUser', currentUser);
-    }
-    async function refreshAuthSession() {
-        if (!authSession?.refresh_token) throw new Error('Your session has expired. Please sign in again.');
-        const previousUser = authSession.user;
-        const payload = await supabaseRequest('/auth/v1/token?grant_type=refresh_token', {
-            method: 'POST',
-            body: JSON.stringify({ refresh_token: authSession.refresh_token })
-        });
-        if (!payload.user && previousUser) payload.user = previousUser;
-        saveAuthSession(payload);
-    }
-    async function ensureFreshSession() {
-        if (!authSession?.access_token) throw new Error('Please sign in first.');
-        const expiresAt = Number(authSession.expires_at || 0);
-        if (!expiresAt || expiresAt <= Math.floor(Date.now() / 1000) + 60) await refreshAuthSession();
-    }
+    // Local-only player profile. Data remains in this browser unless the user exports a backup.
     function detectSafeAvatar() {
         const initials = String(currentUser?.username || 'LP').trim().split(/\s+/).slice(0, 2).map((part) => part[0] || '').join('').toUpperCase() || 'LP';
-        const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96"><rect width="100%" height="100%" rx="48" fill="#273a31"/><text x="50%" y="55%" font-family="Arial,sans-serif" font-size="32" font-weight="700" fill="#c1ff5a" text-anchor="middle" dominant-baseline="middle">${initials.replace(/[&<>"']/g, '')}</text></svg>`;
+        const safeInitials = initials.replace(/[&<>"']/g, '');
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96"><rect width="100%" height="100%" rx="48" fill="#273a31"/><text x="50%" y="55%" font-family="Arial,sans-serif" font-size="32" font-weight="700" fill="#c1ff5a" text-anchor="middle" dominant-baseline="middle">${safeInitials}</text></svg>`;
         return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
     }
-    function handleAuthClick() {
-        showSec('profile');
-        if (!currentUser && !authSession) $('auth-email')?.focus();
-    }
+    function handleProfileClick() { showSec('profile'); }
     function createLocalProfile() {
-        if (currentUser && !authSession) { showToast('A local profile already exists.'); return; }
-        const handle = prompt('Enter a display name for this browser-only Launchpad profile:');
-        if (handle === null || !handle.trim()) return;
-        const username = handle.trim().slice(0, 60);
-        currentUser = { username, avatar: '', bio: 'Local Launchpad profile', loginDate: new Date().toLocaleDateString() };
+        const handle = prompt('Choose a display name for your local Launchpad profile:', currentUser?.username || 'Player');
+        if (handle === null) return;
+        const username = handle.trim().replace(/\s+/g, ' ').slice(0, 60);
+        if (!username) { showToast('Enter a display name to create your profile.'); return; }
+        currentUser = { username, bio: 'Local Launchpad profile', avatar: '', createdAt: Date.now() };
         safeWrite('hubUser', currentUser);
-        syncAuthUI();
-        showToast(`Local profile ready for ${username}. Cloud sync is not enabled until you sign in.`);
+        renderProfileUI(); updateGreeting();
+        showToast(`Local profile created for ${username}.`);
     }
-    function syncAuthUI() {
-        const badge = $('auth-status');
-        const profileOut = $('logged-out-view');
-        const profileIn = $('logged-in-view');
-        const signedIn = Boolean(authSession?.access_token && authSession?.user);
-        const hasProfile = Boolean(currentUser || signedIn);
-        if (signedIn && authSession.user && !currentUser?.email) updateUserFromAuth(authSession.user);
-        if (hasProfile) {
-            const displayName = authSession?.user?.email || currentUser?.username || 'Launchpad Player';
-            const avatarURL = currentUser?.avatar || (!signedIn && currentUser?.username && /^[a-z0-9-]{1,39}$/i.test(currentUser.username) ? `https://github.com/${encodeURIComponent(currentUser.username)}.png` : detectSafeAvatar());
-            badge.replaceChildren();
-            const avatar = document.createElement('img');
-            avatar.src = avatarURL;
-            avatar.alt = '';
-            const name = document.createElement('span');
-            name.textContent = displayName;
-            badge.append(avatar, name);
-            $('user-avatar').src = avatarURL;
-            $('user-avatar').alt = `${displayName} avatar`;
-            $('user-name').textContent = displayName;
-            $('user-bio').textContent = signedIn ? 'Authenticated cloud account' : (currentUser?.bio || 'Local Launchpad profile');
-            profileOut.style.display = 'none';
-            profileIn.style.display = 'block';
-            $('account-type').textContent = signedIn ? 'Cloud account' : 'Local only';
-            setCloudStatus(signedIn ? 'Connected' : 'Local only');
-            $('greeting').textContent = signedIn ? `Welcome back, ${displayName}!` : `Welcome, ${displayName}!`;
-        } else {
-            badge.replaceChildren();
-            const label = document.createElement('span');
-            label.id = 'auth-text';
-            label.textContent = 'Sign in';
-            badge.append(label);
-            profileOut.style.display = 'block';
-            profileIn.style.display = 'none';
-            setCloudStatus('Not connected');
-        }
+    function renameLocalProfile() {
+        if (!currentUser) return createLocalProfile();
+        const handle = prompt('Update your display name:', currentUser.username);
+        if (handle === null) return;
+        const username = handle.trim().replace(/\s+/g, ' ').slice(0, 60);
+        if (!username) { showToast('Display name cannot be empty.'); return; }
+        currentUser.username = username;
+        safeWrite('hubUser', currentUser);
+        renderProfileUI(); updateGreeting();
+        showToast('Profile name updated.');
     }
-    async function signInWithEmail() {
-        const email = $('auth-email').value.trim().toLowerCase();
-        const password = $('auth-password').value;
-        if (!email || !password) { setAuthMessage('Enter your email and password.', true); return; }
-        try {
-            setAuthMessage('Signing in…');
-            const payload = await supabaseRequest('/auth/v1/token?grant_type=password', { method: 'POST', body: JSON.stringify({ email, password }) });
-            saveAuthSession(payload);
-            setAuthMessage('Signed in successfully. Syncing your Launchpad data…');
-            await syncCloudData('merge', true);
-            showToast('Cloud account connected.');
-        } catch (error) { setAuthMessage(error.message || 'Sign in failed.', true); }
-    }
-    async function signUpWithEmail() {
-        const email = $('auth-email').value.trim().toLowerCase();
-        const password = $('auth-password').value;
-        const displayName = $('auth-display-name').value.trim().slice(0, 60);
-        if (!email || !password) { setAuthMessage('Enter an email and password to create an account.', true); return; }
-        if (password.length < 6) { setAuthMessage('Use a password with at least 6 characters.', true); return; }
-        try {
-            setAuthMessage('Creating your account…');
-            const payload = await supabaseRequest('/auth/v1/signup', {
-                method: 'POST',
-                body: JSON.stringify({ email, password, data: { display_name: displayName || email.split('@')[0] } })
-            });
-            if (payload?.access_token && payload?.refresh_token) {
-                saveAuthSession(payload);
-                setAuthMessage('Account created. Syncing your Launchpad data…');
-                await syncCloudData('merge', true);
-                showToast('Cloud account created.');
-            } else {
-                setAuthMessage('Account created. Check your email for the confirmation link, then return here and sign in.');
-            }
-        } catch (error) { setAuthMessage(error.message || 'Account creation failed.', true); }
-    }
-    async function sendPasswordReset() {
-        const email = $('auth-email').value.trim().toLowerCase();
-        if (!email) { setAuthMessage('Enter your account email first.', true); return; }
-        try {
-            await supabaseRequest('/auth/v1/recover', { method: 'POST', body: JSON.stringify({ email }) });
-            setAuthMessage('If the email is registered, Supabase will send a password reset message.');
-        } catch (error) { setAuthMessage(error.message || 'Could not request a password reset.', true); }
-    }
-    function readSyncValue(key) {
-        try {
-            const raw = localStorage.getItem(key);
-            if (raw === null) return null;
-            if (key === 'hubNote') return raw;
-            return JSON.parse(raw);
-        } catch { return null; }
-    }
-    function collectLocalSnapshot() {
-        const values = {};
-        for (const key of SYNCABLE_KEY_LIST) values[key] = readSyncValue(key);
-        let updatedAt = 0;
-        try { updatedAt = Number(localStorage.getItem('hubLocalUpdatedAt')) || 0; } catch {}
-        return { version: 1, updatedAt, values };
-    }
-    function normalizeList(value) { return Array.isArray(value) ? value : []; }
-    function mergeByUrl(localItems, cloudItems, dateKey, limit) {
-        const map = new Map();
-        for (const item of [...normalizeList(localItems), ...normalizeList(cloudItems)]) {
-            if (!item || typeof item.url !== 'string') continue;
-            const prior = map.get(item.url);
-            if (!prior || Number(item[dateKey] || 0) >= Number(prior[dateKey] || 0)) map.set(item.url, item);
-        }
-        return [...map.values()].sort((a, b) => Number(b[dateKey] || 0) - Number(a[dateKey] || 0)).slice(0, limit);
-    }
-    function mergeCloudSnapshots(localSnapshot, cloudSnapshot) {
-        const localValues = localSnapshot?.values || {};
-        const cloudValues = cloudSnapshot?.values || {};
-        const localTime = Number(localSnapshot?.updatedAt || 0);
-        const cloudTime = Number(cloudSnapshot?.updatedAt || 0);
-        const values = { ...cloudValues, ...localValues };
-        values.hubFavorites = mergeByUrl(localValues.hubFavorites, cloudValues.hubFavorites, 'addedAt', 100);
-        values.hubRecentGames = mergeByUrl(localValues.hubRecentGames, cloudValues.hubRecentGames, 'playedAt', 12);
-        values.hubPlayedGames = [...new Set([...normalizeList(localValues.hubPlayedGames), ...normalizeList(cloudValues.hubPlayedGames)].filter((url) => typeof url === 'string' && /^https?:\/\//i.test(url)))].slice(-5000);
-        const taskMap = new Map();
-        for (const task of [...normalizeList(cloudValues.hubTasks), ...normalizeList(localValues.hubTasks)]) {
-            if (!task || typeof task.t !== 'string') continue;
-            const key = task.t.trim().toLowerCase();
-            const old = taskMap.get(key);
-            taskMap.set(key, { t: task.t, c: Boolean(task.c || old?.c) });
-        }
-        values.hubTasks = [...taskMap.values()].slice(0, 500);
-        values.hubLaunchCount = Math.max(0, Number(localValues.hubLaunchCount) || 0, Number(cloudValues.hubLaunchCount) || 0);
-        // Notes and single-value preferences use the newer snapshot to avoid silently overwriting the latest edit.
-        const preferred = cloudTime > localTime ? cloudValues : localValues;
-        for (const key of ['hubNote', 'hubPerfMode', 'hubFXConfig']) {
-            if (Object.prototype.hasOwnProperty.call(preferred, key)) values[key] = preferred[key];
-        }
-        return { version: 1, updatedAt: Math.max(Date.now(), localTime, cloudTime), values };
-    }
-    function applyCloudSnapshot(snapshot) {
-        const values = snapshot?.values || {};
-        applyingCloudData = true;
-        try {
-            for (const key of SYNCABLE_KEY_LIST) {
-                if (!Object.prototype.hasOwnProperty.call(values, key)) continue;
-                const value = values[key];
-                if (key === 'hubNote') localStorage.setItem(key, String(value ?? ''));
-                else localStorage.setItem(key, JSON.stringify(value));
-            }
-            if (Array.isArray(values.hubTasks)) tasks = values.hubTasks.filter((task) => task && typeof task.t === 'string').map((task) => ({ t: task.t, c: Boolean(task.c) }));
-            if (Array.isArray(values.hubFavorites)) favorites = values.hubFavorites.filter((item) => item && typeof item.url === 'string').slice(0, 100);
-            if (Array.isArray(values.hubRecentGames)) recentGames = values.hubRecentGames.filter((item) => item && typeof item.url === 'string').slice(0, 12);
-            if (Array.isArray(values.hubPlayedGames)) playedGameUrls = [...new Set(values.hubPlayedGames.filter((url) => typeof url === 'string'))].slice(0, 5000);
-            if (Number.isFinite(Number(values.hubLaunchCount))) gameLaunchCount = Math.max(0, Number(values.hubLaunchCount));
-            if (typeof values.hubPerfMode === 'boolean') isPerfMode = values.hubPerfMode;
-            if (values.hubFXConfig && typeof values.hubFXConfig === 'object') {
-                fxConfig.count = Math.max(0, Math.min(60, Number(values.hubFXConfig.count) || 0));
-                fxConfig.speed = Math.max(0.05, Math.min(5, Number(values.hubFXConfig.speed) || 0.5));
-                fxConfig.tone = Math.max(10, Math.min(22, Number(values.hubFXConfig.tone) || 16));
-                document.documentElement.style.setProperty('--surface-tone', `${fxConfig.tone}%`);
-            }
-            localStorage.setItem('hubLocalUpdatedAt', String(Number(snapshot.updatedAt) || Date.now()));
-        } catch (error) {
-            console.warn('Could not fully apply the cloud save:', error);
-        } finally { applyingCloudData = false; }
-        document.body.classList.toggle('perf-mode', isPerfMode);
-        if ($('perf-toggle-btn')) $('perf-toggle-btn').textContent = `Performance: ${isPerfMode ? 'ON' : 'OFF'}`;
-        renderTasks(); renderCollections(); updateAchievementStats(); enhanceAllGameCards();
-        if (isPerfMode) pCtx?.clearRect(0, 0, viewportW, viewportH);
-        refreshRenderLoop();
-        $('note').value = String(readSyncValue('hubNote') || '');
-    }
-    async function readCloudSnapshot() {
-        await ensureFreshSession();
-        const userId = authSession?.user?.id;
-        if (!userId) throw new Error('Your account session is missing its user ID. Sign in again.');
-        const query = `/rest/v1/launchpad_profiles?user_id=eq.${encodeURIComponent(userId)}&select=data,updated_at&limit=1`;
-        const rows = await supabaseRequest(query, { method: 'GET' }, true);
-        if (!Array.isArray(rows) || !rows.length) return null;
-        const data = rows[0].data && typeof rows[0].data === 'object' ? rows[0].data : {};
-        return { version: Number(data.version) || 1, updatedAt: Number(data.updatedAt) || (Date.parse(rows[0].updated_at || '') || 0), values: data.values || {} };
-    }
-    async function writeCloudSnapshot(snapshot) {
-        await ensureFreshSession();
-        const userId = authSession?.user?.id;
-        if (!userId) throw new Error('Your account session is missing its user ID.');
-        const body = [{ user_id: userId, data: snapshot, updated_at: new Date().toISOString() }];
-        await supabaseRequest('/rest/v1/launchpad_profiles?on_conflict=user_id', {
-            method: 'POST',
-            headers: { Prefer: 'resolution=merge-duplicates,return=minimal' },
-            body: JSON.stringify(body)
-        }, true);
-    }
-    async function syncCloudData(mode = 'merge', silent = false) {
-        if (!authSession?.access_token || !supabaseConfig) {
-            if (!silent) { setCloudStatus('Not connected'); showToast('Connect Supabase and sign in to use cloud sync.'); }
-            return false;
-        }
-        if (!navigator.onLine) { setCloudStatus('Offline'); if (!silent) showToast('You are offline. Your local data is still saved.'); return false; }
-        if (cloudSyncBusy) return false;
-        cloudSyncBusy = true;
-        setCloudStatus('Syncing…');
-        try {
-            await ensureFreshSession();
-            if (mode === 'download') {
-                const cloud = await readCloudSnapshot();
-                if (!cloud) throw new Error('No cloud save exists yet for this account. Use Upload local data or Sync now first.');
-                applyCloudSnapshot(cloud);
-            } else if (mode === 'upload') {
-                await writeCloudSnapshot(collectLocalSnapshot());
-            } else {
-                const local = collectLocalSnapshot();
-                const cloud = await readCloudSnapshot();
-                const merged = cloud ? mergeCloudSnapshots(local, cloud) : { ...local, updatedAt: Date.now() };
-                applyCloudSnapshot(merged);
-                await writeCloudSnapshot(merged);
-            }
-            lastCloudSyncAt = Date.now();
-            setCloudStatus('Synced ✓');
-            const last = $('cloud-last-sync');
-            if (last) last.textContent = `Last successful sync: ${new Date(lastCloudSyncAt).toLocaleString()}`;
-            if (!silent) showToast(mode === 'download' ? 'Cloud data restored.' : mode === 'upload' ? 'Local data uploaded.' : 'Launchpad data synced.');
-            return true;
-        } catch (error) {
-            console.error('Launchpad cloud sync failed:', error);
-            setCloudStatus('Sync error');
-            if (!silent) showToast(error.message || 'Cloud sync failed.');
-            setAuthMessage(error.message || 'Cloud sync failed.', true);
-            return false;
-        } finally { cloudSyncBusy = false; }
-    }
-    async function logout() {
-        if (authSession?.access_token && supabaseConfig) {
-            try { await supabaseRequest('/auth/v1/logout', { method: 'POST' }, true); } catch (error) { console.warn('Remote sign-out could not be confirmed:', error); }
-        }
-        authSession = null;
-        safeRemove('hubAuthSession');
+    function deleteLocalProfile() {
+        if (!currentUser) { showToast('There is no local profile to remove.'); return; }
+        if (!confirm('Remove this local profile? Your games, favorites, history, tasks, and notes will remain saved.')) return;
         currentUser = null;
         safeRemove('hubUser');
-        clearTimeout(cloudSyncTimer);
-        syncAuthUI();
-        updateGreeting();
-        setAuthMessage('Signed out. Your local Launchpad data remains on this device.');
-        showSec('home');
+        renderProfileUI(); updateGreeting();
+        showToast('Local profile removed. Your Launchpad data was kept.');
     }
-    async function saveSupabaseConfig() {
-        const rawURL = $('supabase-url').value.trim().replace(/\/+$/, '');
-        const anonKey = $('supabase-anon-key').value.trim();
-        try {
-            const parsed = new URL(rawURL);
-            const localHost = ['localhost', '127.0.0.1'].includes(parsed.hostname);
-            if (parsed.protocol !== 'https:' && !(parsed.protocol === 'http:' && localHost)) throw new Error('Use an HTTPS Supabase URL (HTTP is allowed only for localhost).');
-            if (parsed.pathname !== '' && parsed.pathname !== '/') throw new Error('Enter the project root URL without a path.');
-            if (parsed.search || parsed.hash) throw new Error('Remove query parameters and fragments from the project URL.');
-            if (anonKey.length < 20) throw new Error("Enter the project's publishable / anon public key.");
-            const changed = !supabaseConfig || supabaseConfig.url !== parsed.origin || supabaseConfig.anonKey !== anonKey;
-            supabaseConfig = { url: parsed.origin, anonKey };
-            safeWrite('hubSupabaseConfig', supabaseConfig);
-            if (changed && authSession) {
-                authSession = null; safeRemove('hubAuthSession'); currentUser = null; safeRemove('hubUser'); syncAuthUI();
+    function renderProfileUI() {
+        const badge = $('profile-status');
+        const profileOut = $('logged-out-view');
+        const profileIn = $('logged-in-view');
+        const hasProfile = Boolean(currentUser?.username);
+        if (badge) {
+            badge.replaceChildren();
+            if (hasProfile) {
+                const avatar = document.createElement('img');
+                avatar.className = 'profile-avatar-small'; avatar.src = detectSafeAvatar(); avatar.alt = '';
+                const name = document.createElement('span'); name.textContent = currentUser.username;
+                badge.append(avatar, name);
+            } else {
+                const label = document.createElement('span'); label.id = 'profile-text'; label.textContent = 'Local profile';
+                badge.append(label);
             }
-            $('supabase-url').value = supabaseConfig.url;
-            $('supabase-anon-key').value = anonKey;
-            $('supabase-config-status').textContent = 'Connection settings saved';
-            setAuthMessage('Supabase connection saved. You can now create an account or sign in.');
-            showToast('Supabase settings saved.');
-        } catch (error) { $('supabase-config-status').textContent = 'Not configured'; setAuthMessage(error.message, true); }
-    }
-    function clearSupabaseConfig() {
-        if (!confirm('Clear this browser’s Supabase connection settings and sign out? Your cloud account and cloud data will not be deleted.')) return;
-        supabaseConfig = null; authSession = null; currentUser = null;
-        safeRemove('hubSupabaseConfig'); safeRemove('hubAuthSession'); safeRemove('hubUser');
-        $('supabase-url').value = ''; $('supabase-anon-key').value = '';
-        $('supabase-config-status').textContent = 'Not configured';
-        syncAuthUI(); setAuthMessage('Connection settings cleared. Local game data remains on this browser.');
-    }
-    function copySupabaseSQL() {
-        const sql = $('supabase-config-panel')?.querySelector('.sql-block')?.innerText || '';
-        if (navigator.clipboard?.writeText) navigator.clipboard.writeText(sql).then(() => showToast('SQL copied.')).catch(() => showToast('Clipboard unavailable. Select and copy the SQL manually.'));
-        else showToast('Select and copy the SQL block manually.');
-    }
-    async function restoreCloudSession() {
-        if (!supabaseConfig || !authSession) { syncAuthUI(); return; }
-        try {
-            await ensureFreshSession();
-            if (authSession.user) updateUserFromAuth(authSession.user);
-            syncAuthUI();
-            await syncCloudData('merge', true);
-        } catch (error) {
-            console.warn('Could not restore saved cloud session:', error);
-            authSession = null; safeRemove('hubAuthSession'); syncAuthUI();
-            setAuthMessage('Your saved cloud session expired. Please sign in again.', true);
         }
+        if (profileOut) profileOut.style.display = hasProfile ? 'none' : 'block';
+        if (profileIn) profileIn.style.display = hasProfile ? 'block' : 'none';
+        if (hasProfile) {
+            const avatar = $('user-avatar');
+            if (avatar) { avatar.src = detectSafeAvatar(); avatar.alt = `${currentUser.username} avatar`; }
+            if ($('user-name')) $('user-name').textContent = currentUser.username;
+            if ($('user-bio')) $('user-bio').textContent = 'Local profile · saved on this browser';
+        }
+        if ($('profile-launches')) $('profile-launches').textContent = String(gameLaunchCount);
+        if ($('profile-unique')) $('profile-unique').textContent = String(playedGameUrls.length);
+        if ($('profile-favorites')) $('profile-favorites').textContent = String(favorites.length);
     }
+    function getLocalBackupData() {
+        return {
+            hubUser: currentUser,
+            hubTasks: tasks,
+            hubFavorites: favorites,
+            hubRecentGames: recentGames,
+            hubPlayedGames: playedGameUrls,
+            hubGamePlayCounts: gamePlayCounts,
+            hubLaunchCount: gameLaunchCount,
+            hubNote: $('note')?.value || '',
+            hubPerfMode: isPerfMode,
+            hubFXConfig: fxConfig,
+            hubAccent: safeRead('hubAccent', '#c1ff5a')
+        };
+    }
+    function exportLocalData() {
+        const backup = { format: 'launchpad-local-backup', version: 'V15', exportedAt: new Date().toISOString(), data: getLocalBackupData() };
+        const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `launchpad-v15-backup-${new Date().toISOString().slice(0, 10)}.json`;
+        document.body.appendChild(link); link.click(); link.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1200);
+        if ($('backup-status')) $('backup-status').textContent = `Backup exported · ${new Date().toLocaleString()}`;
+        showToast('Launchpad backup exported.');
+    }
+    async function importLocalData(event) {
+        const input = event?.target;
+        const file = input?.files?.[0];
+        if (!file) return;
+        try {
+            if (file.size > 5 * 1024 * 1024) throw new Error('Backup file is too large (5 MB maximum).');
+            const backup = JSON.parse(await file.text());
+            const data = backup?.data || backup?.values;
+            if (!backup || backup.format !== 'launchpad-local-backup' || !data || typeof data !== 'object' || Array.isArray(data)) {
+                throw new Error('This file is not a supported Launchpad backup.');
+            }
+            if (!confirm('Import this backup and replace the matching local Launchpad data on this browser?')) return;
+            if (Array.isArray(data.hubTasks)) tasks = data.hubTasks.filter((task) => task && typeof task.t === 'string').slice(0, 500).map((task) => ({ t: task.t.slice(0, 300), c: Boolean(task.c) }));
+            if (Array.isArray(data.hubFavorites)) favorites = data.hubFavorites.filter((item) => item && typeof item.url === 'string' && /^https?:\/\//i.test(item.url)).slice(0, 100);
+            if (Array.isArray(data.hubRecentGames)) recentGames = data.hubRecentGames.filter((item) => item && typeof item.url === 'string' && /^https?:\/\//i.test(item.url)).slice(0, 12);
+            if (Array.isArray(data.hubPlayedGames)) playedGameUrls = [...new Set(data.hubPlayedGames.filter((url) => typeof url === 'string' && /^https?:\/\//i.test(url)))].slice(-5000);
+            if (data.hubGamePlayCounts && typeof data.hubGamePlayCounts === 'object' && !Array.isArray(data.hubGamePlayCounts)) gamePlayCounts = data.hubGamePlayCounts;
+            if (Number.isFinite(Number(data.hubLaunchCount))) gameLaunchCount = Math.max(0, Math.min(100000000, Math.floor(Number(data.hubLaunchCount))));
+            if (data.hubUser && typeof data.hubUser.username === 'string' && data.hubUser.username.trim()) currentUser = { username: data.hubUser.username.trim().slice(0, 60), bio: 'Local Launchpad profile', avatar: '' };
+            else if (data.hubUser === null) currentUser = null;
+            if (typeof data.hubNote === 'string') { $('note').value = data.hubNote.slice(0, 200000); safeWrite('hubNote', $('note').value); }
+            if (typeof data.hubPerfMode === 'boolean') isPerfMode = data.hubPerfMode;
+            if (data.hubFXConfig && typeof data.hubFXConfig === 'object') {
+                fxConfig.count = Math.max(0, Math.min(60, Number(data.hubFXConfig.count) || 0));
+                fxConfig.speed = Math.max(.05, Math.min(5, Number(data.hubFXConfig.speed) || .5));
+                fxConfig.tone = Math.max(10, Math.min(22, Number(data.hubFXConfig.tone) || 16));
+                document.documentElement.style.setProperty('--surface-tone', `${fxConfig.tone}%`);
+            }
+            safeWrite('hubUser', currentUser); safeWrite('hubTasks', tasks); safeWrite('hubFavorites', favorites);
+            safeWrite('hubRecentGames', recentGames); safeWrite('hubPlayedGames', playedGameUrls); safeWrite('hubGamePlayCounts', gamePlayCounts);
+            safeWrite('hubLaunchCount', gameLaunchCount); safeWrite('hubPerfMode', isPerfMode); safeWrite('hubFXConfig', fxConfig);
+            if (typeof data.hubAccent === 'string' && /^#[0-9a-f]{6}$/i.test(data.hubAccent)) setAccent(data.hubAccent);
+            document.body.classList.toggle('perf-mode', isPerfMode);
+            if ($('perf-toggle-btn')) $('perf-toggle-btn').textContent = `Performance: ${isPerfMode ? 'ON' : 'OFF'}`;
+            if ($('meme-mode-btn')) $('meme-mode-btn').textContent = `Meme Mode: ${isMemeMode ? 'ON' : 'OFF'}`;
+            const sliders = document.querySelectorAll('#design input[type=range]');
+            if (sliders[0]) sliders[0].value = String(fxConfig.count);
+            if (sliders[1]) sliders[1].value = String(Math.round(fxConfig.speed * 20));
+            if (sliders[2]) sliders[2].value = String(Math.round((fxConfig.tone - 10) / .15));
+            initParticles(); renderTasks(); renderCollections(); updateAchievementStats(); enhanceAllGameCards();
+            sortGameLibrary(); renderProfileUI(); updateGreeting(); refreshRenderLoop();
+            if ($('backup-status')) $('backup-status').textContent = `Backup imported · ${new Date().toLocaleString()}`;
+            showToast('Launchpad backup imported successfully.');
+        } catch (error) {
+            showToast(error.message || 'Could not import this backup.');
+            if ($('backup-status')) $('backup-status').textContent = error.message || 'Backup import failed.';
+        } finally { if (input) input.value = ''; }
+    }
+    function clearLocalData() {
+        if (!confirm('Reset all Launchpad data saved in this browser? This removes your local profile, favorites, history, tasks, notes, achievements, and saved preferences.')) return;
+        ['hubUser','hubTasks','hubFavorites','hubRecentGames','hubPlayedGames','hubGamePlayCounts','hubLaunchCount','hubNote','hubPerfMode','hubFXConfig','hubAccent'].forEach(safeRemove);
+        currentUser = null; tasks = []; favorites = []; recentGames = []; playedGameUrls = []; gamePlayCounts = {}; gameLaunchCount = 0;
+        safeWrite('hubTasks', tasks);
+        isPerfMode = false; fxConfig.count = 8; fxConfig.speed = .5; fxConfig.tone = 16;
+        $('note').value = '';
+        document.documentElement.style.setProperty('--surface-tone', '16%');
+        setAccent('#c1ff5a', false);
+        document.body.classList.remove('perf-mode');
+        if ($('perf-toggle-btn')) $('perf-toggle-btn').textContent = 'Performance: OFF';
+        const sliders = document.querySelectorAll('#design input[type=range]');
+        if (sliders[0]) sliders[0].value = '8'; if (sliders[1]) sliders[1].value = '10'; if (sliders[2]) sliders[2].value = '40';
+        safeWrite('hubNote', ''); renderTasks(); renderCollections(); updateAchievementStats(); enhanceAllGameCards();
+        renderProfileUI(); updateGreeting(); initParticles(); refreshRenderLoop();
+        if ($('backup-status')) $('backup-status').textContent = 'Local Launchpad data was reset.';
+        showToast('Local Launchpad data reset.');
+    }
+    function setAccent(color, persist = true) {
+        if (!/^#[0-9a-f]{6}$/i.test(String(color))) return;
+        document.documentElement.style.setProperty('--accent', color);
+        document.documentElement.style.setProperty('--accent-strong', color);
+        document.documentElement.style.setProperty('--accent-soft', `color-mix(in srgb, ${color} 14%, transparent)`);
+        if ($('accent-color')) $('accent-color').value = color;
+        if (persist) safeWrite('hubAccent', color);
+    }
+    function resetAccent() { setAccent('#c1ff5a'); showToast('Accent color reset.'); }
 
     function selectIssue(element, type) {
         document.querySelectorAll('.feedback-chip').forEach((chip) => chip.classList.remove('selected'));
@@ -2674,7 +2567,6 @@ on public.launchpad_profiles to authenticated;</code></pre>
     }
 
     function updateGreeting() {
-        if (authSession?.user) { $('greeting').textContent = `Welcome back, ${authSession.user.email || currentUser?.username || 'player'}!`; return; }
         if (currentUser) { $('greeting').textContent = `Welcome back, ${currentUser.username}!`; return; }
         const hour = new Date().getHours();
         $('greeting').textContent = hour < 12 ? 'Good morning, explorer.' : hour < 18 ? 'Good afternoon, developer.' : 'Good evening, gamer.';
@@ -2722,7 +2614,7 @@ on public.launchpad_profiles to authenticated;</code></pre>
         commandLine.textContent = `> ${original}`;
         display.appendChild(commandLine);
         let output = '';
-        if (value === 'help') output = 'Available: clear, meme, date, whoami, version, status, system, neofetch, diagnostics, sync, echo [text]';
+        if (value === 'help') output = 'Available: clear, meme, date, whoami, version, status, system, neofetch, diagnostics, backup, profile, games, echo [text]';
         else if (value === 'meme') { toggleMemeMode(); output = 'Meme Flying Mode toggled.'; }
         else if (value === 'clear') { display.replaceChildren(); output = 'Terminal cleared.'; }
         else if (value === 'date') output = new Date().toString();
@@ -2731,7 +2623,9 @@ on public.launchpad_profiles to authenticated;</code></pre>
         else if (value === 'status') output = `Launchpad is running. Launchpad effects are capped at ${MAX_FPS} FPS; embedded games control their own frame rate.`;
         else if (value === 'system') output = `Browser: ${detectBrowser()} | OS: ${detectOS()} | Device: ${detectDeviceType()} | CPU hint: ${navigator.hardwareConcurrency || 'N/A'} cores | RAM hint: ${navigator.deviceMemory || 'N/A'} GB`;
         else if (value === 'diagnostics') { showSec('diagnostics'); runDiagnostics(); output = 'Diagnostics report refreshed.'; }
-        else if (value === 'sync') { syncCloudData('merge'); output = 'Cloud sync requested.'; }
+        else if (value === 'backup') { exportLocalData(); output = 'Local backup export started.'; }
+        else if (value === 'profile') { showSec('profile'); output = 'Opened local player profile.'; }
+        else if (value === 'games') { showSec('games'); output = 'Opened games library.'; }
         else if (value === 'neofetch') output = `LAUNCHPAD OS V15 · ${MAX_FPS} FPS Canvas Cap · ${detectBrowser()} · ${detectOS()}`;
         else if (value.startsWith('echo ')) output = original.slice(5);
         else if (value) output = "Command not recognized. Type 'help'.";
@@ -2767,6 +2661,7 @@ on public.launchpad_profiles to authenticated;</code></pre>
 
     $('note').value = (() => { try { return localStorage.getItem('hubNote') || ''; } catch { return ''; } })();
     $('note').addEventListener('input', () => safeWrite('hubNote', $('note').value));
+    $('profile-status').addEventListener('keydown', (event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); handleProfileClick(); } });
     $('new-task-input').addEventListener('keydown', (event) => { if (event.key === 'Enter') addTask(); });
     $('term-input').addEventListener('keydown', handleTerminal);
     $('sketchpad').addEventListener('pointerdown', startSketch);
@@ -2779,8 +2674,14 @@ on public.launchpad_profiles to authenticated;</code></pre>
         if (document.hidden && renderHandle) { cancelAnimationFrame(renderHandle); renderHandle = 0; }
         else refreshRenderLoop();
     });
-    window.addEventListener('online', () => { setCloudStatus(authSession ? 'Online · syncing…' : 'Local only'); if (authSession) syncCloudData('merge', true); });
-    window.addEventListener('offline', () => setCloudStatus(authSession ? 'Offline · changes saved locally' : 'Offline'));
+    function updateNetworkStatus() {
+        const status = $('network-status');
+        if (!status) return;
+        status.querySelector('span:last-child').textContent = navigator.onLine ? 'Online' : 'Offline';
+        status.querySelector('.status-dot').style.background = navigator.onLine ? 'var(--success)' : 'var(--warning)';
+    }
+    window.addEventListener('online', updateNetworkStatus);
+    window.addEventListener('offline', updateNetworkStatus);
 
     // Make mouse-operated cards keyboard accessible without changing their existing click actions.
     document.querySelectorAll('.card[onclick]').forEach((card) => {
@@ -2805,21 +2706,18 @@ on public.launchpad_profiles to authenticated;</code></pre>
         openInNewTab, toggleTheaterSize, closeGame, universalSearch, addTask, toggleTask,
         cin, cclr, cres, swStart, swReset, startPomo, resetPomo, showUnitConverter,
         convertUnit, rollDice, flipCoin, clearSketch, showMorse, translateMorse, downloadNotes,
-        genPass, copySystemInfo, pMusic, handleAuthClick, logout, selectIssue, gitSubmit,
+        genPass, copySystemInfo, pMusic, handleProfileClick, selectIssue, gitSubmit,
         mask, panicMode, handleTerminal, toggleFavorite, clearFavorites, clearRecentHistory,
-        renderCollections, updateAchievementStats, playRandomGame,
-        createLocalProfile, signInWithEmail, signUpWithEmail, sendPasswordReset, syncCloudData,
-        saveSupabaseConfig, clearSupabaseConfig, copySupabaseSQL, runDiagnostics, copyDiagnostics
+        renderCollections, updateAchievementStats, playRandomGame, copyCurrentGameLink,
+        createLocalProfile, renameLocalProfile, deleteLocalProfile, exportLocalData, importLocalData, clearLocalData,
+        filterGameLibrary, sortGameLibrary, resetLibraryFilters, removeTask, clearCompletedTasks, setAccent, resetAccent,
+        runDiagnostics, copyDiagnostics, downloadSketch
     });
 
     // Initial paint and UI state.
     document.documentElement.style.setProperty('--surface-tone', `${fxConfig.tone}%`);
+    setAccent(typeof savedAccent === 'string' && /^#[0-9a-f]{6}$/i.test(savedAccent) ? savedAccent : '#c1ff5a', false);
     resizeCanvases();
-    if (supabaseConfig) {
-        $('supabase-url').value = supabaseConfig.url;
-        $('supabase-anon-key').value = supabaseConfig.anonKey;
-        $('supabase-config-status').textContent = 'Connection settings saved';
-    }
     if (isPerfMode) {
         document.body.classList.add('perf-mode');
         $('perf-toggle-btn').textContent = 'Performance: ON';
@@ -2832,10 +2730,10 @@ on public.launchpad_profiles to authenticated;</code></pre>
     enhanceAllGameCards();
     renderCollections();
     updateAchievementStats();
-    syncAuthUI();
+    renderProfileUI();
     updateGreeting();
     runDiagnostics();
-    restoreCloudSession();
+    updateNetworkStatus();
     const quotes = [
         'Speed, precision, and memes.',
         'Vision without execution is hallucination.',
@@ -2847,6 +2745,7 @@ on public.launchpad_profiles to authenticated;</code></pre>
     if ($('meme-mode-btn')) $('meme-mode-btn').textContent = 'Meme Mode: OFF';
     if ($('meme-toggle-text')) $('meme-toggle-text').textContent = 'OFF';
     showSec('home');
+    sortGameLibrary();
     initBattery();
     updateClockAndStats();
     setInterval(updateClockAndStats, 1000);
